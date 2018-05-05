@@ -3,17 +3,17 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 let pathToClean = 'public';
 
 const path = require('path');
 
 const common = {
   context: __dirname + '/src/',
-  entry: "index.js",
+  entry: "app.js",
   output: {
     path: __dirname + '/public',
-    filename: "bundle/[name].js",
+    filename: "[name].js",
     publicPath: '/'
   },
   resolve: {
@@ -23,26 +23,19 @@ const common = {
   module: {
     rules:
       [{
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ]
+        test: /\.styl$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ['css-loader', 'stylus-loader']
+        })
       }, {
         test: /\.pug$/,
         loader: 'pug-loader',
         options: {
           pretty: true
         }
-      }, {
-        test: /\.(ttf|eot|woff|woff2|png|jpg|jpeg|svg|gif)$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[ext]'
-          }
-        }]
-      }]
+      },
+      ]
   },
 
   plugins: [
@@ -52,10 +45,7 @@ const common = {
       filename: 'index.html'
     }),
     new CleanWebpackPlugin(pathToClean),
-    new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css"
-    }),
+    new ExtractTextPlugin('style.css'),
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery',
