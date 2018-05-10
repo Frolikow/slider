@@ -12,9 +12,9 @@ $(document).ready(function () {
     $('.slider').html('<div class="slider_handle" id="test">');
     $('.slider_handle').html('<div class="slider_handle_value">');
 
-    let sliderMin = 0;
-    let sliderMax = 10;
-    let sliderValue = 5;
+    let sliderMin = 10;
+    let sliderMax = 20;
+    let sliderValue = 19;
 
     //присваивание переменных соответствующим элементам
     let sliderElem = $('.slider:eq(0)');
@@ -22,14 +22,13 @@ $(document).ready(function () {
     let valueElem = $('.slider_handle_value:eq(0)');
 
     valueElem.html(sliderValue);
-    handleElem.css('left', defaultValue());
+    handleElem.css('left', defaultValue(sliderMax, sliderMin));
 
     //событие нажатой ЛКМ
     handleElem.mousedown(function (event) {
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       let handleCoords = getCoords(handleElem); //внутренние координаты ползунка
       let shiftX = event.pageX - handleCoords.left; //координаты левого края элемента
-
       // движение нажатой ЛКМ
       $(document).on('mousemove', function (event) {
         //вычисление левого края слайдера и задание координат для ползунка
@@ -51,15 +50,41 @@ $(document).ready(function () {
       });
     });
 
+    sliderElem.click(function (event) { //обработка клика ЛКМ по шкале слайдера
+      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
+      let shiftX = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
+      handleElem.css('left', shiftX + 'px');
+      calculateSliderValue(sliderMax, sliderMin, shiftX);
+    })
+
     function calculateSliderValue(slMax, slMin, leftEdge) { //расчет значения над ползунком
       let sliderWidth = parseInt(sliderElem.css('width'));
-      let sliderStep = (sliderWidth / slMax - slMin)*0.96;
-      let currentSliderValue = leftEdge / sliderStep;
-      valueElem.html(currentSliderValue ^ 0);
+      let sliderStep = (sliderWidth / (slMax - slMin)) * 0.96;
+      let currentSliderValue = (leftEdge / sliderStep) ^ 0;
+
+      let values = [];
+      let currentValue = 0;
+      for (var i = 0; currentValue < slMax; i++) {
+        currentValue = slMin;
+        slMin++;
+        values.push(currentValue);
+      }
+      console.log(currentSliderValue)
+      console.log(values[currentSliderValue])
+      valueElem.html(values[currentSliderValue]);
     }
 
-    function defaultValue(){  //установка ползунка в позицию "по-умолчанию" = sliderValue
-      let defaultPosition = sliderValue*((parseInt(sliderElem.css('width')) /sliderMax - sliderMin)*0.96);
+    function defaultValue(slMax, slMin) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
+      let defaultPosition = (parseInt(sliderElem.css('width')) / (slMax - slMin)) * 0.96;
+
+      let values = [];
+      let currentValue = 0;
+      for (var i = 0; currentValue < slMax; i++) {
+        currentValue = slMin;
+        slMin++;
+        values.push(currentValue);
+      }
+      defaultPosition = values.indexOf(sliderValue) * defaultPosition;
       return defaultPosition;
     }
 
