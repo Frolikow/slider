@@ -1,8 +1,9 @@
 body
   margin 0
-  padding 0
+  padding 8%
   font-family: sans-serif
   background-color #ccc 
+
   
 .layout
   width 100%
@@ -10,6 +11,17 @@ body
   display flex
   justify-content: center
   align-items: center
+  .config_panel
+    margin 15px
+    width 500px
+    display flex
+    flex-direction column
+    align-content: space-between
+    input 
+      max-width 300px
+    .config_showHandleValue
+      margin-bottom 15px
+
   .slider
     width 500px
     height 5px
@@ -47,3 +59,16 @@ body
           position relative
           bottom 4px
           left 12px
+  .verticalBlockSlider       
+    transform rotate(90deg)
+    .verticalSlider
+      &_handle
+        &_value
+          transform rotate(270deg)
+          bottom 45px
+          &:after
+            content ""
+            position relative
+            left -5px
+            bottom 16px
+            transform rotate(135deg)
