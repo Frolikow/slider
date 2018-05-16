@@ -21,7 +21,7 @@ $(document).ready(function () {
     let handleElem = $('.slider_handle:eq(0)');
     let valueElem = $('.slider_handle_value:eq(0)');
 
-    let testValue=false;
+    let testValue = false;
     getInfoPositionSlider();
     function getInfoPositionSlider() {
       $('.config_orientation:eq(0)').on('change', function () {
@@ -76,18 +76,6 @@ $(document).ready(function () {
           }
           handleElem.css('left', beginEdge + 'px');
         }
-
-        console.log('');
-        console.log(testValue);
-
-        console.log('event.pageX ' + event.pageX);
-        console.log('event.pageY ' + event.pageY);
-        console.log('shift ' + shift);
-        console.log('sliderCoords.left ' + sliderCoords.left);
-        console.log('sliderCoords.top ' + sliderCoords.top);
-        console.log('beginEdge ' + beginEdge);
-        console.log('endEdge ' + endEdge);
-
         calculateSliderValue(sliderMax, sliderMin, beginEdge);
       });
 
@@ -146,19 +134,24 @@ $(document).ready(function () {
 
     //создание элементов для панели конфигов
     $('.block_config').html('<div class="config_panel">')
-    $('.config_panel').html('<label><input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>' + '<label><input type="checkbox" class="config_range">Включить выбор интервала</label>' + '<label><input type="checkbox" class="config_showHandleValue">Включить отображение флажка</label>' +
-      '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue">' + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue">' +
-      '<label>Текущее значение</label><input type="number" class="config_currentValue">' + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep">');
+    $('.config_panel').html('<label><input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
+      + '<label><input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
+      + '<label><input type="checkbox" class="config_range">Включить выбор интервала</label>'
+      + '<label>Текущее значение</label><input type="number" class="config_currentValue">'
+      + '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue">'
+      + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue">'
+      + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep">');
 
-    // test();
-    // function test() {
-    //   getInfoPositionSlider();
-    //   $('.config_orientation:eq(0)').click()
-    //   $('.block_slider:eq(0)').addClass('verticalBlockSlider');
-    //   $('.slider:eq(0)').addClass('verticalSlider');
-    //   $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
-    //   $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
-    // }
+    $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок
+      if (this.checked) {
+        console.log('config_showHandleValue checked');
+        $('.slider_handle_value').css('display', 'none')
+      }
+      else {
+        console.log('config_showHandleValue unchecked');
+        $('.slider_handle_value').css('display', 'block')
+      }
+    })
 
     $('.config_orientation:eq(0)').change(function () {  //вкл/выкл вертикальной ориентации
       getInfoPositionSlider();
@@ -173,9 +166,10 @@ $(document).ready(function () {
         $('.slider:eq(0)').removeClass('verticalSlider');
         $('.slider_handle:eq(0)').removeClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').removeClass('verticalSlider_handle_value');
-
       }
     })
+
+
 
     $('.config_range:eq(0)').change(function () {  //вкл/выкл выбор диапазона
       if (this.checked) {
@@ -186,16 +180,22 @@ $(document).ready(function () {
       }
     })
 
-
-    $('.config_showHandleValue:eq(0)').change(function () {  //показать/скрыть значение над ползунком
-      if (this.checked) {
-        console.log('config_showHandleValue checked');
+    $('.config_currentValue:eq(0)').mouseup(function () { //текущее значение слайдера
+      if (this.value) {
+        console.log('config_currentValue ' + this.value);
       }
       else {
-        console.log('config_showHandleValue unchecked');
+        console.log('config_currentValue [0]');
       }
     })
-
+    $('.config_currentValue:eq(0)').keyup(function () {
+      if (this.value) {
+        console.log('config_currentValue ' + this.value);
+      }
+      else {
+        console.log('config_currentValue 0');
+      }
+    })
 
     $('.config_minValue:eq(0)').mouseup(function () { //минимальное значение слайдера
       if (this.value) {
@@ -233,22 +233,6 @@ $(document).ready(function () {
     })
 
 
-    $('.config_currentValue:eq(0)').mouseup(function () { //текущее значение слайдера
-      if (this.value) {
-        console.log('config_currentValue ' + this.value);
-      }
-      else {
-        console.log('config_currentValue [0]');
-      }
-    })
-    $('.config_currentValue:eq(0)').keyup(function () {
-      if (this.value) {
-        console.log('config_currentValue ' + this.value);
-      }
-      else {
-        console.log('config_currentValue 0');
-      }
-    })
 
 
     $('.config_sizeOfStep:eq(0)').mouseup(function () { //размера шага слайдера
