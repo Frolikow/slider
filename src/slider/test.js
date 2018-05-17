@@ -12,39 +12,37 @@ $(document).ready(function () {
     $('.slider').html('<div class="slider_handle">');
     $('.slider_handle').html('<div class="slider_handle_value">');
 
-    let sliderMin = 1;
-    let sliderMax = 10;
-    let sliderValue = 5;
+    let sliderMin = -3;
+    let sliderMax = 2;
+    let sliderValue = 1;
 
     //присваивание переменных соответствующим элементам
     let sliderElem = $('.slider:eq(0)');
     let handleElem = $('.slider_handle:eq(0)');
     let valueElem = $('.slider_handle_value:eq(0)');
 
-    let testValue = false;
-    getInfoPositionSlider();
-    function getInfoPositionSlider() {
+    let verticalOrientation = false;
+    getInfoOrientationSlider();
+    function getInfoOrientationSlider() {
       $('.config_orientation:eq(0)').on('change', function () {
         if (this.checked) {
-          testValue = true;
+          verticalOrientation = true;
         }
         else {
-          testValue = false;
+          verticalOrientation = false;
         }
-        return testValue;
+        return verticalOrientation;
       })
     };
 
-
-    valueElem.html(sliderValue);
-    handleElem.css('left', defaultValue(sliderMax, sliderMin));
+    handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue));
 
     handleElem.mousedown(function (event) { //событие нажатой ЛКМ
-      getInfoPositionSlider();
+      getInfoOrientationSlider();
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       let handleCoords = getCoords(handleElem); //внутренние координаты ползунка
       let shift; //координаты левого края элемента
-      if (testValue == true) {
+      if (verticalOrientation == true) {
         shift = event.pageY - handleCoords.top;
       } else {
         shift = event.pageX - handleCoords.left;
@@ -54,7 +52,7 @@ $(document).ready(function () {
         //вычисление левого края слайдера и задание координат для ползунка
         let beginEdge;
         let endEdge;
-        if (testValue) {
+        if (verticalOrientation) {
           beginEdge = event.pageY - shift - sliderCoords.top;
           if (beginEdge < 0) {
             beginEdge = 0;
@@ -87,7 +85,7 @@ $(document).ready(function () {
     sliderElem.click(function (event) { //обработка клика ЛКМ по шкале слайдера
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       let shift;
-      if (testValue) {
+      if (verticalOrientation) {
         shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
       } else {
         shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
@@ -107,20 +105,34 @@ $(document).ready(function () {
         slMin++;
         values.push(currentValue);
       }
+      $('.config_currentValue:eq(0)').val(values[currentSliderValue]);
       valueElem.html(values[currentSliderValue]);
+      sliderValue = values[currentSliderValue];
     }
 
-    function defaultValue(slMax, slMin) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
+    function defaultValue(slMax, slMin, slVal) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
       let defaultPosition = (parseInt(sliderElem.css('width')) / (slMax - slMin)) * 0.96;
-
+      let sliderMin = slMin;
       let values = [];
       let currentValue = 0;
       for (var i = 0; currentValue < slMax; i++) {
-        currentValue = slMin;
-        slMin++;
+        currentValue = sliderMin;
+        sliderMin++;
         values.push(currentValue);
       }
-      defaultPosition = values.indexOf(sliderValue) * defaultPosition;
+      if (slVal < slMin) {
+        console.log('(slVal < slMin)');
+        slVal = slMin;
+      }
+      else if (slVal > slMax) {
+        console.log('(slVal > slMax)');
+        slVal = slMax;
+      }
+      else {
+        console.log('OK');
+      }
+      valueElem.html(slVal);
+      defaultPosition = $.inArray(slVal, values) * defaultPosition;
       return defaultPosition;
     }
 
@@ -144,17 +156,15 @@ $(document).ready(function () {
 
     $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок
       if (this.checked) {
-        console.log('config_showHandleValue checked');
         $('.slider_handle_value').css('display', 'none')
       }
       else {
-        console.log('config_showHandleValue unchecked');
         $('.slider_handle_value').css('display', 'block')
       }
-    })
+    }) //complete
 
     $('.config_orientation:eq(0)').change(function () {  //вкл/выкл вертикальной ориентации
-      getInfoPositionSlider();
+      getInfoOrientationSlider();
       if (this.checked) {
         $('.block_slider:eq(0)').addClass('verticalBlockSlider');
         $('.slider:eq(0)').addClass('verticalSlider');
@@ -167,42 +177,58 @@ $(document).ready(function () {
         $('.slider_handle:eq(0)').removeClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').removeClass('verticalSlider_handle_value');
       }
-    })
+    }) //complete
 
 
+    // test();
+    // function test(){
+    //   $('.config_range:eq(0)').click();
+    // }
 
     $('.config_range:eq(0)').change(function () {  //вкл/выкл выбор диапазона
       if (this.checked) {
         console.log('config_range checked');
+        $('.slider_handle_value:eq(0)').addClass('handle_left');
+        $('.slider_handle_value:eq(0)').after('<div class="slider_handle_value handle_right"><div/>');
       }
       else {
         console.log('config_range unchecked');
+        $('.slider_handle_value:eq(0)').removeClass('handle_left');
+        $('.handle_right:eq(0)').remove();
       }
     })
 
-    $('.config_currentValue:eq(0)').mouseup(function () { //текущее значение слайдера
-      if (this.value) {
-        console.log('config_currentValue ' + this.value);
-      }
-      else {
-        console.log('config_currentValue [0]');
-      }
-    })
-    $('.config_currentValue:eq(0)').keyup(function () {
-      if (this.value) {
-        console.log('config_currentValue ' + this.value);
-      }
-      else {
-        console.log('config_currentValue 0');
-      }
-    })
+
+    $('.config_currentValue:eq(0)').val(sliderValue);
+    $('.config_currentValue:eq(0)').focusout(function () { //текущее значение слайдера
+      // debugger;
+      valueElem.html(this.value);
+      handleElem.css('left', defaultValue(sliderMax, sliderMin, parseInt(this.value)));
+      // console.log(defaultValue(sliderMax, sliderMin, sliderValue))
+    })//complete
+
+    // let rng = document.querySelector('.range [type=range]')
+    // let txt = document.querySelector('.range [type=text]')
+
+    // rng.addEventListener('input', () => 
+    //   txt.value = rng.value
+    // )
+    // txt.addEventListener('input', () => 
+    //   rng.value = txt.value
+    // )
+
+
+
+
 
     $('.config_minValue:eq(0)').mouseup(function () { //минимальное значение слайдера
       if (this.value) {
-        console.log('config_minValue ' + this.value);
+        // console.log('config_minValue ' + this.value);
+        console.log(sliderValue)
       }
       else {
-        console.log('config_minValue [0]');
+        console.log(sliderValue)
+        // console.log('config_minValue [0]');
       }
     })
     $('.config_minValue:eq(0)').keyup(function () {
