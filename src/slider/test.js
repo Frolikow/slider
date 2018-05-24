@@ -13,9 +13,9 @@ $(document).ready(function () {
     $('.slider_handle').html('<div class="slider_handle_value">');
 
     let sliderMin = 1;
-    let sliderMax = 5;
-    let sliderValue = 2;
-    let sliderStep = 3;
+    let sliderMax = 10;
+    let sliderValue = 3;
+    let sliderStep = 2;
     let verticalOrientation = false;
 
     //присваивание переменных соответствующим элементам
@@ -39,18 +39,15 @@ $(document).ready(function () {
 
       // движение нажатой ЛКМ
       $(document).on('mousemove', function (event) {
-        //вычисление левого края слайдера и задание координат для ползунка
         let beginEdge;
         let endEdge;
-        // debugger;
         let position = [];
         let currentValue = 0;
         let slMin = sliderMin;
         let slMax = sliderMax;
         for (var i = 0; currentValue < slMax; i++) {
-          if (slMin >= slMax) {
-            currentValue = slMax;
-            position.push(currentValue);
+          if (slMin > slMax) {
+            break;
           }
           else {
             currentValue = slMin;
@@ -58,10 +55,9 @@ $(document).ready(function () {
             position.push(currentValue);
           }
         }
-        console.log('position ' + position);
 
         if (verticalOrientation) {
-          beginEdge = (event.pageY - shift - sliderCoords.top)/sliderStep;
+          beginEdge = (event.pageY - shift - sliderCoords.top) / sliderStep;
           if (beginEdge < 0) {
             beginEdge = 0;
           }
@@ -72,7 +68,7 @@ $(document).ready(function () {
           handleElem.css('left', searchPosition(beginEdge, endEdge) + 'px');
         }
         else {
-          beginEdge = (event.pageX - shift - sliderCoords.left)/sliderStep;
+          beginEdge = (event.pageX - shift - sliderCoords.left) / sliderStep;
           if (beginEdge < 0) {
             beginEdge = 0;
           }
@@ -81,32 +77,28 @@ $(document).ready(function () {
             beginEdge = endEdge;
           }
 
-          handleElem.css('left', searchPosition(beginEdge, endEdge) + 'px');
+          handleElem.css('left', searchPosition(beginEdge ^ 0, endEdge) + 'px');
         }
 
         function searchPosition(begin, end) {
           let widthOfstep = (end / (position.length - 1));
           let currentIndex = $.inArray(sliderValue, position);
-          let halfWidthOfStep = widthOfstep / 2;
+          let halfWidthOfStep = (widthOfstep / 2);
           let currentPositionHandle = widthOfstep * currentIndex;
 
-          let testValue = (currentPositionHandle + halfWidthOfStep) * sliderStep;
-          console.log('begin ' + begin);
-          console.log('end ' + end);
-          console.log('widthOfstep ' + widthOfstep);
-          console.log('currentIndex ' + currentIndex);
-          console.log('halfWidthOfStep ' + halfWidthOfStep);
-          console.log('currentPositionHandle ' + currentPositionHandle);
-          console.log('testValue ' + testValue);
-          console.log(' ');
+          let currentPositionCursor = begin * sliderStep;
+          let middleOfPosition = currentPositionHandle + halfWidthOfStep;
 
-          if (begin < testValue) {
-            currentPositionHandle = widthOfstep * currentIndex;
-            return currentPositionHandle;
+          if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex == -1) {
+            currentPositionHandle = end;
           }
-          else if (begin > testValue) {
-            currentPositionHandle = widthOfstep * (currentIndex + 1);
-            return currentPositionHandle;
+          else {
+            if (currentPositionCursor <= middleOfPosition) {
+              currentPositionHandle = widthOfstep * currentIndex;
+            }
+            else if (currentPositionCursor > middleOfPosition) {
+              currentIndex = widthOfstep * currentIndex + widthOfstep;
+            }
           }
           return currentPositionHandle;
         }
@@ -119,52 +111,106 @@ $(document).ready(function () {
       });
     });
 
-    sliderElem.click(function (event) { //обработка клика ЛКМ по шкале слайдера
-      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
+    sliderElem.click(function () { //обработка клика ЛКМ по шкале слайдера
+      let clickPositionArray = [];
+      let clickPositionValue = 0;
+      let slMin = sliderMin;
+      let slMax = sliderMax;
+      for (var i = 0; clickPositionValue < slMax; i++) {
+        if (slMin > slMax) {
+          break;
+        }
+        else {
+          clickPositionValue = slMin;
+          slMin += sliderStep;
+          clickPositionArray.push(clickPositionValue);
+        }
+      }
+
       let shift;
+      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       if (verticalOrientation) {
         shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
       } else {
         shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
       }
-      handleElem.animate({ left: shift + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift))
+      // debugger;
+      let sliderWidth = parseInt(sliderElem.css('width')) - 20;
+      let clickSliderValueStep = sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / sliderStep);
+      let currentIndex = $.inArray(sliderValue, clickPositionArray);
+
+      let test;
+      let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
+      let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
+      if (shift < clickMiddlePosition) {
+        test = clickSliderValueStep * currentSliderValue;
+      }
+      else if (shift > clickMiddlePosition) {
+        test = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
+      }
+
+      handleElem.animate({ left: test + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep));
     })
 
     function calculateSliderValue(slMax, slMin, beginEdge) { //расчет значения над ползунком
-      let sliderWidth = parseInt(sliderElem.css('width'));
-      let sliderValueStep = (sliderWidth / (slMax - slMin)) * 0.96;
-      let currentSliderValue = ((beginEdge + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
+      let sliderWidth = parseInt(sliderElem.css('width')) - 20;
 
       let values = [];
       let currentValue = 0;
       for (var i = 0; currentValue < slMax; i++) {
-        currentValue = slMin;
-        slMin += sliderStep;
-        values.push(currentValue);
+        if (slMin > slMax) {
+          break;
+        }
+        else {
+          currentValue = slMin;
+          slMin += sliderStep;
+          values.push(currentValue);
+        }
       }
-      $('.config_currentValue:eq(0)').val(values[currentSliderValue]);
+      let sliderValueStep = sliderWidth / (values[values.length - 1] - values[0]);
+      let currentSliderValue = ((beginEdge + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
+      
       valueElem.html(values[currentSliderValue]);
-      sliderValue = values[currentSliderValue];
+      sliderValue = parseInt(valueElem.text());
+      $('.config_currentValue:eq(0)').val(sliderValue);
     }
 
     function defaultValue(slMax, slMin, slVal) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
-      let defaultPosition = (parseInt(sliderElem.css('width')) / (slMax - slMin)) * 0.96;
-      let sliderMin = slMin;
-      let values = [];
+      let defaultValues = [];
       let currentValue = 0;
-      for (var i = 0; currentValue < slMax; i++) {
-        currentValue = sliderMin;
-        sliderMin++;
-        values.push(currentValue);
-      }
-      if (slVal < slMin) {
+      if (slVal <= slMin) {
         slVal = slMin;
       }
-      else if (slVal > slMax) {
+      else if (slVal >= slMax) {
         slVal = slMax;
       }
-      valueElem.html(slVal);
-      defaultPosition = $.inArray(slVal, values) * defaultPosition;
+
+      let sliderMin = slMin;
+      for (var i = 0; currentValue < slMax; i++) {
+        if (sliderMin > slMax) {
+          break;
+        }
+        else {
+          currentValue = sliderMin;
+          sliderMin += sliderStep;
+          defaultValues.push(currentValue);
+        }
+      }
+
+      if (($.inArray(sliderValue, defaultValues)) == -1) {
+        slVal = slMin;
+      }
+
+      let stepOfDefaultPosition = (parseInt(sliderElem.css('width')) - 20) / (defaultValues.length - 1);
+      let currentInndexDefaultPosition = $.inArray(slVal, defaultValues);
+      let defaultPosition = currentInndexDefaultPosition * stepOfDefaultPosition;
+      sliderValue = slVal;
+
+      if (currentInndexDefaultPosition == -1) {
+        defaultPosition = 0;
+        sliderValue = defaultValues[0];
+      }
+      valueElem.html(sliderValue);
       return defaultPosition;
     }
 
@@ -181,10 +227,10 @@ $(document).ready(function () {
     $('.config_panel').html('<label><input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
       + '<label><input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
       + '<label><input type="checkbox" class="config_range">Включить выбор интервала</label>'
-      + '<label>Текущее значение</label><input type="number" class="config_currentValue">'
+      + '<label>Текущее значение</label><input type="number" class="config_currentValue" min="' + sliderMin + '" max="' + sliderMax + '" >'
       + '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue">'
       + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue">'
-      + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep">');
+      + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep" min="1" max="' + (sliderMax - sliderMin) + '">');
 
 
     $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок
@@ -235,14 +281,17 @@ $(document).ready(function () {
 
     $('.config_currentValue:eq(0)').val(sliderValue);
     $('.config_currentValue:eq(0)').focusout(function () { //текущее значение слайдера
-      valueElem.html(this.value);
       handleElem.css('left', defaultValue(sliderMax, sliderMin, parseInt(this.value)));
+      this.value = sliderValue;
+
     })//complete
 
     $('.config_minValue:eq(0)').val(sliderMin);
     $('.config_minValue:eq(0)').focusout(function () { //минимальное значение слайдера
       sliderMin = parseInt(this.value);
       handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue));
+      $('.config_currentValue:eq(0)').attr('min', sliderMin);
+      $('.config_sizeOfStep:eq(0)').attr('max', (sliderMax - sliderMin));
     }) //complete
 
 
@@ -250,12 +299,15 @@ $(document).ready(function () {
     $('.config_maxValue:eq(0)').focusout(function () { //максимальное значение слайдера
       sliderMax = parseInt(this.value);
       handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue));
+      $('.config_currentValue:eq(0)').attr('max', sliderMax);
+      $('.config_sizeOfStep:eq(0)').attr('max', (sliderMax - sliderMin));
     }) //complete
 
 
     $('.config_sizeOfStep:eq(0)').val(sliderStep);
     $('.config_sizeOfStep:eq(0)').focusout(function () { //размера шага слайдера
       sliderStep = parseInt(this.value);
+      $('.config_currentValue:eq(0)').attr('max', sliderMax);
     })
   }
 })(jQuery);
