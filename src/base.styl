@@ -19,10 +19,14 @@ body
     display flex
     flex-direction column
     align-content: space-between
-    input 
-      max-width 300px
+    input[type='number']
+      width 20%
     .config_range
       margin-bottom 15px
+    .config_block_currentValue
+      display flex
+      .config_currentValueRange
+        margin-left 15px
 
   .slider
     width 500px
@@ -31,7 +35,7 @@ body
     background-color #999
     cursor pointer
     position relative
-    &_handle
+    &_handle 
       width 20px
       height 20px
       border-radius 50%
@@ -61,6 +65,11 @@ body
           position relative
           bottom 4px
           left 12px
+    &_handle_right
+      position relative
+      top -27px
+
+
   .verticalBlockSlider       
     transform rotate(90deg)
     .verticalSlider
