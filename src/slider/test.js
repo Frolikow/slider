@@ -13,9 +13,9 @@ $(document).ready(function () {
     $('.slider_handle_left').html('<div class="slider_handle_value slider_handle_value_left">');
 
     let sliderMin = 1;
-    let sliderMax = 5;
-    let sliderValue = 2;
-    let sliderValueRange = 4;
+    let sliderMax = 20;
+    let sliderValue = 5;
+    let sliderValueRange = 15;
     let sliderStep = 1;
     let verticalOrientation = false;
     let sliderRangeStatus = false;
@@ -30,9 +30,10 @@ $(document).ready(function () {
     $('.config_panel').html('<label><input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
       + '<label><input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
       + '<label><input type="checkbox" class="config_range">Включить выбор интервала</label>'
+
       + '<label>Текущее значение</label><div class="config_block_currentValue"><input type="number" class="config_currentValue" min="' + sliderMin + '" max="' + sliderMax + '" ></div>'
-      + '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue">'
-      + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue">'
+      + '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue" max=' + (sliderMax - sliderStep) + '>'
+      + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue" min=' + (sliderMin + sliderStep) + '>'
       + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep" min="1" max="' + (sliderMax - sliderMin) + '">');
 
     $('.slider_handle:eq(0)').after('<div class="slider_handle slider_handle_right"><div class="slider_handle_value slider_handle_value_right">');
@@ -43,8 +44,6 @@ $(document).ready(function () {
 
     handleElemRange.css('display', 'none')
     configCurrentValueRange.css('display', 'none')
-
-
 
     $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок
       if (this.checked) {
@@ -125,6 +124,9 @@ $(document).ready(function () {
     $('.config_minValue:eq(0)').focusout(function () { //минимальное значение слайдера
       sliderMin = parseInt(this.value);
       handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
+      if (sliderRangeStatus) {
+        handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
+      }
       $('.config_currentValue:eq(0)').attr('min', sliderMin);
       $('.config_sizeOfStep:eq(0)').attr('max', (sliderMax - sliderMin));
     }) //complete
@@ -133,8 +135,12 @@ $(document).ready(function () {
     $('.config_maxValue:eq(0)').focusout(function () { //максимальное значение слайдера
       sliderMax = parseInt(this.value);
       handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
+      if (sliderRangeStatus) {
+        handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
+      }
       $('.config_currentValue:eq(0)').attr('max', sliderMax);
       $('.config_sizeOfStep:eq(0)').attr('max', (sliderMax - sliderMin));
+      configCurrentValueRange.attr('max', sliderMax)
     }) //complete
 
     $('.config_sizeOfStep:eq(0)').val(sliderStep);
@@ -173,34 +179,43 @@ $(document).ready(function () {
           }
         }
 
+        let positionRange = [];
+        slMin = sliderValue + sliderStep;
+        currentValue = 0;
+        if (sliderRangeStatus) {
+          for (var i = slMin; currentValue < slMax; i++) {
+            if (slMin > slMax) {
+              break;
+            }
+            else {
+              currentValue = slMin;
+              slMin += sliderStep;
+              positionRange.push(currentValue);
+            }
+          }
+        }
+
         if (verticalOrientation) {
           beginEdge = (event.pageY - shift - sliderCoords.top) / sliderStep;
-          if (beginEdge < 0) {
-            beginEdge = 0;
-          }
-          endEdge = sliderElem.outerWidth() - handleElemRange.outerWidth();
-          if (beginEdge > endEdge) {
-            beginEdge = endEdge;
-          }
-          handleElemRange.css('left', searchPosition(beginEdge, endEdge) + 'px');
         }
         else {
           beginEdge = (event.pageX - shift - sliderCoords.left) / sliderStep;
-          if (beginEdge < 0) {
-            beginEdge = 0;
-          }
-          endEdge = sliderElem.outerWidth() - handleElemRange.outerWidth();
-          if (beginEdge > endEdge) {
-            beginEdge = endEdge;
-          }
-
-          handleElemRange.css('left', searchPosition(beginEdge ^ 0, endEdge) + 'px');
         }
+
+        if (beginEdge < 0) {
+          beginEdge = 0;
+        }
+        endEdge = sliderElem.outerWidth() - handleElem.outerWidth();
+        if (beginEdge > endEdge) {
+          beginEdge = endEdge;
+        }
+        handleElemRange.css('left', searchPosition(beginEdge, endEdge) + 'px');
 
         function searchPosition(begin, end) {
           let widthOfstep = (end / (position.length - 1));
-          let currentIndex = $.inArray(sliderValueRange, position);
           let halfWidthOfStep = (widthOfstep / 2);
+
+          let currentIndex = $.inArray(sliderValueRange, position);
           let currentPositionHandle = widthOfstep * currentIndex;
 
           let currentPositionCursor = begin * sliderStep;
@@ -208,6 +223,9 @@ $(document).ready(function () {
 
           if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex == -1) {
             currentPositionHandle = end;
+          }
+          else if (sliderValueRange <= sliderValue) {
+            currentPositionHandle = widthOfstep * $.inArray((sliderValue + sliderStep), position);
           }
           else {
             if (currentPositionCursor <= middleOfPosition) {
@@ -333,7 +351,7 @@ $(document).ready(function () {
               }
             }
           }
-          return currentPositionHandle; //ДЛЯ ВТОРОГО ПОЛЗУНКА НУЖНО СДЕЛАТЬ ТАКИЕЖЕ ИСПРАВЛЕНИЯ КАК В ЭТОЙ ФУНКЦИИ. ПОПРАВИТЬ ФУНКЦИЮ ВЫЧИСЛЕНИЯ ЗНАЧЕНИЙ!
+          return currentPositionHandle;
         }
 
         calculateSliderValue(sliderMax, sliderMin, beginEdge, false);
@@ -344,46 +362,46 @@ $(document).ready(function () {
       });
     });
 
-    // sliderElem.click(function () { //обработка клика ЛКМ по шкале слайдера
-    //   let clickPositionArray = [];
-    //   let clickPositionValue = 0;
-    //   let slMin = sliderMin;
-    //   let slMax = sliderMax;
-    //   for (var i = 0; clickPositionValue < slMax; i++) {
-    //     if (slMin > slMax) {
-    //       break;
-    //     }
-    //     else {
-    //       clickPositionValue = slMin;
-    //       slMin += sliderStep;
-    //       clickPositionArray.push(clickPositionValue);
-    //     }
-    //   }
+    sliderElem.click(function () { //обработка клика ЛКМ по шкале слайдера
+      let clickPositionArray = [];
+      let clickPositionValue = 0;
+      let slMin = sliderMin;
+      let slMax = sliderMax;
+      for (var i = 0; clickPositionValue < slMax; i++) {
+        if (slMin > slMax) {
+          break;
+        }
+        else {
+          clickPositionValue = slMin;
+          slMin += sliderStep;
+          clickPositionArray.push(clickPositionValue);
+        }
+      }
 
-    //   let shift;
-    //   let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
-    //   if (verticalOrientation) {
-    //     shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
-    //   } else {
-    //     shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
-    //   }
-    //   // debugger;
-    //   let sliderWidth = parseInt(sliderElem.css('width')) - 20;
-    //   let clickSliderValueStep = sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / sliderStep);
-    //   let currentIndex = $.inArray(sliderValue, clickPositionArray);
+      let shift;
+      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
+      if (verticalOrientation) {
+        shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
+      } else {
+        shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
+      }
+      // debugger;
+      let sliderWidth = parseInt(sliderElem.css('width')) - 20;
+      let clickSliderValueStep = sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / sliderStep);
+      let currentIndex = $.inArray(sliderValue, clickPositionArray);
 
-    //   let test;
-    //   let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
-    //   let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
-    //   if (shift < clickMiddlePosition) {
-    //     test = clickSliderValueStep * currentSliderValue;
-    //   }
-    //   else if (shift > clickMiddlePosition) {
-    //     test = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
-    //   }
+      let test;
+      let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
+      let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
+      if (shift < clickMiddlePosition) {
+        test = clickSliderValueStep * currentSliderValue;
+      }
+      else if (shift > clickMiddlePosition) {
+        test = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
+      }
 
-    //   handleElem.animate({ left: test + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, valueElem));
-    // })
+      handleElem.animate({ left: test + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, valueElem));
+    })
 
     function calculateSliderValue(slMax, slMin, beginEdge, rangeStatus) { //расчет значения над ползунком
       let sliderWidth = parseInt(sliderElem.css('width')) - 20;
@@ -404,19 +422,32 @@ $(document).ready(function () {
       let currentSliderValue = ((beginEdge + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
 
       if (rangeStatus) {
-        valueElemRange.html(values[currentSliderValue]);
-        sliderValueRange = parseInt(valueElemRange.text());
-        configCurrentValueRange.val(sliderValueRange);
+        if (currentSliderValue <= $.inArray(sliderValue, values)) {
+          valueElemRange.html(sliderValue + sliderStep);
+          sliderValueRange = parseInt(valueElemRange.text());
+          configCurrentValueRange.val(sliderValue + sliderStep);
+        }
+        else {
+          valueElemRange.html(values[currentSliderValue]);
+          sliderValueRange = parseInt(valueElemRange.text());
+          configCurrentValueRange.val(sliderValueRange);
+        }
       }
       else {
-        valueElem.html(values[currentSliderValue]);
-        sliderValue = parseInt(valueElem.text());
-        $('.config_currentValue:eq(0)').val(sliderValue);
+        if (sliderRangeStatus && currentSliderValue >= $.inArray((sliderValueRange - sliderStep), values)) {
+          valueElem.html(sliderValueRange - sliderStep);
+          sliderValue = parseInt(valueElem.text());
+          $('.config_currentValue:eq(0)').val(sliderValueRange - sliderStep);
+        }
+        else {
+          valueElem.html(values[currentSliderValue]);
+          sliderValue = parseInt(valueElem.text());
+          $('.config_currentValue:eq(0)').val(sliderValue);
+        }
       }
     }
 
     function defaultValue(slMax, slMin, slVal, currentElem) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
-      // debugger;
       let defaultValues = [];
       let currentValue = 0;
 
@@ -439,14 +470,14 @@ $(document).ready(function () {
         }
       }
 
-      if (currentElem === valueElem) {
+      if (currentElem == valueElem) {
         if (($.inArray(sliderValue, defaultValues)) == -1) {
           slVal = slMin;
-        }//////////////////////////////////////////
+        }
       }
       else if (currentElem == valueElemRange) {
         if (($.inArray(sliderValueRange, defaultValues)) == -1) {
-          slVal = slMin;
+          slVal = slMax;
         }
       }
 
@@ -461,6 +492,7 @@ $(document).ready(function () {
           sliderValue = defaultValues[0];
         }
         currentElem.html(sliderValue);
+        $('.config_currentValue:eq(0)').val(sliderValue);
       }
       else if (currentElem == valueElemRange) {
         sliderValueRange = slVal;
@@ -469,6 +501,7 @@ $(document).ready(function () {
           sliderValueRange = defaultValues[0];
         }
         currentElem.html(sliderValueRange);
+        $('.config_currentValueRange:eq(0)').val(sliderValueRange);
       }
       return defaultPosition;
     }
