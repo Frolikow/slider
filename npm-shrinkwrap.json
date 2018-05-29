@@ -3054,7 +3054,7 @@
     },
     "node-static": {
       "version": "0.7.10",
-      "from": "node-static@>=0.7.10 <0.8.0",
+      "from": "https://registry.npmjs.org/node-static/-/node-static-0.7.10.tgz",
       "resolved": "https://registry.npmjs.org/node-static/-/node-static-0.7.10.tgz",
       "dev": true
     },

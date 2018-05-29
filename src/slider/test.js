@@ -60,11 +60,10 @@ $(document).ready(function () {
         $('.slider:eq(0)').addClass('verticalSlider');
         $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
-        if (sliderRangeStatus = true) {
+        if (sliderRangeStatus) {
           $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
           $('.slider_handle_right_value:eq(0)').addClass('verticalSlider_handle_value');
         }
-
         verticalOrientation = true;
       }
       else {
@@ -72,7 +71,7 @@ $(document).ready(function () {
         $('.slider:eq(0)').removeClass('verticalSlider');
         $('.slider_handle:eq(0)').removeClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').removeClass('verticalSlider_handle_value');
-        if (sliderRangeStatus = true) {
+        if (sliderRangeStatus) {
           $('.slider_handle_right:eq(0)').removeClass('verticalSlider_handle');
           $('.slider_handle_right_value:eq(0)').removeClass('verticalSlider_handle_value');
         }
@@ -522,7 +521,7 @@ $(document).ready(function () {
         sliderValueRange = slVal;
         if (currentIndexDefaultPosition == -1) {
           defaultPosition = stepOfDefaultPosition* (defaultValues.length-1);
-          sliderValueRange = sliderMax;
+          sliderValueRange = defaultValues[defaultValues.length-1];
         }
         currentElem.html(sliderValueRange);
         $('.config_currentValueRange:eq(0)').val(sliderValueRange);

@@ -30,7 +30,7 @@
     "gh-pages": "^1.1.0",
     "html-webpack-plugin": "^3.2.0",
     "jquery": "^3.3.1",
-    "node-static": "^0.7.10",
+    "node-static": "https://registry.npmjs.org/node-static/-/node-static-0.7.10.tgz",
     "pug": "^2.0.3",
     "pug-html-loader": "^1.1.5",
     "pug-loader": "^2.4.0",
