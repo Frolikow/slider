@@ -12,7 +12,7 @@ const common = {
   context: __dirname + '/src/',
   entry: "app.js",
   output: {
-    path: __dirname + '/public',
+    path: path.resolve(__dirname + '/public'),
     filename: "[name].js",
     publicPath: '/'
   },
