@@ -87,7 +87,15 @@ $(document).ready(function () {
         configCurrentValueRange.css('display', 'block')
         configCurrentValueRange.val(sliderValueRange);
         valueElemRange.text(sliderValueRange);
-        handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
+        if (sliderValue >= sliderValueRange) {
+          sliderValueRange = sliderValue;
+          sliderValue = sliderValueRange - sliderStep;
+          handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
+          handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
+        }
+        else{
+          handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
+        }
         configCurrentValueRange.focusout(function () {
           sliderValueRange = parseInt(this.value);
           handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
@@ -148,7 +156,7 @@ $(document).ready(function () {
       $('.config_currentValue:eq(0)').attr('max', sliderMax);
     })
 
-    
+
     handleElemRange.mousedown(function (event) { //событие нажатой ЛКМ
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       let handleCoords = getCoords(handleElemRange); //внутренние координаты ползунка
@@ -244,7 +252,7 @@ $(document).ready(function () {
         $(document).off('mousemove');
       });
     });
-    
+
 
     handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
 
@@ -422,6 +430,9 @@ $(document).ready(function () {
           }
         }
       }
+      else {
+        handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
+      }
     })
 
 
@@ -520,8 +531,8 @@ $(document).ready(function () {
       else if (currentElem == valueElemRange) {
         sliderValueRange = slVal;
         if (currentIndexDefaultPosition == -1) {
-          defaultPosition = stepOfDefaultPosition* (defaultValues.length-1);
-          sliderValueRange = defaultValues[defaultValues.length-1];
+          defaultPosition = stepOfDefaultPosition * (defaultValues.length - 1);
+          sliderValueRange = defaultValues[defaultValues.length - 1];
         }
         currentElem.html(sliderValueRange);
         $('.config_currentValueRange:eq(0)').val(sliderValueRange);
