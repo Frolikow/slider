@@ -14,7 +14,7 @@ const common = {
   output: {
     path: path.resolve(__dirname + '/public'),
     filename: "[name].js",
-    publicPath: '/'
+    publicPath: ''
   },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
