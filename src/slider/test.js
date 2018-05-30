@@ -31,7 +31,8 @@ $(document).ready(function () {
       + '<label><input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
       + '<label><input type="checkbox" class="config_range">Включить выбор интервала</label>'
 
-      + '<label>Текущее значение</label><div class="config_block_currentValue"><input type="number" class="config_currentValue" min="' + sliderMin + '" max="' + sliderMax + '" ></div>'
+      + '<label>Текущее значение</label><div class="config_block_currentValue"><input type="number" class="config_currentValue" min="'
+      + sliderMin + '" max="' + sliderMax + '" ></div>'
       + '<label>Минимальное значение слайдера</label><input type="number" class="config_minValue" max=' + (sliderMax - sliderStep) + '>'
       + '<label>Максимальное значение слайдера</label><input type="number" class="config_maxValue" min=' + (sliderMin + sliderStep) + '>'
       + '<label>Размер шага слайдера</label><input type="number" class="config_sizeOfStep" min="1" max="' + (sliderMax - sliderMin) + '">');
