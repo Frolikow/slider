@@ -60,10 +60,8 @@ $(document).ready(function () {
         $('.slider:eq(0)').addClass('verticalSlider');
         $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
-        if (sliderRangeStatus) {
-          $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
-          $('.slider_handle_right_value:eq(0)').addClass('verticalSlider_handle_value');
-        }
+        $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
+        $('.slider_handle_value_right:eq(0)').addClass('verticalSlider_handle_value');
         verticalOrientation = true;
       }
       else {
@@ -71,10 +69,8 @@ $(document).ready(function () {
         $('.slider:eq(0)').removeClass('verticalSlider');
         $('.slider_handle:eq(0)').removeClass('verticalSlider_handle');
         $('.slider_handle_value:eq(0)').removeClass('verticalSlider_handle_value');
-        if (sliderRangeStatus) {
-          $('.slider_handle_right:eq(0)').removeClass('verticalSlider_handle');
-          $('.slider_handle_right_value:eq(0)').removeClass('verticalSlider_handle_value');
-        }
+        $('.slider_handle_right:eq(0)').removeClass('verticalSlider_handle');
+        $('.slider_handle_value_right:eq(0)').removeClass('verticalSlider_handle_value');
         verticalOrientation = false;
       }
     }) //complete
@@ -93,7 +89,7 @@ $(document).ready(function () {
           handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
           handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
         }
-        else{
+        else {
           handleElemRange.css('left', defaultValue(sliderMax, sliderMin, sliderValueRange, valueElemRange));
         }
         configCurrentValueRange.focusout(function () {
