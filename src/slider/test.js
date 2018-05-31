@@ -116,14 +116,14 @@ $(document).ready(function () {
       createHandleRange();
 
     })
-
+    
     $('.config_currentValue:eq(0)').val(sliderValue);
     $('.config_currentValue:eq(0)').focusout(function () { //текущее значение слайдера
       handleElem.css('left', defaultValue(sliderMax, sliderMin, parseInt(this.value), valueElem));
       this.value = sliderValue;
       configCurrentValueRange.attr('min', (sliderValue + sliderStep))
     })//complete
-
+    
     $('.config_minValue:eq(0)').val(sliderMin);
     $('.config_minValue:eq(0)').focusout(function () { //минимальное значение слайдера
       sliderMin = parseInt(this.value);
@@ -146,14 +146,81 @@ $(document).ready(function () {
       $('.config_sizeOfStep:eq(0)').attr('max', (sliderMax - sliderMin));
       configCurrentValueRange.attr('max', sliderMax)
     }) //complete
-
+    
     $('.config_sizeOfStep:eq(0)').val(sliderStep);
     $('.config_sizeOfStep:eq(0)').focusout(function () { //размера шага слайдера
       sliderStep = parseInt(this.value);
       $('.config_currentValue:eq(0)').attr('max', sliderMax);
     })
+    
+    handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));//готово
+    
+    sliderElem.click(function () { //обработка клика ЛКМ по шкале слайдера
+      let clickPositionArray = [];
+      let clickPositionValue = 0;
+      let slMin = sliderMin;
+      let slMax = sliderMax;
+      for (var i = 0; clickPositionValue < slMax; i++) {
+        if (slMin > slMax) {
+          break;
+        }
+        else {
+          clickPositionValue = slMin;
+          slMin += sliderStep;
+          clickPositionArray.push(clickPositionValue);
+        }
+      }
+
+      let shift;
+      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
+      if (verticalOrientation) {
+        shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
+      } else {
+        shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
+      }
 
 
+      let sliderWidth = sliderElem.outerWidth() - handleElem.outerWidth();
+      let clickSliderValueStep = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / sliderStep));
+
+      let moveToPosition;
+      let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
+      let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
+
+      if (shift < clickMiddlePosition) {
+        moveToPosition = clickSliderValueStep * currentSliderValue;
+      }
+      else if (shift > clickMiddlePosition) {
+        moveToPosition = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
+      }
+
+      if (moveToPosition > sliderWidth) {
+        moveToPosition = sliderWidth
+      }
+
+      if (sliderRangeStatus) {
+        if (moveToPosition < parseInt(handleElem.css('left'))) {
+          handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
+        }
+        else if (moveToPosition > parseInt(handleElemRange.css('left'))) {
+          handleElemRange.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, true));
+        }
+        else {
+          if ((moveToPosition - parseInt(handleElem.css('left'))) > (parseInt(handleElemRange.css('left')) - moveToPosition)) {
+            handleElemRange.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, true));
+          }
+          else if ((moveToPosition - parseInt(handleElem.css('left'))) < (parseInt(handleElemRange.css('left')) - moveToPosition)) {
+            handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
+          }
+        }
+      }
+      else {
+        handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
+      }
+    })
+   
+   
+    ///////////////////////////////////////////////////////////////////////////////////////////// CURRENT CHANGES
     handleElemRange.mousedown(function (event) { //событие нажатой ЛКМ
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
       let handleCoords = getCoords(handleElemRange); //внутренние координаты ползунка
@@ -163,7 +230,7 @@ $(document).ready(function () {
       } else {
         shift = event.pageX - handleCoords.left;
       }
-
+      
       // движение нажатой ЛКМ
       $(document).on('mousemove', function (event) {
         let beginEdge;
@@ -215,6 +282,9 @@ $(document).ready(function () {
         }
         handleElemRange.css('left', searchPosition(beginEdge, endEdge) + 'px');
 
+
+
+        
         function searchPosition(begin, end) {
           let widthOfstep = (end / (position.length - 1));
           let halfWidthOfStep = (widthOfstep / 2);
@@ -242,6 +312,9 @@ $(document).ready(function () {
           return currentPositionHandle;
         }
 
+
+
+
         calculateSliderValue(sliderMax, sliderMin, beginEdge, true);
       });
 
@@ -249,9 +322,6 @@ $(document).ready(function () {
         $(document).off('mousemove');
       });
     });
-
-
-    handleElem.css('left', defaultValue(sliderMax, sliderMin, sliderValue, valueElem));
 
     handleElem.mousedown(function (event) { //событие нажатой ЛКМ
       let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
@@ -368,72 +438,7 @@ $(document).ready(function () {
 
 
 
-    sliderElem.click(function () { //обработка клика ЛКМ по шкале слайдера
-      let clickPositionArray = [];
-      let clickPositionValue = 0;
-      let slMin = sliderMin;
-      let slMax = sliderMax;
-      for (var i = 0; clickPositionValue < slMax; i++) {
-        if (slMin > slMax) {
-          break;
-        }
-        else {
-          clickPositionValue = slMin;
-          slMin += sliderStep;
-          clickPositionArray.push(clickPositionValue);
-        }
-      }
-
-      let shift;
-      let sliderCoords = getCoords(sliderElem); //внутренние координаты слайдера
-      if (verticalOrientation) {
-        shift = event.pageY - sliderCoords.top - (handleElem.outerHeight() / 2);
-      } else {
-        shift = event.pageX - sliderCoords.left - (handleElem.outerWidth() / 2);
-      }
-
-
-      let sliderWidth = sliderElem.outerWidth() - handleElem.outerWidth();
-      let clickSliderValueStep = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / sliderStep));
-
-      let moveToPosition;
-      let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
-      let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
-
-      if (shift < clickMiddlePosition) {
-        moveToPosition = clickSliderValueStep * currentSliderValue;
-      }
-      else if (shift > clickMiddlePosition) {
-        moveToPosition = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
-      }
-
-      if (moveToPosition > sliderWidth) {
-        moveToPosition = sliderWidth
-      }
-
-      if (sliderRangeStatus) {
-        if (moveToPosition < parseInt(handleElem.css('left'))) {
-          handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
-        }
-        else if (moveToPosition > parseInt(handleElemRange.css('left'))) {
-          handleElemRange.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, true));
-        }
-        else {
-          if ((moveToPosition - parseInt(handleElem.css('left'))) > (parseInt(handleElemRange.css('left')) - moveToPosition)) {
-            handleElemRange.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, true));
-          }
-          else if ((moveToPosition - parseInt(handleElem.css('left'))) < (parseInt(handleElemRange.css('left')) - moveToPosition)) {
-            handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
-          }
-        }
-      }
-      else {
-        handleElem.animate({ left: moveToPosition + 'px' }, 300, calculateSliderValue(sliderMax, sliderMin, shift / sliderStep, false));
-      }
-    })
-
-
-
+    //готово
     function calculateSliderValue(slMax, slMin, beginEdge, rangeStatus) { //расчет значения над ползунком
       let sliderWidth = parseInt(sliderElem.css('width')) - 20;
 
@@ -536,7 +541,9 @@ $(document).ready(function () {
       }
       return defaultPosition;
     }
-
+    
+    
+    
     function getCoords(elem) { //получение координат курсора внутри элемента
       let box = elem.get(0).getBoundingClientRect();
       return {
@@ -544,6 +551,7 @@ $(document).ready(function () {
         left: box.left + pageXOffset
       };
     }
-
+    
+    //готово
   }
 })(jQuery);
