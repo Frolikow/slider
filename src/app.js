@@ -1,8 +1,8 @@
 'use strict';
 
 import './base.styl';
-import './../node_modules/jquery/src/jquery'
+import './../node_modules/jquery/src/jquery';
+import './plugins/slider-plugin';
 
 
-// import './slider/test';
-import './slider/MVCtest';
+import './slider/slider';
