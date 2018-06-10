@@ -8,7 +8,6 @@
     OMVC.Model = function () {
       var thisModel = this;
 
-
       this.sliderMin = options.sliderMin || 1;
       this.sliderMax = options.sliderMax || 10;
       this.sliderValue = options.sliderValue || thisModel.sliderMin;
@@ -16,6 +15,7 @@
       this.sliderStep = options.sliderStep || 1;
       this.verticalOrientation = options.verticalOrientation || false;
       this.sliderRangeStatus = options.sliderRangeStatus || false;
+      this.sliderHandleValue = options.sliderHandleValue || false;
 
 
       this.sliderElem;
@@ -385,7 +385,7 @@
       $('.block_config').html('<div class="config_panel">')
       $('.config_panel').html('<label> <input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
         + '<label> <input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
-        + '<label> <input type="checkbox" class="config_range">Включить выбор интервала</label>'
+        + '<label> <input type="checkbox"  class="config_range">Включить выбор интервала</label>'
         + '<label>Текущее значение</label> <div class="config_block_currentValue"> <input type="number" class="config_currentValue"> </div>'
         + '<label>Минимальное значение слайдера</label> <input type="number" class="config_minValue">'
         + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
@@ -415,7 +415,12 @@
 
       model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
 
-      $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок
+      if (model.sliderHandleValue) {
+        $('.config_showHandleValue:eq(0)').click();
+        model.valueElem.css('display', 'none');
+        model.valueElemRange.css('display', 'none');
+      }
+      $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок 
         if (this.checked) {
           model.valueElem.css('display', 'none');
           model.valueElemRange.css('display', 'none');
@@ -426,6 +431,16 @@
         }
       })//complete
 
+      if (model.verticalOrientation) {
+        $('.config_orientation:eq(0)').click();
+        $('.block_slider:eq(0)').addClass('verticalBlockSlider');
+        $('.slider:eq(0)').addClass('verticalSlider');
+        $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
+        $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
+        $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
+        $('.slider_handle_value_right:eq(0)').addClass('verticalSlider_handle_value');
+        model.verticalOrientation = true;;
+      }
       $('.config_orientation:eq(0)').change(function () {  //вкл/выкл вертикальной ориентации
         if (this.checked) {
           $('.block_slider:eq(0)').addClass('verticalBlockSlider');
@@ -447,6 +462,10 @@
         }
       })//complete
 
+      if (model.sliderRangeStatus ) {
+        $('.config_range:eq(0)').click();
+        model.createHandleRange();
+      }
       $('.config_range:eq(0)').change(function () {  //вкл/выкл выбор диапазона
         if (model.sliderRangeStatus) {
           model.sliderRangeStatus = false;
@@ -508,28 +527,9 @@
     };
     ////////___Controller___///////////////////////////////////////////___ready___///////////////////
 
-    // function slider() {
-    //   var model = new OMVC.Model();
-    //   var view = new OMVC.ViewSlider();
-    //   var viewConfig = new OMVC.ViewConfiguration();
-    //   var controller = new OMVC.Controller(model, view, viewConfig);
-    // };
-
     var model = new OMVC.Model(options);
-    var view = new OMVC.ViewSlider();
-    var viewConfig = new OMVC.ViewConfiguration();
+    var view = new OMVC.ViewSlider(options);
+    var viewConfig = new OMVC.ViewConfiguration(options);
     var controller = new OMVC.Controller(model, view, viewConfig);
   };
 })(jQuery);
-
-
-
-
-
-// options = $.extend({
-  //   param1: 'param1Value', //параметр1
-  //   param2: 'param2Value' //параметр2
-  // }, options);
-  // var make = function () {
-    // };
-    // return this.each(make);
