@@ -2,12 +2,10 @@
 
 (function ($) {
   $.fn.efSlider = function (options) {
-
     var OMVC = {};
 
-    OMVC.Model = function () {
+    OMVC.Model = function (options) {
       var thisModel = this;
-
       this.sliderMin = options.sliderMin || 1;
       this.sliderMax = options.sliderMax || 10;
       this.sliderValue = options.sliderValue || thisModel.sliderMin;
@@ -17,21 +15,30 @@
       this.sliderRangeStatus = options.sliderRangeStatus || false;
       this.sliderHandleValue = options.sliderHandleValue || false;
 
-
       this.sliderElem;
       this.handleElem;
       this.valueElem;
 
+      this.generalValueElem;
+
       this.handleElemRange;
       this.valueElemRange;
-      this.configCurrentValueRange;
+
+      this.configShowHandleValueElem;
+      this.configOrientationElem;
+      this.configRangeElem
+      this.configCurrentValueElem;
+      this.configCurrentValueRangeElem;
+      this.configMinValueElem;
+      this.configMaxValueElem
+      this.configSizeOfStepElem;
 
       this.createHandleRange = function () {
         if (thisModel.sliderRangeStatus) {
-          $('.config_currentValue:eq(0)').attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
+          thisModel.configCurrentValueElem.attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
           thisModel.handleElemRange.css('display', 'block')
-          thisModel.configCurrentValueRange.css('display', 'block')
-          thisModel.configCurrentValueRange.val(thisModel.sliderValueRange);
+          thisModel.configCurrentValueRangeElem.css('display', 'block')
+          thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
           thisModel.valueElemRange.text(thisModel.sliderValueRange);
           if (thisModel.sliderValue >= thisModel.sliderValueRange) {
             thisModel.sliderValueRange = thisModel.sliderValue;
@@ -42,17 +49,17 @@
           else {
             thisModel.handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.valueElemRange));
           }
-          thisModel.configCurrentValueRange.focusout(function () {
+          thisModel.configCurrentValueRangeElem.focusout(function () {
             thisModel.sliderValueRange = parseInt(this.value);
             thisModel.handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.valueElemRange));
             thisModel.valueElemRange.text(thisModel.sliderValueRange);
-            $('.config_currentValue:eq(0)').attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
+            thisModel.configCurrentValueElem.attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
           })
         }
         else {
           thisModel.handleElemRange.css('display', 'none')
-          thisModel.configCurrentValueRange.css('display', 'none')
-          $('.config_currentValue:eq(0)').attr('max', thisModel.sliderMax)
+          thisModel.configCurrentValueRangeElem.css('display', 'none')
+          thisModel.configCurrentValueElem.attr('max', thisModel.sliderMax)
         }
       };
 
@@ -101,7 +108,7 @@
             thisModel.sliderValue = defaultValuesArray[0];
           }
           currentElem.html(thisModel.sliderValue);
-          $('.config_currentValue:eq(0)').val(thisModel.sliderValue);
+          thisModel.configCurrentValueElem.val(thisModel.sliderValue);
         }
         else if (currentElem == thisModel.valueElemRange) {
           thisModel.sliderValueRange = slVal;
@@ -110,7 +117,7 @@
             thisModel.sliderValueRange = defaultValuesArray[defaultValuesArray.length - 1];
           }
           currentElem.html(thisModel.sliderValueRange);
-          $('.config_currentValueRange:eq(0)').val(thisModel.sliderValueRange);
+          thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
         }
         return defaultPosition;
       };
@@ -136,24 +143,24 @@
           if (currentSliderValue <= $.inArray(thisModel.sliderValue, values)) {
             thisModel.valueElemRange.html(thisModel.sliderValue + thisModel.sliderStep);
             thisModel.sliderValueRange = parseInt(thisModel.valueElemRange.text());
-            thisModel.configCurrentValueRange.val(thisModel.sliderValue + thisModel.sliderStep);
+            thisModel.configCurrentValueRangeElem.val(thisModel.sliderValue + thisModel.sliderStep);
           }
           else {
             thisModel.valueElemRange.html(values[currentSliderValue]);
             thisModel.sliderValueRange = parseInt(thisModel.valueElemRange.text());
-            thisModel.configCurrentValueRange.val(thisModel.sliderValueRange);
+            thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
           }
         }
         else {
           if (thisModel.sliderRangeStatus && currentSliderValue >= $.inArray((thisModel.sliderValueRange - thisModel.sliderStep), values)) {
             thisModel.valueElem.html(thisModel.sliderValueRange - thisModel.sliderStep);
             thisModel.sliderValue = parseInt(thisModel.valueElem.text());
-            $('.config_currentValue:eq(0)').val(thisModel.sliderValueRange - thisModel.sliderStep);
+            thisModel.configCurrentValueElem.val(thisModel.sliderValueRange - thisModel.sliderStep);
           }
           else {
             thisModel.valueElem.html(values[currentSliderValue]);
             thisModel.sliderValue = parseInt(thisModel.valueElem.text());
-            $('.config_currentValue:eq(0)').val(thisModel.sliderValue);
+            thisModel.configCurrentValueElem.val(thisModel.sliderValue);
           }
         }
       };
@@ -316,8 +323,6 @@
         let currentPositionCursor = begin * thisModel.sliderStep;
         let middleOfPosition = currentPositionHandle + halfWidthOfStep;
 
-
-
         if (element == thisModel.handleElem) {
           if (thisModel.sliderRangeStatus) {
             if (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange == -1) {
@@ -365,62 +370,70 @@
           }
           currentPositionHandle = currentPositionHandleRange;
         }
-
-
-
         return currentPositionHandle;
       }
 
     };
     //////////___Model___/////////////////////////////////////___ViewSlider___///////////////////////
-    OMVC.ViewSlider = function () {
-      $('.block_slider').html('<div class="slider">');
-      $('.slider').html('<div class="slider_handle slider_handle_left">');
-      $('.slider_handle_left').html('<div class="slider_handle_value slider_handle_value_left">');
-      $('.slider_handle:eq(0)').after('<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">');
-
+    OMVC.ViewSlider = function (thisForViewSlider) {
+      thisForViewSlider.html('<div class="slider">'
+        + ' <div class="slider_handle slider_handle_left"> <div class="slider_handle_value slider_handle_value_left"></div></div>'
+        + '<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">'
+      );
     };
     //////___ViewSlider___////////////////////////////___ViewConfiguration___////////////////////////
-    OMVC.ViewConfiguration = function () {
-      $('.block_config').html('<div class="config_panel">')
-      $('.config_panel').html('<label> <input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
-        + '<label> <input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
-        + '<label> <input type="checkbox"  class="config_range">Включить выбор интервала</label>'
-        + '<label>Текущее значение</label> <div class="config_block_currentValue"> <input type="number" class="config_currentValue"> </div>'
-        + '<label>Минимальное значение слайдера</label> <input type="number" class="config_minValue">'
-        + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
-        + '<label>Размер шага слайдера</label> <input type="number" class="config_sizeOfStep">');
+    OMVC.ViewConfiguration = function (options, thisForViewConfiguration) {
+      if (options.sliderConfigPanel == true) {
+        thisForViewConfiguration.after('<div class="block_config">' + '<div class="config_panel">'
 
-      $('.config_currentValue:eq(0)').after('<input type="number" class="config_currentValueRange">')
+          + '<label> <input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
+          + '<label> <input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
+          + '<label> <input type="checkbox"  class="config_range">Включить выбор интервала</label>'
 
+          + '<label>Текущее значение</label> <div class="config_block_currentValue">'
+          + ' <input type="number" class="config_currentValue"><input type="number" class="config_currentValueRange"> </div>'
+          + '<label>Минимальное значение слайдера</label> <input type="number" class="config_minValue">'
+          + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
+          + '<label>Размер шага слайдера</label> <input type="number" class="config_sizeOfStep">');
+      }
     };
     /////////___ViewConfiguration___///////////////////////////////////___Controller___//////////////
-    OMVC.Controller = function (model, view, viewConfig) {
-      model.sliderElem = $('.slider:eq(0)');
-      model.handleElem = $('.slider_handle_left:eq(0)');
-      model.valueElem = $('.slider_handle_value_left:eq(0)');
+    OMVC.Controller = function (model, view, viewConfig, thisForController) {
+      //init slider elem
+      model.sliderElem = thisForController.find('.slider');
+      model.handleElem = thisForController.find('.slider_handle_left');
+      model.valueElem = thisForController.find('.slider_handle_value_left');
+      model.generalValueElem = thisForController.find('.slider_handle_value');
+      //init slider range elem
+      model.handleElemRange = thisForController.find('.slider_handle_right');
+      model.valueElemRange = thisForController.find('.slider_handle_value_right');
+      //init slider configPanel elem
+      model.configShowHandleValueElem = thisForController.next().find('.config_showHandleValue');
+      model.configOrientationElem = thisForController.next().find('.config_orientation');
+      model.configRangeElem = thisForController.next().find('.config_range');
+      model.configCurrentValueElem = thisForController.next().find('.config_currentValue');
+      model.configCurrentValueRangeElem = thisForController.next().find('.config_currentValueRange');
+      model.configMinValueElem = thisForController.next().find('.config_minValue');
+      model.configMaxValueElem = thisForController.next().find('.config_maxValue');
+      model.configSizeOfStepElem = thisForController.next().find('.config_sizeOfStep');
 
-      $('.config_currentValue:eq(0)').attr({ 'min': model.sliderMin, 'max': model.sliderMax, 'value': model.sliderValue });
-      $('.config_minValue:eq(0)').attr({ 'max': (model.sliderMax - model.sliderStep), 'value': model.sliderMin });
-      $('.config_maxValue:eq(0)').attr({ 'min': (model.sliderMin + model.sliderStep), 'value': model.sliderMax });
-      $('.config_sizeOfStep:eq(0)').attr({ 'min': 1, 'max': (model.sliderMax - model.sliderMin), 'value': model.sliderStep });
-      $('.config_currentValueRange:eq(0)').attr({ 'min': (model.sliderValue + model.sliderStep), 'max': model.sliderMax, 'value': model.sliderValueRange });
-
-      model.handleElemRange = $('.slider_handle_right:eq(0)');
-      model.valueElemRange = $('.slider_handle_value_right:eq(0)');
-      model.configCurrentValueRange = $('.config_currentValueRange:eq(0)')
+      model.configCurrentValueElem.attr({ 'min': model.sliderMin, 'max': model.sliderMax, 'value': model.sliderValue });
+      model.configMinValueElem.attr({ 'max': (model.sliderMax - model.sliderStep), 'value': model.sliderMin });
+      model.configMaxValueElem.attr({ 'min': (model.sliderMin + model.sliderStep), 'value': model.sliderMax });
+      model.configSizeOfStepElem.attr({ 'min': 1, 'max': (model.sliderMax - model.sliderMin), 'value': model.sliderStep });
+      model.configCurrentValueRangeElem.attr({ 'min': (model.sliderValue + model.sliderStep), 'max': model.sliderMax, 'value': model.sliderValueRange });
 
       model.handleElemRange.css('display', 'none')
-      model.configCurrentValueRange.css('display', 'none')
+      model.configCurrentValueRangeElem.css('display', 'none')
 
       model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
 
       if (model.sliderHandleValue) {
-        $('.config_showHandleValue:eq(0)').click();
+        model.configShowHandleValueElem.click();
         model.valueElem.css('display', 'none');
         model.valueElemRange.css('display', 'none');
       }
-      $('.config_showHandleValue:eq(0)').change(function () {  //убрать флажок 
+      model.configShowHandleValueElem.change(function () {  //убрать флажок 
         if (this.checked) {
           model.valueElem.css('display', 'none');
           model.valueElemRange.css('display', 'none');
@@ -432,41 +445,42 @@
       })//complete
 
       if (model.verticalOrientation) {
-        $('.config_orientation:eq(0)').click();
-        $('.block_slider:eq(0)').addClass('verticalBlockSlider');
-        $('.slider:eq(0)').addClass('verticalSlider');
-        $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
-        $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
-        $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
-        $('.slider_handle_value_right:eq(0)').addClass('verticalSlider_handle_value');
+        model.configOrientationElem.click();
+        thisForController.addClass('verticalBlockSlider');
+        model.sliderElem.addClass('verticalSlider');
+        model.handleElem.addClass('verticalSlider_handle');
+        model.generalValueElem.addClass('verticalSlider_handle_value');
+        model.handleElemRange.addClass('verticalSlider_handle');
+        model.valueElemRange.addClass('verticalSlider_handle_value');
         model.verticalOrientation = true;;
       }
-      $('.config_orientation:eq(0)').change(function () {  //вкл/выкл вертикальной ориентации
+      model.configOrientationElem.change(function () {  //вкл/выкл вертикальной ориентации
         if (this.checked) {
-          $('.block_slider:eq(0)').addClass('verticalBlockSlider');
-          $('.slider:eq(0)').addClass('verticalSlider');
-          $('.slider_handle:eq(0)').addClass('verticalSlider_handle');
-          $('.slider_handle_value:eq(0)').addClass('verticalSlider_handle_value');
-          $('.slider_handle_right:eq(0)').addClass('verticalSlider_handle');
-          $('.slider_handle_value_right:eq(0)').addClass('verticalSlider_handle_value');
+          thisForController.addClass('verticalBlockSlider');
+          model.sliderElem.addClass('verticalSlider');
+          model.handleElem.addClass('verticalSlider_handle');
+          model.generalValueElem.addClass('verticalSlider_handle_value');
+          model.handleElemRange.addClass('verticalSlider_handle');
+          model.valueElemRange.addClass('verticalSlider_handle_value');
           model.verticalOrientation = true;
         }
         else {
-          $('.block_slider:eq(0)').removeClass('verticalBlockSlider');
-          $('.slider:eq(0)').removeClass('verticalSlider');
-          $('.slider_handle:eq(0)').removeClass('verticalSlider_handle');
-          $('.slider_handle_value:eq(0)').removeClass('verticalSlider_handle_value');
-          $('.slider_handle_right:eq(0)').removeClass('verticalSlider_handle');
-          $('.slider_handle_value_right:eq(0)').removeClass('verticalSlider_handle_value');
+          thisForController.removeClass('verticalBlockSlider');
+          model.sliderElem.removeClass('verticalSlider');
+          model.handleElem.removeClass('verticalSlider_handle');
+          model.generalValueElem.removeClass('verticalSlider_handle_value');
+          model.handleElemRange.removeClass('verticalSlider_handle');
+          model.valueElemRange.removeClass('verticalSlider_handle_value');
           model.verticalOrientation = false;
         }
       })//complete
 
-      if (model.sliderRangeStatus ) {
-        $('.config_range:eq(0)').click();
+      if (model.sliderRangeStatus) {
+        model.configRangeElem.click();
         model.createHandleRange();
       }
-      $('.config_range:eq(0)').change(function () {  //вкл/выкл выбор диапазона
+
+      model.configRangeElem.change(function () {  //вкл/выкл выбор диапазона
         if (model.sliderRangeStatus) {
           model.sliderRangeStatus = false;
         }
@@ -477,36 +491,36 @@
 
       })
 
-      $('.config_currentValue:eq(0)').focusout(function () { //текущее значение слайдера
+      model.configCurrentValueElem.focusout(function () { //текущее значение слайдера
         model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.valueElem));
         this.value = model.sliderValue;
-        model.configCurrentValueRange.attr('min', (model.sliderValue + model.sliderStep))
+        model.configCurrentValueRangeElem.attr('min', (model.sliderValue + model.sliderStep))
       })//complete
 
-      $('.config_minValue:eq(0)').focusout(function () { //минимальное значение слайдера
+      model.configMinValueElem.focusout(function () { //минимальное значение слайдера
         model.sliderMin = parseInt(this.value);
         model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
         if (model.sliderRangeStatus) {
           model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
         }
-        $('.config_currentValue:eq(0)').attr('min', model.sliderMin);
-        $('.config_sizeOfStep:eq(0)').attr('max', (model.sliderMax - model.sliderMin));
+        model.configCurrentValueElem.attr('min', model.sliderMin);
+        model.configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
       }) //complete
 
-      $('.config_maxValue:eq(0)').focusout(function () { //максимальное значение слайдера
+      model.configMaxValueElem.focusout(function () { //максимальное значение слайдера
         model.sliderMax = parseInt(this.value);
         model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
         if (model.sliderRangeStatus) {
           model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
         }
-        $('.config_currentValue:eq(0)').attr('max', model.sliderMax);
-        $('.config_sizeOfStep:eq(0)').attr('max', (model.sliderMax - model.sliderMin));
-        model.configCurrentValueRange.attr('max', model.sliderMax)
+        model.configCurrentValueElem.attr('max', model.sliderMax);
+        model.configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
+        model.configCurrentValueRangeElem.attr('max', model.sliderMax)
       }) //complete
 
-      $('.config_sizeOfStep:eq(0)').focusout(function () { //размера шага слайдера
+      model.configSizeOfStepElem.focusout(function () { //размера шага слайдера
         model.sliderStep = parseInt(this.value);
-        $('.config_currentValue:eq(0)').attr('max', model.sliderMax);
+        model.configCurrentValueElem.attr('max', model.sliderMax);
       })
 
       model.sliderElem.click(function () {
@@ -522,14 +536,12 @@
         let currentElement = model.handleElemRange;
         model.mouseDown(event, currentElement);
       });
-
-
     };
     ////////___Controller___///////////////////////////////////////////___ready___///////////////////
 
-    var model = new OMVC.Model(options);
-    var view = new OMVC.ViewSlider(options);
-    var viewConfig = new OMVC.ViewConfiguration(options);
-    var controller = new OMVC.Controller(model, view, viewConfig);
+    var model = new OMVC.Model(options, this);
+    var view = new OMVC.ViewSlider(this);
+    var viewConfig = new OMVC.ViewConfiguration(options, this);
+    var controller = new OMVC.Controller(model, view, viewConfig, this);
   };
 })(jQuery);
