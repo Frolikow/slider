@@ -5,12 +5,12 @@ $(document).ready(function () {
   $('.block_slider').each(function () {
     $(this).efSlider({
       sliderConfigPanel: true,
-      sliderMin: 50,
-      sliderMax: 100,
-      sliderValue: 75,
-      sliderValueRange: 85,
+      sliderMin: 10,
+      sliderMax: 20,
+      sliderValue: 14,
+      sliderValueRange: 18,
       sliderStep: 1,
-      sliderHandleValue: false,
+      sliderHandleValueHide: false,
       verticalOrientation: false,
       sliderRangeStatus: true
     });

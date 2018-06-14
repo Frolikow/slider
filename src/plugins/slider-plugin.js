@@ -13,7 +13,21 @@
       this.sliderStep = options.sliderStep || 1;
       this.verticalOrientation = options.verticalOrientation || false;
       this.sliderRangeStatus = options.sliderRangeStatus || false;
-      this.sliderHandleValue = options.sliderHandleValue || false;
+      this.sliderHandleValueHide = options.sliderHandleValueHide || false;
+
+      if (this.sliderMin > this.sliderMax) {
+        this.sliderMin = 1;
+        this.sliderMax = 10;
+        alert('Неккоректные значения sliderMin, sliderMax \nОбязательное условие: sliderMin < sliderMax \n Изменено на sliderMin = 1, sliderMax = 10.');
+      }
+      if (0 > this.sliderStep || this.sliderStep > (this.sliderMax - this.sliderMin)) {
+        this.sliderStep = 1;
+        alert('Неккоректное значение sliderStep \nОбязательное условие: \n0 > sliderStep || sliderStep > (sliderMax - sliderMin) \n Изменено на sliderStep = 1.');
+      }
+      if (this.sliderValue > this.sliderValueRange) {
+        alert('Неккоректные значения sliderValue, sliderValueRange \nОбязательное условие: \nsliderValue < sliderValueRange \n Изменено на sliderValue = sliderValue - sliderStep, sliderValueRange = sliderValue.');
+      }
+
 
       this.sliderElem;
       this.handleElem;
@@ -428,7 +442,7 @@
 
       model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
 
-      if (model.sliderHandleValue) {
+      if (model.sliderHandleValueHide) {
         model.configShowHandleValueElem.click();
         model.valueElem.css('display', 'none');
         model.valueElemRange.css('display', 'none');
@@ -521,6 +535,10 @@
       model.configSizeOfStepElem.focusout(function () { //размера шага слайдера
         model.sliderStep = parseInt(this.value);
         model.configCurrentValueElem.attr('max', model.sliderMax);
+        model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
+        if (model.sliderRangeStatus) {
+          model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
+        }
       })
 
       model.sliderElem.click(function () {
