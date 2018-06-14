@@ -16,7 +16,7 @@ body {
 }
 .layout .config_panel {
   margin: 15px;
-  width: 500px;
+  width: 350px;
   display: flex;
   flex-direction: column;
   align-content: space-between;
