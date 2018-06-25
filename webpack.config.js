@@ -41,7 +41,7 @@ const common = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./index.pug",
-      inject: 'head',
+      inject: 'body',
       filename: 'index.html'
     }),
     new CleanWebpackPlugin(pathToClean),

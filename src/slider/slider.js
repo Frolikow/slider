@@ -1,18 +1,17 @@
+import $ from 'jquery';
 
-'use strict';
-
-$(document).ready(function () {
+$(document).ready(() => {
   $('.block_slider').each(function () {
     $(this).efSlider({
       sliderConfigPanel: true,
-      sliderMin: 10,
-      sliderMax: 20,
-      sliderValue: 14,
-      sliderValueRange: 18,
+      sliderMin: 1,
+      sliderMax: 5,
+      sliderValue: 2,
+      sliderValueRange: 3,
       sliderStep: 1,
       sliderHandleValueHide: false,
       verticalOrientation: false,
-      sliderRangeStatus: true
+      sliderRangeStatus: false,
     });
   });
 });
