@@ -137,14 +137,16 @@ import jQuery from 'jquery';
             thisModel.sliderValueRange = parseInt(thisModel.$valueElemRange.text());
             thisModel.$configCurrentValueRangeElem.val(thisModel.sliderValueRange);
           }
-        } else if (thisModel.sliderRangeStatus && currentSliderValue >= $.inArray((thisModel.sliderValueRange - thisModel.sliderStep), values)) {
-          thisModel.$valueElem.html(thisModel.sliderValueRange - thisModel.sliderStep);
-          thisModel.sliderValue = parseInt(thisModel.$valueElem.text());
-          thisModel.$configCurrentValueElem.val(thisModel.sliderValueRange - thisModel.sliderStep);
         } else {
-          thisModel.$valueElem.html(values[currentSliderValue]);
-          thisModel.sliderValue = parseInt(thisModel.$valueElem.text());
-          thisModel.$configCurrentValueElem.val(thisModel.sliderValue);
+          if (thisModel.sliderRangeStatus && currentSliderValue >= $.inArray((thisModel.sliderValueRange - thisModel.sliderStep), values)) {
+            thisModel.$valueElem.html(thisModel.sliderValueRange - thisModel.sliderStep);
+            thisModel.sliderValue = parseInt(thisModel.$valueElem.text());
+            thisModel.$configCurrentValueElem.val(thisModel.sliderValueRange - thisModel.sliderStep);
+          } else {
+            thisModel.$valueElem.html(values[currentSliderValue]);
+            thisModel.sliderValue = parseInt(thisModel.$valueElem.text());
+            thisModel.$configCurrentValueElem.val(thisModel.sliderValue);
+          }
         }
       };
 
@@ -224,7 +226,7 @@ import jQuery from 'jquery';
           shift = event.pageX - handleCoords.left;
         }
         // движение нажатой ЛКМ
-        $(document).on('mousemove', () => {
+        $(document).on('mousemove', (event) => {
           let beginEdge;
           const position = [];
           let currentValue = 0;

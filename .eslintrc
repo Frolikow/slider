@@ -18,6 +18,7 @@
     "func-names":"off",
     "no-lonely-if":"off",
     "no-bitwise":"off",
-    "no-alert":"off"
+    "no-alert":"off",
+    "no-shadow":"off"
   }
 }
