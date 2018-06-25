@@ -38,14 +38,14 @@ import jQuery from 'jquery';
           if (thisModel.sliderValue >= thisModel.sliderValueRange) {
             thisModel.sliderValueRange = thisModel.sliderValue;
             thisModel.sliderValue = thisModel.sliderValueRange - thisModel.sliderStep;
-            thisModel.$handleElem.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValue, thisModel.$valueElem));
-            thisModel.$handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
+            thisModel.$handleElem.css('left', thisModel.calculateDefaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValue, thisModel.$valueElem));
+            thisModel.$handleElemRange.css('left', thisModel.calculateDefaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
           } else {
-            thisModel.$handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
+            thisModel.$handleElemRange.css('left', thisModel.calculateDefaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
           }
           thisModel.$configCurrentValueRangeElem.focusout(function () {
             thisModel.sliderValueRange = parseInt(this.value);
-            thisModel.$handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
+            thisModel.$handleElemRange.css('left', thisModel.calculateDefaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.$valueElemRange));
             thisModel.$valueElemRange.text(thisModel.sliderValueRange);
             thisModel.$configCurrentValueElem.attr('max', (thisModel.sliderValueRange - thisModel.sliderStep));
           });
@@ -56,7 +56,7 @@ import jQuery from 'jquery';
         }
       };
 
-      this.defaultValue = function (slMax, slMin, slVal, currentElem) { // установка ползунка в позицию "по-умолчанию" = sliderValue
+      this.calculateDefaultValue = function (slMax, slMin, slVal, currentElem) { // установка ползунка в позицию "по-умолчанию" = sliderValue
         const defaultValuesArray = [];
         let currentValue = 0;
 
@@ -383,7 +383,7 @@ import jQuery from 'jquery';
       model.$handleElemRange.css('display', 'none');
       model.$configCurrentValueRangeElem.css('display', 'none');
 
-      model.$handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
 
       if (model.sliderHandleValueHide) {
         model.$configShowHandleValueElem.click();
@@ -445,16 +445,16 @@ import jQuery from 'jquery';
       });
 
       model.$configCurrentValueElem.focusout(function () { // текущее значение слайдера
-        model.$handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.$valueElem));
+        model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.$valueElem));
         this.value = model.sliderValue;
         model.$configCurrentValueRangeElem.attr('min', (model.sliderValue + model.sliderStep));
       });// complete
 
       model.$configMinValueElem.focusout(function () { // минимальное значение слайдера
         model.sliderMin = parseInt(this.value);
-        model.$handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+        model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
         if (model.sliderRangeStatus) {
-          model.$handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+          model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
         }
         model.$configCurrentValueElem.attr('min', model.sliderMin);
         model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
@@ -462,9 +462,9 @@ import jQuery from 'jquery';
 
       model.$configMaxValueElem.focusout(function () { // максимальное значение слайдера
         model.sliderMax = parseInt(this.value);
-        model.$handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+        model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
         if (model.sliderRangeStatus) {
-          model.$handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+          model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
         }
         model.$configCurrentValueElem.attr('max', model.sliderMax);
         model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
@@ -474,9 +474,9 @@ import jQuery from 'jquery';
       model.$configSizeOfStepElem.focusout(function () { // размера шага слайдера
         model.sliderStep = parseInt(this.value);
         model.$configCurrentValueElem.attr('max', model.sliderMax);
-        model.$handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+        model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
         if (model.sliderRangeStatus) {
-          model.$handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+          model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
         }
       });
 
