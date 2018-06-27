@@ -9,21 +9,21 @@ jQuery плагин - слайдер.
 
 ## Содержание проекта:  
 * [src](#src)   
-* [.eslintignore](#.gitignore)   
-* [eslintrc](#npm-shrinkwrap.json)  
-* [.gitignore](#package.json)  
-* [npm-shrinkwrap](#npm-shrinkwrap)
-* [package.json](#package.json)
-* [webpack.config.js](#webpack.config.js)  
+* [.eslintignore](#eslintignore)   
+* [eslintrc](#eslintrc)  
+* [.gitignore](#gitignore)  
+* [npm-shrinkwrap](#npm-shrinkwrapjson)
+* [package.json](#packagejson)
+* [webpack.config.js](#webpackconfigjs)  
 
 
 ### src   
 Папка содержащая файлы базовых стилей и разметки, файл точки входа для сборщика и файлы плагина.  
  * [plugins](#plugins)  
  * [slider](#slider)  
- * [app.js](#app.js)  
- * [base.styl](#base.styl)  
- * [index.pug](#index.pug)  
+ * [app.js](#appjs)  
+ * [base.styl](#basestyl)  
+ * [index.pug](#indexpug)  
   #### plugins  
   
   #### slider   
