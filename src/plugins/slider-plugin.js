@@ -6,6 +6,7 @@ import jQuery from 'jquery';
 
     OMVC.Model = function () {
       const thisModel = this;
+      this.sliderConfigPanel = options.sliderConfigPanel || false;
       this.sliderMin = options.sliderMin || 1;
       this.sliderMax = options.sliderMax || 10;
       this.sliderValue = options.sliderValue || thisModel.sliderMin;
