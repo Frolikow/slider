@@ -1,4 +1,7 @@
 import jQuery from 'jquery';
+// import './viewSlider/viewSlider';
+// import './viewConfiguration/ViewConfiguration';
+
 
 (function ($) {
   $.fn.efSlider = function (options) {
@@ -335,11 +338,6 @@ import jQuery from 'jquery';
         return currentPositionHandle;
       };
     };
-    OMVC.ViewSlider = function (thisForViewSlider) {
-      thisForViewSlider.html('<div class="slider">'
-        + ' <div class="slider_handle slider_handle_left"> <div class="slider_handle_value slider_handle_value_left"></div></div>'
-        + '<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">');
-    };
     OMVC.ViewConfiguration = function (sliderOptions, thisForViewConfiguration) {
       if (sliderOptions.sliderConfigPanel === true) {
         thisForViewConfiguration.after('<div class="block_config">'
@@ -355,6 +353,11 @@ import jQuery from 'jquery';
           + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
           + '<label>Размер шага слайдера</label> <input type="number" class="config_sizeOfStep">');
       }
+    };
+    OMVC.ViewSlider = function (thisForViewSlider) {
+      thisForViewSlider.html('<div class="slider">'
+        + ' <div class="slider_handle slider_handle_left"> <div class="slider_handle_value slider_handle_value_left"></div></div>'
+        + '<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">');
     };
     OMVC.Controller = function (model, view, viewConfig, thisForController) {
       // init slider elem

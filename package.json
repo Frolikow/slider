@@ -4,7 +4,7 @@
   "description": "slider(Frolikov)",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dev-server --env development",
+    "start": "./node_modules/.bin/webpack-dev-server --env development",
     "build": "./node_modules/.bin/webpack --env production",
     "deploy": "gh-pages -d public"
   },
@@ -14,36 +14,35 @@
   },
   "author": "Frolikow Egor",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Frolikow/slider/issues"
-  },
-  "homepage": "https://github.com/Frolikow/slider#readme",
-  "devDependencies": {
+  "dependencies": {
+    "jquery": "https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz",
     "babel": "^6.23.0",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.7",
-    "eslint": "https://registry.npmjs.org/eslint/-/eslint-4.19.1.tgz",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "^2.12.0",
-    "expose-loader": "^0.7.5",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
     "gh-pages": "^1.1.0",
     "html-webpack-plugin": "^3.2.0",
-    "jquery": "^3.3.1",
-    "node-static": "https://registry.npmjs.org/node-static/-/node-static-0.7.10.tgz",
     "pug": "^2.0.3",
     "pug-html-loader": "^1.1.5",
     "pug-loader": "^2.4.0",
     "style-loader": "^0.19.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "webpack": "^3.8.1",
+    "webpack": "^3.8.1"
+  },
+  "devDependencies": {
+    "eslint": "https://registry.npmjs.org/eslint/-/eslint-4.19.1.tgz",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "expose-loader": "^0.7.5",
+    "node-static": "https://registry.npmjs.org/node-static/-/node-static-0.7.10.tgz",
     "webpack-dev-server": "^2.9.4",
     "webpack-merge": "^4.1.1"
   },
-  "dependencies": {
-    "jquery": "https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz"
-  }
+  "bugs": {
+    "url": "https://github.com/Frolikow/slider/issues"
+  },
+  "homepage": "https://github.com/Frolikow/slider#readme"
 }
