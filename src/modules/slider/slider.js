@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 $(document).ready(() => {
-  $('.block_slider').each(function () {
+  $('.slider').each(function () {
     $(this).efSlider({
       sliderConfigPanel: true,
       sliderMin: 1,
@@ -10,8 +10,8 @@ $(document).ready(() => {
       sliderValueRange: 8,
       sliderStep: 1,
       sliderHandleValueHide: false,
-      verticalOrientation: false,
-      sliderRangeStatus: false,
+      verticalOrientation: true,
+      sliderRangeStatus: true,
     });
   });
 });

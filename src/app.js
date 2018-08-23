@@ -1,6 +1,7 @@
 import './../node_modules/jquery/src/jquery';
 import './plugins/slider-plugin/slider-plugin';
 
-import './slider/slider';
+import './modules/slider/slider';
 
 import './base.styl';
+import './modules/slider/slider.styl';

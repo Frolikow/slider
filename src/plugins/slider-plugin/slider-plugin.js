@@ -1,7 +1,4 @@
 import jQuery from 'jquery';
-// import './viewSlider/viewSlider';
-// import './viewConfiguration/ViewConfiguration';
-
 
 (function ($) {
   $.fn.efSlider = function (options) {
@@ -340,43 +337,43 @@ import jQuery from 'jquery';
     };
     OMVC.ViewConfiguration = function (sliderOptions, thisForViewConfiguration) {
       if (sliderOptions.sliderConfigPanel === true) {
-        thisForViewConfiguration.after('<div class="block_config">'
-          + '<div class="config_panel">'
+        thisForViewConfiguration.after('<div class="slider__configuration">'
+          + '<div class="configuration">'
 
-          + '<label> <input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
-          + '<label> <input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
-          + '<label> <input type="checkbox"  class="config_range">Включить выбор интервала</label>'
+          + '<label> <input type="checkbox" class="configuration__show-handle-value">Убрать флажок</label>'
+          + '<label> <input type="checkbox" class="configuration__orientation">Включить вертикальное отображение</label>'
+          + '<label> <input type="checkbox"  class="configuration__range">Включить выбор интервала</label>'
 
-          + '<label>Текущее значение</label> <div class="config_block_currentValue">'
-          + '<input type="number" class="config_currentValue"> <input type="number" class="config_currentValueRange"> </div>'
-          + '<label>Минимальное значение слайдера</label> <input type="number" class="config_minValue">'
-          + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
-          + '<label>Размер шага слайдера</label> <input type="number" class="config_sizeOfStep">');
+          + '<label>Текущее значение</label> <div class="configuration__current-value">'
+          + '<input type="number" class="configuration__current-value_left"> <input type="number" class="configuration__current-value_right"> </div>'
+          + '<label>Минимальное значение слайдера</label> <input type="number" class="configuration__minimum-value">'
+          + '<label>Максимальное значение слайдера</label> <input type="number" class="configuration__maximum-value">'
+          + '<label>Размер шага слайдера</label> <input type="number" class="configuration__size-of-step">');
       }
     };
     OMVC.ViewSlider = function (thisForViewSlider) {
-      thisForViewSlider.html('<div class="slider">'
-        + ' <div class="slider_handle slider_handle_left"> <div class="slider_handle_value slider_handle_value_left"></div></div>'
-        + '<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">');
+      thisForViewSlider.html('<div class="slider__element">'
+        + ' <div class="slider__handle slider__handle_left"> <div class="slider__value slider__value_left"></div></div>'
+        + '<div class="slider__handle slider__handle_right"> <div class="slider__value slider__value_right">');
     };
     OMVC.Controller = function (model, view, viewConfig, thisForController) {
       // init slider elem
-      model.$sliderElem = thisForController.find('.slider');
-      model.$handleElem = thisForController.find('.slider_handle_left');
-      model.$valueElem = thisForController.find('.slider_handle_value_left');
-      model.$generalValueElem = thisForController.find('.slider_handle_value');
+      model.$sliderElem = thisForController.find('.slider__element');
+      model.$handleElem = thisForController.find('.slider__handle_left');
+      model.$valueElem = thisForController.find('.slider__value_left');
+      model.$generalValueElem = thisForController.find('.slider__value');
       // init slider range elem
-      model.$handleElemRange = thisForController.find('.slider_handle_right');
-      model.$valueElemRange = thisForController.find('.slider_handle_value_right');
+      model.$handleElemRange = thisForController.find('.slider__handle_right');
+      model.$valueElemRange = thisForController.find('.slider__value_right');
       // init slider configPanel elem
-      model.$configShowHandleValueElem = thisForController.next().find('.config_showHandleValue');
-      model.$configOrientationElem = thisForController.next().find('.config_orientation');
-      model.$configRangeElem = thisForController.next().find('.config_range');
-      model.$configCurrentValueElem = thisForController.next().find('.config_currentValue');
-      model.$configCurrentValueRangeElem = thisForController.next().find('.config_currentValueRange');
-      model.$configMinValueElem = thisForController.next().find('.config_minValue');
-      model.$configMaxValueElem = thisForController.next().find('.config_maxValue');
-      model.$configSizeOfStepElem = thisForController.next().find('.config_sizeOfStep');
+      model.$configShowHandleValueElem = thisForController.next().find('.configuration__show-handle-value');
+      model.$configOrientationElem = thisForController.next().find('.configuration__orientation');
+      model.$configRangeElem = thisForController.next().find('.configuration__range');
+      model.$configCurrentValueElem = thisForController.next().find('.configuration__current-value_left');
+      model.$configCurrentValueRangeElem = thisForController.next().find('.configuration__current-value_right');
+      model.$configMinValueElem = thisForController.next().find('.configuration__minimum-value');
+      model.$configMaxValueElem = thisForController.next().find('.configuration__maximum-value');
+      model.$configSizeOfStepElem = thisForController.next().find('.configuration__size-of-step');
 
       model.$configCurrentValueElem.attr({ min: model.sliderMin, max: model.sliderMax, value: model.sliderValue });
       model.$configMinValueElem.attr({ max: (model.sliderMax - model.sliderStep), value: model.sliderMin });
@@ -406,30 +403,30 @@ import jQuery from 'jquery';
 
       if (model.verticalOrientation) {
         model.$configOrientationElem.click();
-        thisForController.addClass('verticalBlockSlider');
-        model.$sliderElem.addClass('verticalSlider');
-        model.$handleElem.addClass('verticalSlider_handle');
-        model.$generalValueElem.addClass('verticalSlider_handle_value');
-        model.$handleElemRange.addClass('verticalSlider_handle');
-        model.$valueElemRange.addClass('verticalSlider_handle_value');
+        thisForController.addClass('slider_vertical');
+        model.$sliderElem.addClass('slider__element_vertical');
+        model.$handleElem.addClass('slider__handle_vertical');
+        model.$generalValueElem.addClass('slider__value_vertical');
+        model.$handleElemRange.addClass('slider__handle_vertical');
+        model.$valueElemRange.addClass('slider__value_vertical');
         model.verticalOrientation = true;
       }
       model.$configOrientationElem.change(function () { // вкл/выкл вертикальной ориентации
         if (this.checked) {
-          thisForController.addClass('verticalBlockSlider');
-          model.$sliderElem.addClass('verticalSlider');
-          model.$handleElem.addClass('verticalSlider_handle');
-          model.$generalValueElem.addClass('verticalSlider_handle_value');
-          model.$handleElemRange.addClass('verticalSlider_handle');
-          model.$valueElemRange.addClass('verticalSlider_handle_value');
+          thisForController.addClass('slider_vertical');
+          model.$sliderElem.addClass('slider__element_vertical');
+          model.$handleElem.addClass('slider__handle_vertical');
+          model.$generalValueElem.addClass('slider__value_vertical');
+          model.$handleElemRange.addClass('slider__handle_vertical');
+          model.$valueElemRange.addClass('slider__value_vertical');
           model.verticalOrientation = true;
         } else {
-          thisForController.removeClass('verticalBlockSlider');
-          model.$sliderElem.removeClass('verticalSlider');
-          model.$handleElem.removeClass('verticalSlider_handle');
-          model.$generalValueElem.removeClass('verticalSlider_handle_value');
-          model.$handleElemRange.removeClass('verticalSlider_handle');
-          model.$valueElemRange.removeClass('verticalSlider_handle_value');
+          thisForController.removeClass('slider_vertical');
+          model.$sliderElem.removeClass('slider__element_vertical');
+          model.$handleElem.removeClass('slider__handle_vertical');
+          model.$generalValueElem.removeClass('slider__value_vertical');
+          model.$handleElemRange.removeClass('slider__handle_vertical');
+          model.$valueElemRange.removeClass('slider__value_vertical');
           model.verticalOrientation = false;
         }
       });// complete
