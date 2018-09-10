@@ -4,14 +4,14 @@ $(document).ready(() => {
   $('.slider').each(function () {
     $(this).efSlider({
       sliderConfigPanel: true,
-      sliderMin: 1,
-      sliderMax: 10,
-      sliderValue: 5,
-      sliderValueRange: 8,
+      sliderMin: 10,
+      sliderMax: 100,
+      sliderValue: 50,
+      sliderValueRange: 80,
       sliderStep: 1,
       sliderHandleValueHide: false,
-      verticalOrientation: true,
-      sliderRangeStatus: true,
+      verticalOrientation: false,
+      sliderRangeStatus: false,
     });
   });
 });
