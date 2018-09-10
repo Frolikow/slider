@@ -74,16 +74,16 @@
 !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(16),
 	__webpack_require__(2),
-	__webpack_require__(69),
-	__webpack_require__(20),
+	__webpack_require__(68),
+	__webpack_require__(21),
 	__webpack_require__(39),
 	__webpack_require__(40),
 	__webpack_require__(24),
-	__webpack_require__(19),
+	__webpack_require__(20),
 	__webpack_require__(41),
 	__webpack_require__(23),
 	__webpack_require__(42),
-	__webpack_require__(70),
+	__webpack_require__(69),
 	__webpack_require__(7),
 	__webpack_require__(1),
 	__webpack_require__(17),
@@ -468,7 +468,7 @@ return jQuery;
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
 /* 1 */
@@ -506,7 +506,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(72) ], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(71) ], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
 	"use strict";
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -794,7 +794,7 @@ return nodeName;
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(19),
+	__webpack_require__(20),
 	__webpack_require__(41)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type, toString ) {
 
@@ -823,7 +823,7 @@ return toType;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(1),
-	__webpack_require__(20),
+	__webpack_require__(21),
 	__webpack_require__(31)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction, slice ) {
 
@@ -1229,8 +1229,8 @@ return jQuery;
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(24),
+	__webpack_require__(74),
 	__webpack_require__(75),
-	__webpack_require__(76),
 	__webpack_require__(50),
 	__webpack_require__(9),
 
@@ -1430,7 +1430,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(30),
 	__webpack_require__(1),
 	__webpack_require__(6),
-	__webpack_require__(20),
+	__webpack_require__(21),
 	__webpack_require__(5),
 	__webpack_require__(9),
 
@@ -2184,12 +2184,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(2),
 	__webpack_require__(1),
 	__webpack_require__(6),
-	__webpack_require__(90),
+	__webpack_require__(89),
 	__webpack_require__(64),
 	__webpack_require__(63),
 
 	__webpack_require__(4),
-	__webpack_require__(91),
+	__webpack_require__(90),
 	__webpack_require__(37),
 	__webpack_require__(11),
 	__webpack_require__(65) // jQuery.param
@@ -3585,526 +3585,6 @@ return camelCase;
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
-	"use strict";
-
-	// [[Class]] -> type pairs
-	return {};
-}).call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(16)
-], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
-	"use strict";
-
-	return arr.slice;
-}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(0),
-	__webpack_require__(39),
-	__webpack_require__(1),
-	__webpack_require__(40),
-	__webpack_require__(8),
-	__webpack_require__(61),
-	__webpack_require__(56),
-	__webpack_require__(57),
-	__webpack_require__(58),
-	__webpack_require__(59),
-	__webpack_require__(60),
-	__webpack_require__(55),
-	__webpack_require__(81),
-
-	__webpack_require__(5),
-	__webpack_require__(53),
-	__webpack_require__(32),
-	__webpack_require__(43),
-	__webpack_require__(9),
-
-	__webpack_require__(4),
-	__webpack_require__(12),
-	__webpack_require__(3),
-	__webpack_require__(13)
-], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, concat, isFunction, push, access,
-	rcheckableType, rtagName, rscriptType,
-	wrapMap, getAll, setGlobalEval, buildFragment, support,
-	dataPriv, dataUser, acceptData, DOMEval, nodeName ) {
-
-"use strict";
-
-var
-
-	/* eslint-disable max-len */
-
-	// See https://github.com/eslint/eslint/issues/3229
-	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
-
-	/* eslint-enable */
-
-	// Support: IE <=10 - 11, Edge 12 - 13 only
-	// In IE/Edge using regex groups here causes severe slowdowns.
-	// See https://connect.microsoft.com/IE/feedback/details/1736512/
-	rnoInnerhtml = /<script|<style|<link/i,
-
-	// checked="checked" or checked
-	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
-	rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
-
-// Prefer a tbody over its parent table for containing new rows
-function manipulationTarget( elem, content ) {
-	if ( nodeName( elem, "table" ) &&
-		nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
-
-		return jQuery( elem ).children( "tbody" )[ 0 ] || elem;
-	}
-
-	return elem;
-}
-
-// Replace/restore the type attribute of script elements for safe DOM manipulation
-function disableScript( elem ) {
-	elem.type = ( elem.getAttribute( "type" ) !== null ) + "/" + elem.type;
-	return elem;
-}
-function restoreScript( elem ) {
-	if ( ( elem.type || "" ).slice( 0, 5 ) === "true/" ) {
-		elem.type = elem.type.slice( 5 );
-	} else {
-		elem.removeAttribute( "type" );
-	}
-
-	return elem;
-}
-
-function cloneCopyEvent( src, dest ) {
-	var i, l, type, pdataOld, pdataCur, udataOld, udataCur, events;
-
-	if ( dest.nodeType !== 1 ) {
-		return;
-	}
-
-	// 1. Copy private data: events, handlers, etc.
-	if ( dataPriv.hasData( src ) ) {
-		pdataOld = dataPriv.access( src );
-		pdataCur = dataPriv.set( dest, pdataOld );
-		events = pdataOld.events;
-
-		if ( events ) {
-			delete pdataCur.handle;
-			pdataCur.events = {};
-
-			for ( type in events ) {
-				for ( i = 0, l = events[ type ].length; i < l; i++ ) {
-					jQuery.event.add( dest, type, events[ type ][ i ] );
-				}
-			}
-		}
-	}
-
-	// 2. Copy user data
-	if ( dataUser.hasData( src ) ) {
-		udataOld = dataUser.access( src );
-		udataCur = jQuery.extend( {}, udataOld );
-
-		dataUser.set( dest, udataCur );
-	}
-}
-
-// Fix IE bugs, see support tests
-function fixInput( src, dest ) {
-	var nodeName = dest.nodeName.toLowerCase();
-
-	// Fails to persist the checked state of a cloned checkbox or radio button.
-	if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
-		dest.checked = src.checked;
-
-	// Fails to return the selected option to the default selected state when cloning options
-	} else if ( nodeName === "input" || nodeName === "textarea" ) {
-		dest.defaultValue = src.defaultValue;
-	}
-}
-
-function domManip( collection, args, callback, ignored ) {
-
-	// Flatten any nested arrays
-	args = concat.apply( [], args );
-
-	var fragment, first, scripts, hasScripts, node, doc,
-		i = 0,
-		l = collection.length,
-		iNoClone = l - 1,
-		value = args[ 0 ],
-		valueIsFunction = isFunction( value );
-
-	// We can't cloneNode fragments that contain checked, in WebKit
-	if ( valueIsFunction ||
-			( l > 1 && typeof value === "string" &&
-				!support.checkClone && rchecked.test( value ) ) ) {
-		return collection.each( function( index ) {
-			var self = collection.eq( index );
-			if ( valueIsFunction ) {
-				args[ 0 ] = value.call( this, index, self.html() );
-			}
-			domManip( self, args, callback, ignored );
-		} );
-	}
-
-	if ( l ) {
-		fragment = buildFragment( args, collection[ 0 ].ownerDocument, false, collection, ignored );
-		first = fragment.firstChild;
-
-		if ( fragment.childNodes.length === 1 ) {
-			fragment = first;
-		}
-
-		// Require either new content or an interest in ignored elements to invoke the callback
-		if ( first || ignored ) {
-			scripts = jQuery.map( getAll( fragment, "script" ), disableScript );
-			hasScripts = scripts.length;
-
-			// Use the original fragment for the last item
-			// instead of the first because it can end up
-			// being emptied incorrectly in certain situations (#8070).
-			for ( ; i < l; i++ ) {
-				node = fragment;
-
-				if ( i !== iNoClone ) {
-					node = jQuery.clone( node, true, true );
-
-					// Keep references to cloned scripts for later restoration
-					if ( hasScripts ) {
-
-						// Support: Android <=4.0 only, PhantomJS 1 only
-						// push.apply(_, arraylike) throws on ancient WebKit
-						jQuery.merge( scripts, getAll( node, "script" ) );
-					}
-				}
-
-				callback.call( collection[ i ], node, i );
-			}
-
-			if ( hasScripts ) {
-				doc = scripts[ scripts.length - 1 ].ownerDocument;
-
-				// Reenable scripts
-				jQuery.map( scripts, restoreScript );
-
-				// Evaluate executable scripts on first document insertion
-				for ( i = 0; i < hasScripts; i++ ) {
-					node = scripts[ i ];
-					if ( rscriptType.test( node.type || "" ) &&
-						!dataPriv.access( node, "globalEval" ) &&
-						jQuery.contains( doc, node ) ) {
-
-						if ( node.src && ( node.type || "" ).toLowerCase()  !== "module" ) {
-
-							// Optional AJAX dependency, but won't run scripts if not present
-							if ( jQuery._evalUrl ) {
-								jQuery._evalUrl( node.src );
-							}
-						} else {
-							DOMEval( node.textContent.replace( rcleanScript, "" ), doc, node );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return collection;
-}
-
-function remove( elem, selector, keepData ) {
-	var node,
-		nodes = selector ? jQuery.filter( selector, elem ) : elem,
-		i = 0;
-
-	for ( ; ( node = nodes[ i ] ) != null; i++ ) {
-		if ( !keepData && node.nodeType === 1 ) {
-			jQuery.cleanData( getAll( node ) );
-		}
-
-		if ( node.parentNode ) {
-			if ( keepData && jQuery.contains( node.ownerDocument, node ) ) {
-				setGlobalEval( getAll( node, "script" ) );
-			}
-			node.parentNode.removeChild( node );
-		}
-	}
-
-	return elem;
-}
-
-jQuery.extend( {
-	htmlPrefilter: function( html ) {
-		return html.replace( rxhtmlTag, "<$1></$2>" );
-	},
-
-	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
-		var i, l, srcElements, destElements,
-			clone = elem.cloneNode( true ),
-			inPage = jQuery.contains( elem.ownerDocument, elem );
-
-		// Fix IE cloning issues
-		if ( !support.noCloneChecked && ( elem.nodeType === 1 || elem.nodeType === 11 ) &&
-				!jQuery.isXMLDoc( elem ) ) {
-
-			// We eschew Sizzle here for performance reasons: https://jsperf.com/getall-vs-sizzle/2
-			destElements = getAll( clone );
-			srcElements = getAll( elem );
-
-			for ( i = 0, l = srcElements.length; i < l; i++ ) {
-				fixInput( srcElements[ i ], destElements[ i ] );
-			}
-		}
-
-		// Copy the events from the original to the clone
-		if ( dataAndEvents ) {
-			if ( deepDataAndEvents ) {
-				srcElements = srcElements || getAll( elem );
-				destElements = destElements || getAll( clone );
-
-				for ( i = 0, l = srcElements.length; i < l; i++ ) {
-					cloneCopyEvent( srcElements[ i ], destElements[ i ] );
-				}
-			} else {
-				cloneCopyEvent( elem, clone );
-			}
-		}
-
-		// Preserve script evaluation history
-		destElements = getAll( clone, "script" );
-		if ( destElements.length > 0 ) {
-			setGlobalEval( destElements, !inPage && getAll( elem, "script" ) );
-		}
-
-		// Return the cloned set
-		return clone;
-	},
-
-	cleanData: function( elems ) {
-		var data, elem, type,
-			special = jQuery.event.special,
-			i = 0;
-
-		for ( ; ( elem = elems[ i ] ) !== undefined; i++ ) {
-			if ( acceptData( elem ) ) {
-				if ( ( data = elem[ dataPriv.expando ] ) ) {
-					if ( data.events ) {
-						for ( type in data.events ) {
-							if ( special[ type ] ) {
-								jQuery.event.remove( elem, type );
-
-							// This is a shortcut to avoid jQuery.event.remove's overhead
-							} else {
-								jQuery.removeEvent( elem, type, data.handle );
-							}
-						}
-					}
-
-					// Support: Chrome <=35 - 45+
-					// Assign undefined instead of using delete, see Data#remove
-					elem[ dataPriv.expando ] = undefined;
-				}
-				if ( elem[ dataUser.expando ] ) {
-
-					// Support: Chrome <=35 - 45+
-					// Assign undefined instead of using delete, see Data#remove
-					elem[ dataUser.expando ] = undefined;
-				}
-			}
-		}
-	}
-} );
-
-jQuery.fn.extend( {
-	detach: function( selector ) {
-		return remove( this, selector, true );
-	},
-
-	remove: function( selector ) {
-		return remove( this, selector );
-	},
-
-	text: function( value ) {
-		return access( this, function( value ) {
-			return value === undefined ?
-				jQuery.text( this ) :
-				this.empty().each( function() {
-					if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
-						this.textContent = value;
-					}
-				} );
-		}, null, value, arguments.length );
-	},
-
-	append: function() {
-		return domManip( this, arguments, function( elem ) {
-			if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
-				var target = manipulationTarget( this, elem );
-				target.appendChild( elem );
-			}
-		} );
-	},
-
-	prepend: function() {
-		return domManip( this, arguments, function( elem ) {
-			if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
-				var target = manipulationTarget( this, elem );
-				target.insertBefore( elem, target.firstChild );
-			}
-		} );
-	},
-
-	before: function() {
-		return domManip( this, arguments, function( elem ) {
-			if ( this.parentNode ) {
-				this.parentNode.insertBefore( elem, this );
-			}
-		} );
-	},
-
-	after: function() {
-		return domManip( this, arguments, function( elem ) {
-			if ( this.parentNode ) {
-				this.parentNode.insertBefore( elem, this.nextSibling );
-			}
-		} );
-	},
-
-	empty: function() {
-		var elem,
-			i = 0;
-
-		for ( ; ( elem = this[ i ] ) != null; i++ ) {
-			if ( elem.nodeType === 1 ) {
-
-				// Prevent memory leaks
-				jQuery.cleanData( getAll( elem, false ) );
-
-				// Remove any remaining nodes
-				elem.textContent = "";
-			}
-		}
-
-		return this;
-	},
-
-	clone: function( dataAndEvents, deepDataAndEvents ) {
-		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
-		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
-
-		return this.map( function() {
-			return jQuery.clone( this, dataAndEvents, deepDataAndEvents );
-		} );
-	},
-
-	html: function( value ) {
-		return access( this, function( value ) {
-			var elem = this[ 0 ] || {},
-				i = 0,
-				l = this.length;
-
-			if ( value === undefined && elem.nodeType === 1 ) {
-				return elem.innerHTML;
-			}
-
-			// See if we can take a shortcut and just use innerHTML
-			if ( typeof value === "string" && !rnoInnerhtml.test( value ) &&
-				!wrapMap[ ( rtagName.exec( value ) || [ "", "" ] )[ 1 ].toLowerCase() ] ) {
-
-				value = jQuery.htmlPrefilter( value );
-
-				try {
-					for ( ; i < l; i++ ) {
-						elem = this[ i ] || {};
-
-						// Remove element nodes and prevent memory leaks
-						if ( elem.nodeType === 1 ) {
-							jQuery.cleanData( getAll( elem, false ) );
-							elem.innerHTML = value;
-						}
-					}
-
-					elem = 0;
-
-				// If using innerHTML throws an exception, use the fallback method
-				} catch ( e ) {}
-			}
-
-			if ( elem ) {
-				this.empty().append( value );
-			}
-		}, null, value, arguments.length );
-	},
-
-	replaceWith: function() {
-		var ignored = [];
-
-		// Make the changes, replacing each non-ignored context element with the new content
-		return domManip( this, arguments, function( elem ) {
-			var parent = this.parentNode;
-
-			if ( jQuery.inArray( this, ignored ) < 0 ) {
-				jQuery.cleanData( getAll( this ) );
-				if ( parent ) {
-					parent.replaceChild( elem, this );
-				}
-			}
-
-		// Force callback invocation
-		}, ignored );
-	}
-} );
-
-jQuery.each( {
-	appendTo: "append",
-	prependTo: "prepend",
-	insertBefore: "before",
-	insertAfter: "after",
-	replaceAll: "replaceWith"
-}, function( name, original ) {
-	jQuery.fn[ name ] = function( selector ) {
-		var elems,
-			ret = [],
-			insert = jQuery( selector ),
-			last = insert.length - 1,
-			i = 0;
-
-		for ( ; i <= last; i++ ) {
-			elems = i === last ? this : this.clone( true );
-			jQuery( insert[ i ] )[ original ]( elems );
-
-			// Support: Android <=4.0 only, PhantomJS 1 only
-			// .get() because push.apply(_, arraylike) throws on ancient WebKit
-			push.apply( ret, elems.get() );
-		}
-
-		return this.pushStack( ret );
-	};
-} );
-
-return jQuery;
-}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-/***/ }),
-/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14475,11 +13955,531 @@ return jQuery;
 
 
 /***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
+	"use strict";
+
+	// [[Class]] -> type pairs
+	return {};
+}).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	__webpack_require__(16)
+], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr ) {
+	"use strict";
+
+	return arr.slice;
+}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	__webpack_require__(0),
+	__webpack_require__(39),
+	__webpack_require__(1),
+	__webpack_require__(40),
+	__webpack_require__(8),
+	__webpack_require__(61),
+	__webpack_require__(56),
+	__webpack_require__(57),
+	__webpack_require__(58),
+	__webpack_require__(59),
+	__webpack_require__(60),
+	__webpack_require__(55),
+	__webpack_require__(80),
+
+	__webpack_require__(5),
+	__webpack_require__(53),
+	__webpack_require__(32),
+	__webpack_require__(43),
+	__webpack_require__(9),
+
+	__webpack_require__(4),
+	__webpack_require__(12),
+	__webpack_require__(3),
+	__webpack_require__(13)
+], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, concat, isFunction, push, access,
+	rcheckableType, rtagName, rscriptType,
+	wrapMap, getAll, setGlobalEval, buildFragment, support,
+	dataPriv, dataUser, acceptData, DOMEval, nodeName ) {
+
+"use strict";
+
+var
+
+	/* eslint-disable max-len */
+
+	// See https://github.com/eslint/eslint/issues/3229
+	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
+
+	/* eslint-enable */
+
+	// Support: IE <=10 - 11, Edge 12 - 13 only
+	// In IE/Edge using regex groups here causes severe slowdowns.
+	// See https://connect.microsoft.com/IE/feedback/details/1736512/
+	rnoInnerhtml = /<script|<style|<link/i,
+
+	// checked="checked" or checked
+	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
+	rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+
+// Prefer a tbody over its parent table for containing new rows
+function manipulationTarget( elem, content ) {
+	if ( nodeName( elem, "table" ) &&
+		nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
+
+		return jQuery( elem ).children( "tbody" )[ 0 ] || elem;
+	}
+
+	return elem;
+}
+
+// Replace/restore the type attribute of script elements for safe DOM manipulation
+function disableScript( elem ) {
+	elem.type = ( elem.getAttribute( "type" ) !== null ) + "/" + elem.type;
+	return elem;
+}
+function restoreScript( elem ) {
+	if ( ( elem.type || "" ).slice( 0, 5 ) === "true/" ) {
+		elem.type = elem.type.slice( 5 );
+	} else {
+		elem.removeAttribute( "type" );
+	}
+
+	return elem;
+}
+
+function cloneCopyEvent( src, dest ) {
+	var i, l, type, pdataOld, pdataCur, udataOld, udataCur, events;
+
+	if ( dest.nodeType !== 1 ) {
+		return;
+	}
+
+	// 1. Copy private data: events, handlers, etc.
+	if ( dataPriv.hasData( src ) ) {
+		pdataOld = dataPriv.access( src );
+		pdataCur = dataPriv.set( dest, pdataOld );
+		events = pdataOld.events;
+
+		if ( events ) {
+			delete pdataCur.handle;
+			pdataCur.events = {};
+
+			for ( type in events ) {
+				for ( i = 0, l = events[ type ].length; i < l; i++ ) {
+					jQuery.event.add( dest, type, events[ type ][ i ] );
+				}
+			}
+		}
+	}
+
+	// 2. Copy user data
+	if ( dataUser.hasData( src ) ) {
+		udataOld = dataUser.access( src );
+		udataCur = jQuery.extend( {}, udataOld );
+
+		dataUser.set( dest, udataCur );
+	}
+}
+
+// Fix IE bugs, see support tests
+function fixInput( src, dest ) {
+	var nodeName = dest.nodeName.toLowerCase();
+
+	// Fails to persist the checked state of a cloned checkbox or radio button.
+	if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
+		dest.checked = src.checked;
+
+	// Fails to return the selected option to the default selected state when cloning options
+	} else if ( nodeName === "input" || nodeName === "textarea" ) {
+		dest.defaultValue = src.defaultValue;
+	}
+}
+
+function domManip( collection, args, callback, ignored ) {
+
+	// Flatten any nested arrays
+	args = concat.apply( [], args );
+
+	var fragment, first, scripts, hasScripts, node, doc,
+		i = 0,
+		l = collection.length,
+		iNoClone = l - 1,
+		value = args[ 0 ],
+		valueIsFunction = isFunction( value );
+
+	// We can't cloneNode fragments that contain checked, in WebKit
+	if ( valueIsFunction ||
+			( l > 1 && typeof value === "string" &&
+				!support.checkClone && rchecked.test( value ) ) ) {
+		return collection.each( function( index ) {
+			var self = collection.eq( index );
+			if ( valueIsFunction ) {
+				args[ 0 ] = value.call( this, index, self.html() );
+			}
+			domManip( self, args, callback, ignored );
+		} );
+	}
+
+	if ( l ) {
+		fragment = buildFragment( args, collection[ 0 ].ownerDocument, false, collection, ignored );
+		first = fragment.firstChild;
+
+		if ( fragment.childNodes.length === 1 ) {
+			fragment = first;
+		}
+
+		// Require either new content or an interest in ignored elements to invoke the callback
+		if ( first || ignored ) {
+			scripts = jQuery.map( getAll( fragment, "script" ), disableScript );
+			hasScripts = scripts.length;
+
+			// Use the original fragment for the last item
+			// instead of the first because it can end up
+			// being emptied incorrectly in certain situations (#8070).
+			for ( ; i < l; i++ ) {
+				node = fragment;
+
+				if ( i !== iNoClone ) {
+					node = jQuery.clone( node, true, true );
+
+					// Keep references to cloned scripts for later restoration
+					if ( hasScripts ) {
+
+						// Support: Android <=4.0 only, PhantomJS 1 only
+						// push.apply(_, arraylike) throws on ancient WebKit
+						jQuery.merge( scripts, getAll( node, "script" ) );
+					}
+				}
+
+				callback.call( collection[ i ], node, i );
+			}
+
+			if ( hasScripts ) {
+				doc = scripts[ scripts.length - 1 ].ownerDocument;
+
+				// Reenable scripts
+				jQuery.map( scripts, restoreScript );
+
+				// Evaluate executable scripts on first document insertion
+				for ( i = 0; i < hasScripts; i++ ) {
+					node = scripts[ i ];
+					if ( rscriptType.test( node.type || "" ) &&
+						!dataPriv.access( node, "globalEval" ) &&
+						jQuery.contains( doc, node ) ) {
+
+						if ( node.src && ( node.type || "" ).toLowerCase()  !== "module" ) {
+
+							// Optional AJAX dependency, but won't run scripts if not present
+							if ( jQuery._evalUrl ) {
+								jQuery._evalUrl( node.src );
+							}
+						} else {
+							DOMEval( node.textContent.replace( rcleanScript, "" ), doc, node );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return collection;
+}
+
+function remove( elem, selector, keepData ) {
+	var node,
+		nodes = selector ? jQuery.filter( selector, elem ) : elem,
+		i = 0;
+
+	for ( ; ( node = nodes[ i ] ) != null; i++ ) {
+		if ( !keepData && node.nodeType === 1 ) {
+			jQuery.cleanData( getAll( node ) );
+		}
+
+		if ( node.parentNode ) {
+			if ( keepData && jQuery.contains( node.ownerDocument, node ) ) {
+				setGlobalEval( getAll( node, "script" ) );
+			}
+			node.parentNode.removeChild( node );
+		}
+	}
+
+	return elem;
+}
+
+jQuery.extend( {
+	htmlPrefilter: function( html ) {
+		return html.replace( rxhtmlTag, "<$1></$2>" );
+	},
+
+	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
+		var i, l, srcElements, destElements,
+			clone = elem.cloneNode( true ),
+			inPage = jQuery.contains( elem.ownerDocument, elem );
+
+		// Fix IE cloning issues
+		if ( !support.noCloneChecked && ( elem.nodeType === 1 || elem.nodeType === 11 ) &&
+				!jQuery.isXMLDoc( elem ) ) {
+
+			// We eschew Sizzle here for performance reasons: https://jsperf.com/getall-vs-sizzle/2
+			destElements = getAll( clone );
+			srcElements = getAll( elem );
+
+			for ( i = 0, l = srcElements.length; i < l; i++ ) {
+				fixInput( srcElements[ i ], destElements[ i ] );
+			}
+		}
+
+		// Copy the events from the original to the clone
+		if ( dataAndEvents ) {
+			if ( deepDataAndEvents ) {
+				srcElements = srcElements || getAll( elem );
+				destElements = destElements || getAll( clone );
+
+				for ( i = 0, l = srcElements.length; i < l; i++ ) {
+					cloneCopyEvent( srcElements[ i ], destElements[ i ] );
+				}
+			} else {
+				cloneCopyEvent( elem, clone );
+			}
+		}
+
+		// Preserve script evaluation history
+		destElements = getAll( clone, "script" );
+		if ( destElements.length > 0 ) {
+			setGlobalEval( destElements, !inPage && getAll( elem, "script" ) );
+		}
+
+		// Return the cloned set
+		return clone;
+	},
+
+	cleanData: function( elems ) {
+		var data, elem, type,
+			special = jQuery.event.special,
+			i = 0;
+
+		for ( ; ( elem = elems[ i ] ) !== undefined; i++ ) {
+			if ( acceptData( elem ) ) {
+				if ( ( data = elem[ dataPriv.expando ] ) ) {
+					if ( data.events ) {
+						for ( type in data.events ) {
+							if ( special[ type ] ) {
+								jQuery.event.remove( elem, type );
+
+							// This is a shortcut to avoid jQuery.event.remove's overhead
+							} else {
+								jQuery.removeEvent( elem, type, data.handle );
+							}
+						}
+					}
+
+					// Support: Chrome <=35 - 45+
+					// Assign undefined instead of using delete, see Data#remove
+					elem[ dataPriv.expando ] = undefined;
+				}
+				if ( elem[ dataUser.expando ] ) {
+
+					// Support: Chrome <=35 - 45+
+					// Assign undefined instead of using delete, see Data#remove
+					elem[ dataUser.expando ] = undefined;
+				}
+			}
+		}
+	}
+} );
+
+jQuery.fn.extend( {
+	detach: function( selector ) {
+		return remove( this, selector, true );
+	},
+
+	remove: function( selector ) {
+		return remove( this, selector );
+	},
+
+	text: function( value ) {
+		return access( this, function( value ) {
+			return value === undefined ?
+				jQuery.text( this ) :
+				this.empty().each( function() {
+					if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
+						this.textContent = value;
+					}
+				} );
+		}, null, value, arguments.length );
+	},
+
+	append: function() {
+		return domManip( this, arguments, function( elem ) {
+			if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
+				var target = manipulationTarget( this, elem );
+				target.appendChild( elem );
+			}
+		} );
+	},
+
+	prepend: function() {
+		return domManip( this, arguments, function( elem ) {
+			if ( this.nodeType === 1 || this.nodeType === 11 || this.nodeType === 9 ) {
+				var target = manipulationTarget( this, elem );
+				target.insertBefore( elem, target.firstChild );
+			}
+		} );
+	},
+
+	before: function() {
+		return domManip( this, arguments, function( elem ) {
+			if ( this.parentNode ) {
+				this.parentNode.insertBefore( elem, this );
+			}
+		} );
+	},
+
+	after: function() {
+		return domManip( this, arguments, function( elem ) {
+			if ( this.parentNode ) {
+				this.parentNode.insertBefore( elem, this.nextSibling );
+			}
+		} );
+	},
+
+	empty: function() {
+		var elem,
+			i = 0;
+
+		for ( ; ( elem = this[ i ] ) != null; i++ ) {
+			if ( elem.nodeType === 1 ) {
+
+				// Prevent memory leaks
+				jQuery.cleanData( getAll( elem, false ) );
+
+				// Remove any remaining nodes
+				elem.textContent = "";
+			}
+		}
+
+		return this;
+	},
+
+	clone: function( dataAndEvents, deepDataAndEvents ) {
+		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
+		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
+
+		return this.map( function() {
+			return jQuery.clone( this, dataAndEvents, deepDataAndEvents );
+		} );
+	},
+
+	html: function( value ) {
+		return access( this, function( value ) {
+			var elem = this[ 0 ] || {},
+				i = 0,
+				l = this.length;
+
+			if ( value === undefined && elem.nodeType === 1 ) {
+				return elem.innerHTML;
+			}
+
+			// See if we can take a shortcut and just use innerHTML
+			if ( typeof value === "string" && !rnoInnerhtml.test( value ) &&
+				!wrapMap[ ( rtagName.exec( value ) || [ "", "" ] )[ 1 ].toLowerCase() ] ) {
+
+				value = jQuery.htmlPrefilter( value );
+
+				try {
+					for ( ; i < l; i++ ) {
+						elem = this[ i ] || {};
+
+						// Remove element nodes and prevent memory leaks
+						if ( elem.nodeType === 1 ) {
+							jQuery.cleanData( getAll( elem, false ) );
+							elem.innerHTML = value;
+						}
+					}
+
+					elem = 0;
+
+				// If using innerHTML throws an exception, use the fallback method
+				} catch ( e ) {}
+			}
+
+			if ( elem ) {
+				this.empty().append( value );
+			}
+		}, null, value, arguments.length );
+	},
+
+	replaceWith: function() {
+		var ignored = [];
+
+		// Make the changes, replacing each non-ignored context element with the new content
+		return domManip( this, arguments, function( elem ) {
+			var parent = this.parentNode;
+
+			if ( jQuery.inArray( this, ignored ) < 0 ) {
+				jQuery.cleanData( getAll( this ) );
+				if ( parent ) {
+					parent.replaceChild( elem, this );
+				}
+			}
+
+		// Force callback invocation
+		}, ignored );
+	}
+} );
+
+jQuery.each( {
+	appendTo: "append",
+	prependTo: "prepend",
+	insertBefore: "before",
+	insertAfter: "after",
+	replaceAll: "replaceWith"
+}, function( name, original ) {
+	jQuery.fn[ name ] = function( selector ) {
+		var elems,
+			ret = [],
+			insert = jQuery( selector ),
+			last = insert.length - 1,
+			i = 0;
+
+		for ( ; i <= last; i++ ) {
+			elems = i === last ? this : this.clone( true );
+			jQuery( insert[ i ] )[ original ]( elems );
+
+			// Support: Android <=4.0 only, PhantomJS 1 only
+			// .get() because push.apply(_, arraylike) throws on ancient WebKit
+			push.apply( ret, elems.get() );
+		}
+
+		return this.pushStack( ret );
+	};
+} );
+
+return jQuery;
+}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ }),
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(19)
+	__webpack_require__(20)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type ) {
 	"use strict";
 
@@ -15116,15 +15116,15 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(38),
 	__webpack_require__(46),
 	__webpack_require__(5),
-	__webpack_require__(80),
+	__webpack_require__(79),
 
 	__webpack_require__(4),
 	__webpack_require__(33),
 	__webpack_require__(11),
 	__webpack_require__(12),
-	__webpack_require__(21),
+	__webpack_require__(22),
 	__webpack_require__(15),
-	__webpack_require__(82)
+	__webpack_require__(81)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, camelCase, document, isFunction, rcssNum, rnothtmlwhite, cssExpand,
 	isHiddenWithinTree, swap, adjustCSS, dataPriv, showHide ) {
 
@@ -16142,7 +16142,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(19)
+	__webpack_require__(20)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type ) {
 	"use strict";
 
@@ -16232,7 +16232,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(71),
+	__webpack_require__(70),
 	__webpack_require__(27),
 	__webpack_require__(44),
 	__webpack_require__(29),
@@ -16550,7 +16550,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(74),
+	__webpack_require__(73),
 	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document ) {
 
@@ -17431,15 +17431,14 @@ return jQuery;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_styl__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_styl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__base_styl__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_jquery_src_jquery__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_jquery_src_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__node_modules_jquery_src_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plugins_slider_plugin__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__plugins_slider_plugin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__plugins_slider_plugin__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__slider_slider__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__slider_slider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__slider_slider__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_jquery_src_jquery__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_jquery_src_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_jquery_src_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__plugins_slider_plugin_slider_plugin__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_slider_slider__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_styl__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__base_styl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__base_styl__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_slider_slider_styl__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_slider_slider_styl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__modules_slider_slider_styl__);
 
 
 
@@ -17451,12 +17450,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 67 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -17465,33 +17458,33 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(12),
 	__webpack_require__(31),
 	__webpack_require__(11),
-	__webpack_require__(77),
+	__webpack_require__(76),
 	__webpack_require__(51),
-	__webpack_require__(78),
+	__webpack_require__(77),
 	__webpack_require__(33),
-	__webpack_require__(79),
-	__webpack_require__(83),
+	__webpack_require__(78),
+	__webpack_require__(82),
 	__webpack_require__(13),
-	__webpack_require__(87),
-	__webpack_require__(21),
-	__webpack_require__(89),
-	__webpack_require__(92),
+	__webpack_require__(86),
+	__webpack_require__(22),
+	__webpack_require__(88),
+	__webpack_require__(91),
 	__webpack_require__(15),
-	__webpack_require__(93),
+	__webpack_require__(92),
 	__webpack_require__(65),
 	__webpack_require__(14),
+	__webpack_require__(93),
 	__webpack_require__(94),
 	__webpack_require__(95),
 	__webpack_require__(96),
-	__webpack_require__(97),
-	__webpack_require__(100),
+	__webpack_require__(99),
 	__webpack_require__(34),
+	__webpack_require__(100),
 	__webpack_require__(101),
 	__webpack_require__(102),
 	__webpack_require__(103),
-	__webpack_require__(104),
-	__webpack_require__(106),
-	__webpack_require__(107)
+	__webpack_require__(105),
+	__webpack_require__(106)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -17503,7 +17496,7 @@ return jQuery;
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -17515,7 +17508,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -17529,7 +17522,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -17543,12 +17536,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(73)
+	__webpack_require__(72)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, Sizzle ) {
 
 "use strict";
@@ -17569,7 +17562,7 @@ jQuery.escapeSelector = Sizzle.escape;
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -19848,7 +19841,7 @@ if ( true ) {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -19868,7 +19861,7 @@ jQuery.readyException = function( error ) {
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -19897,7 +19890,7 @@ return function( elem, dir, until ) {
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -19921,7 +19914,7 @@ return function( n, elem ) {
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -19949,7 +19942,7 @@ jQuery.Deferred.exceptionHook = function( error, stack ) {
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20136,7 +20129,7 @@ return jQuery;
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20167,7 +20160,7 @@ return jQuery.fn.delay;
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20279,7 +20272,7 @@ return showHide;
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20321,7 +20314,7 @@ return support;
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20451,15 +20444,15 @@ jQuery.fx.step = {};
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(84),
+	__webpack_require__(83),
 	__webpack_require__(62),
-	__webpack_require__(85),
-	__webpack_require__(86)
+	__webpack_require__(84),
+	__webpack_require__(85)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -20471,7 +20464,7 @@ return jQuery;
 
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20619,7 +20612,7 @@ jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) 
 
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -20812,7 +20805,7 @@ jQuery.fn.extend( {
 
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21010,13 +21003,13 @@ jQuery.each( [ "radio", "checkbox" ], function() {
 
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(5),
-	__webpack_require__(88),
+	__webpack_require__(87),
 
 	__webpack_require__(13),
 	__webpack_require__(37)
@@ -21072,7 +21065,7 @@ return jQuery;
 
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21090,7 +21083,7 @@ return support;
 
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21120,7 +21113,7 @@ return jQuery._evalUrl;
 
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
@@ -21132,7 +21125,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21169,14 +21162,14 @@ return jQuery.parseXML;
 
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(1),
 	__webpack_require__(4),
-	__webpack_require__(21), // clone
+	__webpack_require__(22), // clone
 	__webpack_require__(12) // parent, contents
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction ) {
 
@@ -21254,7 +21247,7 @@ return jQuery;
 
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21276,7 +21269,7 @@ jQuery.expr.pseudos.visible = function( elem ) {
 
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21453,7 +21446,7 @@ jQuery.ajaxTransport( function( options ) {
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21537,7 +21530,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21647,17 +21640,17 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(36),
 	__webpack_require__(1),
-	__webpack_require__(98),
+	__webpack_require__(97),
 	__webpack_require__(14),
 	__webpack_require__(12),
-	__webpack_require__(21),
+	__webpack_require__(22),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, stripAndCollapse, isFunction ) {
 
@@ -21731,7 +21724,7 @@ jQuery.fn.load = function( url, params, callback ) {
 
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21741,7 +21734,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(55),
 
 	// This is the only module that needs core/support
-	__webpack_require__(99)
+	__webpack_require__(98)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document, rsingleTag, buildFragment, support ) {
 
 "use strict";
@@ -21803,7 +21796,7 @@ return jQuery.parseHTML;
 
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21830,7 +21823,7 @@ return support;
 
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21859,7 +21852,7 @@ jQuery.each( [
 
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -21881,7 +21874,7 @@ jQuery.expr.pseudos.animated = function( elem ) {
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22121,7 +22114,7 @@ return jQuery;
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22185,7 +22178,7 @@ return jQuery;
 
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22195,9 +22188,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(10),
 	__webpack_require__(1),
 	__webpack_require__(17),
-	__webpack_require__(20),
+	__webpack_require__(21),
 
-	__webpack_require__(105)
+	__webpack_require__(104)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, nodeName, camelCase, toType, isFunction, isWindow, slice ) {
 
 "use strict";
@@ -22290,7 +22283,7 @@ jQuery.isNumeric = function( obj ) {
 
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22326,7 +22319,7 @@ jQuery.fn.extend( {
 
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22360,7 +22353,7 @@ if ( true ) {
 
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -22401,603 +22394,626 @@ if ( !noGlobal ) {
 
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 107 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(jQuery) {
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Model__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ViewSlider__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ViewConfiguration__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Controller__ = __webpack_require__(111);
+
+
+
+
+
+
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    var OMVC = {};
-
-    OMVC.Model = function (options) {
-      var thisModel = this;
-      this.sliderMin = options.sliderMin || 1;
-      this.sliderMax = options.sliderMax || 10;
-      this.sliderValue = options.sliderValue || thisModel.sliderMin;
-      this.sliderValueRange = options.sliderValueRange || thisModel.sliderMax;
-      this.sliderStep = options.sliderStep || 1;
-      this.verticalOrientation = options.verticalOrientation || false;
-      this.sliderRangeStatus = options.sliderRangeStatus || false;
-      this.sliderHandleValueHide = options.sliderHandleValueHide || false;
-
-      if (this.sliderMin > this.sliderMax) {
-        this.sliderMin = 1;
-        this.sliderMax = 10;
-        alert('Неккоректные значения sliderMin, sliderMax \nОбязательное условие: sliderMin < sliderMax \n Изменено на sliderMin = 1, sliderMax = 10.');
-      }
-      if (0 > this.sliderStep || this.sliderStep > (this.sliderMax - this.sliderMin)) {
-        this.sliderStep = 1;
-        alert('Неккоректное значение sliderStep \nОбязательное условие: \n0 > sliderStep || sliderStep > (sliderMax - sliderMin) \n Изменено на sliderStep = 1.');
-      }
-      if (this.sliderValue > this.sliderValueRange) {
-        alert('Неккоректные значения sliderValue, sliderValueRange \nОбязательное условие: \nsliderValue < sliderValueRange \n Изменено на sliderValue = sliderValue - sliderStep, sliderValueRange = sliderValue.');
-      }
-
-
-      this.sliderElem;
-      this.handleElem;
-      this.valueElem;
-
-      this.generalValueElem;
-
-      this.handleElemRange;
-      this.valueElemRange;
-
-      this.configShowHandleValueElem;
-      this.configOrientationElem;
-      this.configRangeElem
-      this.configCurrentValueElem;
-      this.configCurrentValueRangeElem;
-      this.configMinValueElem;
-      this.configMaxValueElem
-      this.configSizeOfStepElem;
-
-      this.createHandleRange = function () {
-        if (thisModel.sliderRangeStatus) {
-          thisModel.configCurrentValueElem.attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
-          thisModel.handleElemRange.css('display', 'block')
-          thisModel.configCurrentValueRangeElem.css('display', 'block')
-          thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
-          thisModel.valueElemRange.text(thisModel.sliderValueRange);
-          if (thisModel.sliderValue >= thisModel.sliderValueRange) {
-            thisModel.sliderValueRange = thisModel.sliderValue;
-            thisModel.sliderValue = thisModel.sliderValueRange - thisModel.sliderStep;
-            thisModel.handleElem.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValue, thisModel.valueElem));
-            thisModel.handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.valueElemRange));
-          }
-          else {
-            thisModel.handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.valueElemRange));
-          }
-          thisModel.configCurrentValueRangeElem.focusout(function () {
-            thisModel.sliderValueRange = parseInt(this.value);
-            thisModel.handleElemRange.css('left', thisModel.defaultValue(thisModel.sliderMax, thisModel.sliderMin, thisModel.sliderValueRange, thisModel.valueElemRange));
-            thisModel.valueElemRange.text(thisModel.sliderValueRange);
-            thisModel.configCurrentValueElem.attr('max', (thisModel.sliderValueRange - thisModel.sliderStep))
-          })
-        }
-        else {
-          thisModel.handleElemRange.css('display', 'none')
-          thisModel.configCurrentValueRangeElem.css('display', 'none')
-          thisModel.configCurrentValueElem.attr('max', thisModel.sliderMax)
-        }
-      };
-
-      this.defaultValue = function (slMax, slMin, slVal, currentElem) {  //установка ползунка в позицию "по-умолчанию" = sliderValue
-        let defaultValuesArray = [];
-        let currentValue = 0;
-
-        if (slVal <= slMin) {
-          slVal = slMin;
-        }
-        else if (slVal >= slMax) {
-          slVal = slMax;
-        }
-
-        let defSliderMin = slMin;
-        for (var i = 0; currentValue < slMax; i++) {
-          if (defSliderMin > slMax) {
-            break;
-          }
-          else {
-            currentValue = defSliderMin;
-            defSliderMin += thisModel.sliderStep;
-            defaultValuesArray.push(currentValue);
-          }
-        }
-
-        if (currentElem == thisModel.valueElem) {
-          if (($.inArray(thisModel.sliderValue, defaultValuesArray)) === -1) {
-            slVal = slMin;
-          }
-        }
-        else if (currentElem == thisModel.valueElemRange) {
-          if (($.inArray(thisModel.sliderValueRange, defaultValuesArray)) === -1) {
-            slVal = slMax;
-          }
-        }
-        let sliderWidth = thisModel.sliderElem.outerWidth() - thisModel.handleElem.outerWidth();
-        let stepOfDefaultPosition = sliderWidth / (defaultValuesArray.length - 1);
-        let currentIndexDefaultPosition = $.inArray(slVal, defaultValuesArray);
-        let defaultPosition = currentIndexDefaultPosition * stepOfDefaultPosition;
-
-        if (currentElem == thisModel.valueElem) {
-          thisModel.sliderValue = slVal;
-          if (currentIndexDefaultPosition == -1) {
-            defaultPosition = 0;
-            thisModel.sliderValue = defaultValuesArray[0];
-          }
-          currentElem.html(thisModel.sliderValue);
-          thisModel.configCurrentValueElem.val(thisModel.sliderValue);
-        }
-        else if (currentElem == thisModel.valueElemRange) {
-          thisModel.sliderValueRange = slVal;
-          if (currentIndexDefaultPosition == -1) {
-            defaultPosition = stepOfDefaultPosition * (defaultValuesArray.length - 1);
-            thisModel.sliderValueRange = defaultValuesArray[defaultValuesArray.length - 1];
-          }
-          currentElem.html(thisModel.sliderValueRange);
-          thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
-        }
-        return defaultPosition;
-      };
-
-      this.calculateSliderValue = function (slMax, slMin, begin, rangeStatus) { //расчет значения над ползунком
-        let sliderWidth = thisModel.sliderElem.outerWidth() - thisModel.handleElem.outerWidth();
-        let values = [];
-        let currentValue = 0;
-        for (var i = 0; currentValue < slMax; i++) {
-          if (slMin > slMax) {
-            break;
-          }
-          else {
-            currentValue = slMin;
-            slMin += thisModel.sliderStep;
-            values.push(currentValue);
-          }
-        }
-        let sliderValueStep = sliderWidth / (values[values.length - 1] - values[0]);
-        let currentSliderValue = ((begin + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
-
-        if (rangeStatus) {
-          if (currentSliderValue <= $.inArray(thisModel.sliderValue, values)) {
-            thisModel.valueElemRange.html(thisModel.sliderValue + thisModel.sliderStep);
-            thisModel.sliderValueRange = parseInt(thisModel.valueElemRange.text());
-            thisModel.configCurrentValueRangeElem.val(thisModel.sliderValue + thisModel.sliderStep);
-          }
-          else {
-            thisModel.valueElemRange.html(values[currentSliderValue]);
-            thisModel.sliderValueRange = parseInt(thisModel.valueElemRange.text());
-            thisModel.configCurrentValueRangeElem.val(thisModel.sliderValueRange);
-          }
-        }
-        else {
-          if (thisModel.sliderRangeStatus && currentSliderValue >= $.inArray((thisModel.sliderValueRange - thisModel.sliderStep), values)) {
-            thisModel.valueElem.html(thisModel.sliderValueRange - thisModel.sliderStep);
-            thisModel.sliderValue = parseInt(thisModel.valueElem.text());
-            thisModel.configCurrentValueElem.val(thisModel.sliderValueRange - thisModel.sliderStep);
-          }
-          else {
-            thisModel.valueElem.html(values[currentSliderValue]);
-            thisModel.sliderValue = parseInt(thisModel.valueElem.text());
-            thisModel.configCurrentValueElem.val(thisModel.sliderValue);
-          }
-        }
-      };
-
-      this.getCoords = function (elem) { //получение координат курсора внутри элемента
-        let box = elem.get(0).getBoundingClientRect();
-        return {
-          top: box.top + pageYOffset,
-          left: box.left + pageXOffset
-        };
-      }
-
-      this.clickOnSlider = function () {  //обработка клика ЛКМ по шкале слайдера
-        let clickPositionArray = [];
-        let clickPositionValue = 0;
-        let slMin = thisModel.sliderMin;
-        let slMax = thisModel.sliderMax;
-        for (var i = 0; clickPositionValue < slMax; i++) {
-          if (slMin > slMax) {
-            break;
-          }
-          else {
-            clickPositionValue = slMin;
-            slMin += thisModel.sliderStep;
-            clickPositionArray.push(clickPositionValue);
-          }
-        }
-
-        let shift;
-        let sliderCoords = thisModel.getCoords(thisModel.sliderElem); //внутренние координаты слайдера
-        if (thisModel.verticalOrientation) {
-          shift = event.pageY - sliderCoords.top - (thisModel.handleElem.outerHeight() / 2);
-        } else {
-          shift = event.pageX - sliderCoords.left - (thisModel.handleElem.outerWidth() / 2);
-        }
-
-
-        let sliderWidth = thisModel.sliderElem.outerWidth() - thisModel.handleElem.outerWidth();
-        let clickSliderValueStep = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / thisModel.sliderStep));
-
-        let moveToPosition;
-        let currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
-        let clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
-
-        if (shift < clickMiddlePosition) {
-          moveToPosition = clickSliderValueStep * currentSliderValue;
-        }
-        else if (shift > clickMiddlePosition) {
-          moveToPosition = clickSliderValueStep * currentSliderValue + clickSliderValueStep;
-        }
-
-        if (moveToPosition > sliderWidth) {
-          moveToPosition = sliderWidth
-        }
-
-        if (thisModel.sliderRangeStatus) {
-          if (moveToPosition < parseInt(thisModel.handleElem.css('left'))) {
-            thisModel.handleElem.animate({ left: moveToPosition + 'px' }, 300, thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, shift / thisModel.sliderStep, false));
-          }
-          else if (moveToPosition > parseInt(thisModel.handleElemRange.css('left'))) {
-            thisModel.handleElemRange.animate({ left: moveToPosition + 'px' }, 300, thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, shift / thisModel.sliderStep, true));
-          }
-          else {
-            if ((moveToPosition - parseInt(thisModel.handleElem.css('left'))) > (parseInt(thisModel.handleElemRange.css('left')) - moveToPosition)) {
-              thisModel.handleElemRange.animate({ left: moveToPosition + 'px' }, 300, thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, shift / thisModel.sliderStep, true));
-            }
-            else if ((moveToPosition - parseInt(thisModel.handleElem.css('left'))) < (parseInt(thisModel.handleElemRange.css('left')) - moveToPosition)) {
-              thisModel.handleElem.animate({ left: moveToPosition + 'px' }, 300, thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, shift / thisModel.sliderStep, false));
-            }
-          }
-        }
-        else {
-          thisModel.handleElem.animate({ left: moveToPosition + 'px' }, 300, thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, shift / thisModel.sliderStep, false));
-        }
-      }
-
-      this.mouseDown = function (event, actualElement) {//событие нажатой ЛКМ
-        let sliderCoords = thisModel.getCoords(thisModel.sliderElem); //внутренние координаты слайдера
-        let handleCoords = thisModel.getCoords(actualElement); //внутренние координаты ползунка
-        let shift; //координаты левого края элемента
-        if (thisModel.verticalOrientation == true) {
-          shift = event.pageY - handleCoords.top;
-        } else {
-          shift = event.pageX - handleCoords.left;
-        }
-        // движение нажатой ЛКМ
-        $(document).on('mousemove', function (event) {
-          let beginEdge;
-          let endEdge;
-          let position = [];
-          let currentValue = 0;
-          let slMin = thisModel.sliderMin;
-          let slMax = thisModel.sliderMax;
-          for (var i = 0; currentValue < slMax; i++) {
-            if (slMin > slMax) {
-              break;
-            }
-            else {
-              currentValue = slMin;
-              slMin += thisModel.sliderStep;
-              position.push(currentValue);
-            }
-          }
-
-          let positionRange = [];
-          slMin = thisModel.sliderMin;
-          currentValue = 0;
-          if (actualElement == thisModel.handleElem) {
-            slMax = thisModel.sliderValueRange - thisModel.sliderStep;
-          }
-          for (var i = 0; currentValue < slMax; i++) {
-            if (slMin > slMax) {
-              break;
-            }
-            else {
-              currentValue = slMin;
-              slMin += thisModel.sliderStep;
-              positionRange.push(currentValue);
-            }
-          }
-          if (thisModel.verticalOrientation) {
-            beginEdge = (event.pageY - shift - sliderCoords.top) / thisModel.sliderStep;
-          }
-          else {
-            beginEdge = (event.pageX - shift - sliderCoords.left) / thisModel.sliderStep;
-          }
-
-          if (beginEdge < 0) {
-            beginEdge = 0;
-          }
-          endEdge = thisModel.sliderElem.outerWidth() - actualElement.outerWidth();
-          if (beginEdge > endEdge) {
-            beginEdge = endEdge;
-          }
-          actualElement.css('left', thisModel.searchPosition(beginEdge, endEdge, position, positionRange, actualElement) + 'px');
-
-          if (actualElement == thisModel.handleElem) {
-            thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, beginEdge, false);
-          }
-          else if (actualElement == thisModel.handleElemRange) {
-            thisModel.calculateSliderValue(thisModel.sliderMax, thisModel.sliderMin, beginEdge, true);
-          }
-        });
-
-        $(document).mouseup(function () {  //событие ОТжатой ЛКМ, отмена "mousemove"
-          $(document).off('mousemove');
-        });
-      }
-
-      this.searchPosition = function (begin, end, position, positionRange, element) {
-        let widthOfstep = (end / (position.length - 1));
-        let halfWidthOfStep = (widthOfstep / 2);
-
-        let currentIndex = $.inArray(thisModel.sliderValue, position);
-        let currentPositionHandle = widthOfstep * currentIndex;
-
-        let currentIndexRange = $.inArray(thisModel.sliderValueRange - thisModel.sliderStep, positionRange)
-        let currentPositionHandleRange = widthOfstep * currentIndexRange;
-
-        let currentPositionCursor = begin * thisModel.sliderStep;
-        let middleOfPosition = currentPositionHandle + halfWidthOfStep;
-
-        if (element == thisModel.handleElem) {
-          if (thisModel.sliderRangeStatus) {
-            if (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange == -1) {
-              currentPositionHandle = currentPositionHandleRange;
-            }
-            else {
-              if (currentPositionCursor <= middleOfPosition) {
-                currentPositionHandle = widthOfstep * currentIndex;
-              }
-              else if (currentPositionCursor > middleOfPosition) {
-                currentPositionHandle = widthOfstep * currentIndex + widthOfstep;
-              }
-            }
-          }
-
-          else {
-            if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex == -1) {
-              currentPositionHandle = end;
-            }
-            else {
-              if (currentPositionCursor <= middleOfPosition) {
-                currentPositionHandle = widthOfstep * currentIndex;
-              }
-              else if (currentPositionCursor > middleOfPosition) {
-                currentPositionHandle = widthOfstep * currentIndex + widthOfstep;
-              }
-            }
-          }
-        }
-
-        else if (element == thisModel.handleElemRange) {
-          if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || thisModel.sliderValueRange == -1) {
-            currentPositionHandleRange = end;
-          }
-          else if (thisModel.sliderValueRange <= thisModel.sliderValue + thisModel.sliderStep) {
-            currentPositionHandleRange = widthOfstep * $.inArray((thisModel.sliderValue + thisModel.sliderStep), position);
-          }
-          else {
-            if (currentPositionCursor <= middleOfPosition) {
-              currentPositionHandleRange = widthOfstep * currentIndexRange;
-            }
-            else if (currentPositionCursor > middleOfPosition) {
-              currentPositionHandleRange = widthOfstep * currentIndexRange + widthOfstep;
-            }
-          }
-          currentPositionHandle = currentPositionHandleRange;
-        }
-        return currentPositionHandle;
-      }
-
-    };
-    //////////___Model___/////////////////////////////////////___ViewSlider___///////////////////////
-    OMVC.ViewSlider = function (thisForViewSlider) {
-      thisForViewSlider.html('<div class="slider">'
-        + ' <div class="slider_handle slider_handle_left"> <div class="slider_handle_value slider_handle_value_left"></div></div>'
-        + '<div class="slider_handle slider_handle_right"> <div class="slider_handle_value slider_handle_value_right">'
-      );
-    };
-    //////___ViewSlider___////////////////////////////___ViewConfiguration___////////////////////////
-    OMVC.ViewConfiguration = function (options, thisForViewConfiguration) {
-      if (options.sliderConfigPanel == true) {
-        thisForViewConfiguration.after('<div class="block_config">' + '<div class="config_panel">'
-
-          + '<label> <input type="checkbox" class="config_showHandleValue">Убрать флажок</label>'
-          + '<label> <input type="checkbox" class="config_orientation">Включить вертикальное отображение</label>'
-          + '<label> <input type="checkbox"  class="config_range">Включить выбор интервала</label>'
-
-          + '<label>Текущее значение</label> <div class="config_block_currentValue">'
-          + ' <input type="number" class="config_currentValue"><input type="number" class="config_currentValueRange"> </div>'
-          + '<label>Минимальное значение слайдера</label> <input type="number" class="config_minValue">'
-          + '<label>Максимальное значение слайдера</label> <input type="number" class="config_maxValue">'
-          + '<label>Размер шага слайдера</label> <input type="number" class="config_sizeOfStep">');
-      }
-    };
-    /////////___ViewConfiguration___///////////////////////////////////___Controller___//////////////
-    OMVC.Controller = function (model, view, viewConfig, thisForController) {
-      //init slider elem
-      model.sliderElem = thisForController.find('.slider');
-      model.handleElem = thisForController.find('.slider_handle_left');
-      model.valueElem = thisForController.find('.slider_handle_value_left');
-      model.generalValueElem = thisForController.find('.slider_handle_value');
-      //init slider range elem
-      model.handleElemRange = thisForController.find('.slider_handle_right');
-      model.valueElemRange = thisForController.find('.slider_handle_value_right');
-      //init slider configPanel elem
-      model.configShowHandleValueElem = thisForController.next().find('.config_showHandleValue');
-      model.configOrientationElem = thisForController.next().find('.config_orientation');
-      model.configRangeElem = thisForController.next().find('.config_range');
-      model.configCurrentValueElem = thisForController.next().find('.config_currentValue');
-      model.configCurrentValueRangeElem = thisForController.next().find('.config_currentValueRange');
-      model.configMinValueElem = thisForController.next().find('.config_minValue');
-      model.configMaxValueElem = thisForController.next().find('.config_maxValue');
-      model.configSizeOfStepElem = thisForController.next().find('.config_sizeOfStep');
-
-      model.configCurrentValueElem.attr({ 'min': model.sliderMin, 'max': model.sliderMax, 'value': model.sliderValue });
-      model.configMinValueElem.attr({ 'max': (model.sliderMax - model.sliderStep), 'value': model.sliderMin });
-      model.configMaxValueElem.attr({ 'min': (model.sliderMin + model.sliderStep), 'value': model.sliderMax });
-      model.configSizeOfStepElem.attr({ 'min': 1, 'max': (model.sliderMax - model.sliderMin), 'value': model.sliderStep });
-      model.configCurrentValueRangeElem.attr({ 'min': (model.sliderValue + model.sliderStep), 'max': model.sliderMax, 'value': model.sliderValueRange });
-
-      model.handleElemRange.css('display', 'none')
-      model.configCurrentValueRangeElem.css('display', 'none')
-
-      model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
-
-      if (model.sliderHandleValueHide) {
-        model.configShowHandleValueElem.click();
-        model.valueElem.css('display', 'none');
-        model.valueElemRange.css('display', 'none');
-      }
-      model.configShowHandleValueElem.change(function () {  //убрать флажок 
-        if (this.checked) {
-          model.valueElem.css('display', 'none');
-          model.valueElemRange.css('display', 'none');
-        }
-        else {
-          model.valueElem.css('display', 'block');
-          model.valueElemRange.css('display', 'block');
-        }
-      })//complete
-
-      if (model.verticalOrientation) {
-        model.configOrientationElem.click();
-        thisForController.addClass('verticalBlockSlider');
-        model.sliderElem.addClass('verticalSlider');
-        model.handleElem.addClass('verticalSlider_handle');
-        model.generalValueElem.addClass('verticalSlider_handle_value');
-        model.handleElemRange.addClass('verticalSlider_handle');
-        model.valueElemRange.addClass('verticalSlider_handle_value');
-        model.verticalOrientation = true;;
-      }
-      model.configOrientationElem.change(function () {  //вкл/выкл вертикальной ориентации
-        if (this.checked) {
-          thisForController.addClass('verticalBlockSlider');
-          model.sliderElem.addClass('verticalSlider');
-          model.handleElem.addClass('verticalSlider_handle');
-          model.generalValueElem.addClass('verticalSlider_handle_value');
-          model.handleElemRange.addClass('verticalSlider_handle');
-          model.valueElemRange.addClass('verticalSlider_handle_value');
-          model.verticalOrientation = true;
-        }
-        else {
-          thisForController.removeClass('verticalBlockSlider');
-          model.sliderElem.removeClass('verticalSlider');
-          model.handleElem.removeClass('verticalSlider_handle');
-          model.generalValueElem.removeClass('verticalSlider_handle_value');
-          model.handleElemRange.removeClass('verticalSlider_handle');
-          model.valueElemRange.removeClass('verticalSlider_handle_value');
-          model.verticalOrientation = false;
-        }
-      })//complete
-
-      if (model.sliderRangeStatus) {
-        model.configRangeElem.click();
-        model.createHandleRange();
-      }
-
-      model.configRangeElem.change(function () {  //вкл/выкл выбор диапазона
-        if (model.sliderRangeStatus) {
-          model.sliderRangeStatus = false;
-        }
-        else {
-          model.sliderRangeStatus = true;
-        }
-        model.createHandleRange();
-
-      })
-
-      model.configCurrentValueElem.focusout(function () { //текущее значение слайдера
-        model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.valueElem));
-        this.value = model.sliderValue;
-        model.configCurrentValueRangeElem.attr('min', (model.sliderValue + model.sliderStep))
-      })//complete
-
-      model.configMinValueElem.focusout(function () { //минимальное значение слайдера
-        model.sliderMin = parseInt(this.value);
-        model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
-        if (model.sliderRangeStatus) {
-          model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
-        }
-        model.configCurrentValueElem.attr('min', model.sliderMin);
-        model.configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
-      }) //complete
-
-      model.configMaxValueElem.focusout(function () { //максимальное значение слайдера
-        model.sliderMax = parseInt(this.value);
-        model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
-        if (model.sliderRangeStatus) {
-          model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
-        }
-        model.configCurrentValueElem.attr('max', model.sliderMax);
-        model.configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
-        model.configCurrentValueRangeElem.attr('max', model.sliderMax)
-      }) //complete
-
-      model.configSizeOfStepElem.focusout(function () { //размера шага слайдера
-        model.sliderStep = parseInt(this.value);
-        model.configCurrentValueElem.attr('max', model.sliderMax);
-        model.handleElem.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.valueElem));
-        if (model.sliderRangeStatus) {
-          model.handleElemRange.css('left', model.defaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.valueElemRange));
-        }
-      })
-
-      model.sliderElem.click(function () {
-        model.clickOnSlider();
-      })
-
-      model.handleElem.mousedown(function (event) {
-        let currentElement = model.handleElem;
-        model.mouseDown(event, currentElement);
-      });
-
-      model.handleElemRange.mousedown(function (event) {
-        let currentElement = model.handleElemRange;
-        model.mouseDown(event, currentElement);
-      });
-    };
-    ////////___Controller___///////////////////////////////////////////___ready___///////////////////
-
-    var model = new OMVC.Model(options, this);
-    var view = new OMVC.ViewSlider(this);
-    var viewConfig = new OMVC.ViewConfiguration(options, this);
-    var controller = new OMVC.Controller(model, view, viewConfig, this);
+    const model = new __WEBPACK_IMPORTED_MODULE_1__Model__["a" /* default */](options);
+    const view = new __WEBPACK_IMPORTED_MODULE_2__ViewSlider__["a" /* default */](this);
+    const viewConfiguration = new __WEBPACK_IMPORTED_MODULE_3__ViewConfiguration__["a" /* default */](options, this);
+    const controller = new __WEBPACK_IMPORTED_MODULE_4__Controller__["a" /* default */](model, view, viewConfiguration, this);
   };
-})(jQuery);
+}(__WEBPACK_IMPORTED_MODULE_0_jquery___default.a));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+class Model {
+  constructor(options) {
+    this.sliderConfigPanel = options.sliderConfigPanel || false;
+    this.sliderMin = options.sliderMin || 1;
+    this.sliderMax = options.sliderMax || 10;
+    this.sliderValue = options.sliderValue || this.sliderMin;
+    this.sliderValueRange = options.sliderValueRange || this.sliderMax;
+    this.sliderStep = options.sliderStep || 1;
+    this.verticalOrientation = options.verticalOrientation || false;
+    this.sliderRangeStatus = options.sliderRangeStatus || false;
+    this.sliderHandleValueHide = options.sliderHandleValueHide || false;
+    this.inputValidation();
+  }
+
+  inputValidation() {
+    if (this.sliderMin > this.sliderMax) {
+      this.sliderMin = 1;
+      this.sliderMax = 10;
+      alert('Неккоректные значения sliderMin, sliderMax \nОбязательное условие: sliderMin < sliderMax \n Изменено на sliderMin = 1, sliderMax = 10.');
+    }
+    if (this.sliderStep < 0 || this.sliderStep > (this.sliderMax - this.sliderMin)) {
+      this.sliderStep = 1;
+      alert('Неккоректное значение sliderStep \nОбязательное условие: \n0 > sliderStep || sliderStep > (sliderMax - sliderMin) \n Изменено на sliderStep = 1.');
+    }
+    if (this.sliderValue > this.sliderValueRange) {
+      this.sliderValueRange = this.sliderValue;
+      this.sliderValue = this.sliderValue - this.sliderStep;
+      alert('Неккоректные значения sliderValue, sliderValueRange \nОбязательное условие: \nsliderValue < sliderValueRange \n Изменено на sliderValue = sliderValue - sliderStep, sliderValueRange = sliderValue.');
+    }
+  }
+
+  createHandleRange() {
+    if (this.sliderRangeStatus) {
+      this.$configCurrentValueElem.attr('max', (this.sliderValueRange - this.sliderStep));
+      this.$handleElemRange.css('display', 'block');
+      this.$configCurrentValueRangeElem.css('display', 'block');
+      this.$configCurrentValueRangeElem.val(this.sliderValueRange);
+      this.$valueElemRange.text(this.sliderValueRange);
+      if (this.sliderValue >= this.sliderValueRange) {
+        this.sliderValueRange = this.sliderValue;
+        this.sliderValue = this.sliderValueRange - this.sliderStep;
+        this.$handleElem.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValue, this.$valueElem));
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
+      } else {
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
+      }
+      this.$configCurrentValueRangeElem.focusout(function () {
+        this.sliderValueRange = parseInt(this.value);
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
+        this.$valueElemRange.text(this.sliderValueRange);
+        this.$configCurrentValueElem.attr('max', (this.sliderValueRange - this.sliderStep));
+      });
+    } else {
+      this.$handleElemRange.css('display', 'none');
+      this.$configCurrentValueRangeElem.css('display', 'none');
+      this.$configCurrentValueElem.attr('max', this.sliderMax);
+    }
+  }
+
+  calculateDefaultValue(slMax, slMin, slVal, currentElem) { // установка ползунка в позицию "по-умолчанию" = sliderValue
+    const defaultValuesArray = [];
+    let currentValue = 0;
+
+    if (slVal <= slMin) {
+      slVal = slMin;
+    } else if (slVal >= slMax) {
+      slVal = slMax;
+    }
+
+    let defSliderMin = slMin;
+    for (; currentValue < slMax;) {
+      if (defSliderMin > slMax) {
+        break;
+      } else {
+        currentValue = defSliderMin;
+        defSliderMin += this.sliderStep;
+        defaultValuesArray.push(currentValue);
+      }
+    }
+
+    if (currentElem === this.$valueElem) {
+      if ((__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(this.sliderValue, defaultValuesArray)) === -1) {
+        slVal = slMin;
+      }
+    } else if (currentElem === this.$valueElemRange) {
+      if ((__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(this.sliderValueRange, defaultValuesArray)) === -1) {
+        slVal = slMax;
+      }
+    }
+    const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
+    const stepOfDefaultPosition = sliderWidth / (defaultValuesArray.length - 1);
+    const currentIndexDefaultPosition = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(slVal, defaultValuesArray);
+    let defaultPosition = currentIndexDefaultPosition * stepOfDefaultPosition;
+
+    if (currentElem === this.$valueElem) {
+      this.sliderValue = slVal;
+      if (currentIndexDefaultPosition === -1) {
+        defaultPosition = 0;
+        this.sliderValue = defaultValuesArray[0];
+      }
+      currentElem.html(this.sliderValue);
+      this.$configCurrentValueElem.val(this.sliderValue);
+    } else if (currentElem === this.$valueElemRange) {
+      this.sliderValueRange = slVal;
+      if (currentIndexDefaultPosition === -1) {
+        defaultPosition = stepOfDefaultPosition * (defaultValuesArray.length - 1);
+        this.sliderValueRange = defaultValuesArray[defaultValuesArray.length - 1];
+      }
+      currentElem.html(this.sliderValueRange);
+      this.$configCurrentValueRangeElem.val(this.sliderValueRange);
+    }
+    return defaultPosition;
+  }
+
+  calculateSliderValue(slMax, slMin, begin, rangeStatus) { // расчет значения над ползунком
+    const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
+    const values = [];
+    let currentValue = 0;
+    for (; currentValue < slMax;) {
+      if (slMin > slMax) {
+        break;
+      } else {
+        currentValue = slMin;
+        slMin += this.sliderStep;
+        values.push(currentValue);
+      }
+    }
+    const sliderValueStep = sliderWidth / (values[values.length - 1] - values[0]);
+    const currentSliderValue = ((begin + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
+
+    if (rangeStatus) {
+      if (currentSliderValue <= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(this.sliderValue, values)) {
+        this.$valueElemRange.html(this.sliderValue + this.sliderStep);
+        this.sliderValueRange = parseInt(this.$valueElemRange.text());
+        this.$configCurrentValueRangeElem.val(this.sliderValue + this.sliderStep);
+      } else {
+        this.$valueElemRange.html(values[currentSliderValue]);
+        this.sliderValueRange = parseInt(this.$valueElemRange.text());
+        this.$configCurrentValueRangeElem.val(this.sliderValueRange);
+      }
+    } else {
+      if (this.sliderRangeStatus && currentSliderValue >= __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray((this.sliderValueRange - this.sliderStep), values)) {
+        this.$valueElem.html(this.sliderValueRange - this.sliderStep);
+        this.sliderValue = parseInt(this.$valueElem.text());
+        this.$configCurrentValueElem.val(this.sliderValueRange - this.sliderStep);
+      } else {
+        this.$valueElem.html(values[currentSliderValue]);
+        this.sliderValue = parseInt(this.$valueElem.text());
+        this.$configCurrentValueElem.val(this.sliderValue);
+      }
+    }
+  }
+
+  getCoords(elem) { // получение координат курсора внутри элемента
+    const box = elem.get(0).getBoundingClientRect();
+    return {
+      top: box.top + window.pageYOffset,
+      left: box.left + window.pageXOffset,
+    };
+  }
+
+  clickOnSlider(event) { // обработка клика ЛКМ по шкале слайдера
+    const clickPositionArray = [];
+    let clickPositionValue = 0;
+    let slMin = this.sliderMin;
+    const slMax = this.sliderMax;
+    for (; clickPositionValue < slMax;) {
+      if (slMin > slMax) {
+        break;
+      } else {
+        clickPositionValue = slMin;
+        slMin += this.sliderStep;
+        clickPositionArray.push(clickPositionValue);
+      }
+    }
+
+    let shift;
+    const sliderCoords = this.getCoords(this.$sliderElem); // внутренние координаты слайдера
+    if (this.verticalOrientation) {
+      shift = (event.pageY - sliderCoords.top - (this.$handleElem.outerHeight() / 2));
+    } else {
+      shift = (event.pageX - sliderCoords.left - (this.$handleElem.outerWidth() / 2));
+    }
+
+    const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
+    const clickSliderValueStep = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / this.sliderStep));
+
+    // debugger;
+    let moveToPosition;
+    const currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
+    const clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
+
+    if (shift < clickMiddlePosition) {
+      moveToPosition = (clickSliderValueStep * currentSliderValue);
+    } else if (shift > clickMiddlePosition) {
+      moveToPosition = (clickSliderValueStep * currentSliderValue) + clickSliderValueStep;
+    }
+
+    if (moveToPosition > sliderWidth) {
+      moveToPosition = sliderWidth;
+    }
+
+    if (this.sliderRangeStatus) {
+      if (moveToPosition < parseInt(this.$handleElem.css('left'))) {
+        this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+      } else if (moveToPosition > parseInt(this.$handleElemRange.css('left'))) {
+        this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, true));
+      } else {
+        if ((moveToPosition - parseInt(this.$handleElem.css('left'))) > (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
+          this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, true));
+        } else if ((moveToPosition - parseInt(this.$handleElem.css('left'))) < (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
+          this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+        }
+      }
+    } else {
+      this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+    }
+  }
+
+  mouseDown(event, $actualElement) { // событие нажатой ЛКМ
+    const sliderCoords = this.getCoords(this.$sliderElem); // внутренние координаты слайдера
+    const handleCoords = this.getCoords($actualElement); // внутренние координаты ползунка
+    let shift; // координаты левого края элемента
+    if (this.verticalOrientation === true) {
+      shift = event.pageY - handleCoords.top;
+    } else {
+      shift = event.pageX - handleCoords.left;
+    }
+    // движение нажатой ЛКМ
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('mousemove', (event) => {
+      let beginEdge;
+      const position = [];
+      let currentValue = 0;
+      let slMin = this.sliderMin;
+      let slMax = this.sliderMax;
+      for (; currentValue < slMax;) {
+        if (slMin > slMax) {
+          break;
+        } else {
+          currentValue = slMin;
+          slMin += this.sliderStep;
+          position.push(currentValue);
+        }
+      }
+
+      const positionRange = [];
+      slMin = this.sliderMin;
+      currentValue = 0;
+      if ($actualElement === this.$handleElem) {
+        slMax = this.sliderValueRange - this.sliderStep;
+      }
+      for (; currentValue < slMax;) {
+        if (slMin > slMax) {
+          break;
+        } else {
+          currentValue = slMin;
+          slMin += this.sliderStep;
+          positionRange.push(currentValue);
+        }
+      }
+      if (this.verticalOrientation) {
+        beginEdge = (event.pageY - shift - sliderCoords.top) / this.sliderStep;
+      } else {
+        beginEdge = (event.pageX - shift - sliderCoords.left) / this.sliderStep;
+      }
+
+      if (beginEdge < 0) {
+        beginEdge = 0;
+      }
+      const endEdge = this.$sliderElem.outerWidth() - $actualElement.outerWidth();
+      if (beginEdge > endEdge) {
+        beginEdge = endEdge;
+      }
+      $actualElement.css('left', `${this.searchPosition(beginEdge, endEdge, position, positionRange, $actualElement)}px`);
+
+      if ($actualElement === this.$handleElem) {
+        this.calculateSliderValue(this.sliderMax, this.sliderMin, beginEdge, false);
+      } else if ($actualElement === this.$handleElemRange) {
+        this.calculateSliderValue(this.sliderMax, this.sliderMin, beginEdge, true);
+      }
+    });
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).mouseup(() => { // событие ОТжатой ЛКМ, отмена "mousemove"
+      __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).off('mousemove');
+    });
+  }
+
+  searchPosition(begin, end, position, positionRange, $element) {
+    const widthOfstep = (end / (position.length - 1));
+    const halfWidthOfStep = (widthOfstep / 2);
+
+    const currentIndex = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(this.sliderValue, position);
+    let currentPositionHandle = widthOfstep * currentIndex;
+
+    const currentIndexRange = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray(this.sliderValueRange - this.sliderStep, positionRange);
+    let currentPositionHandleRange = widthOfstep * currentIndexRange;
+
+    const currentPositionCursor = begin * this.sliderStep;
+    const middleOfPosition = currentPositionHandle + halfWidthOfStep;
+
+    if ($element === this.$handleElem) {
+      if (this.sliderRangeStatus) {
+        if (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange === -1) {
+          currentPositionHandle = currentPositionHandleRange;
+        } else {
+          if (currentPositionCursor <= middleOfPosition) {
+            currentPositionHandle = widthOfstep * currentIndex;
+          } else if (currentPositionCursor > middleOfPosition) {
+            currentPositionHandle = (widthOfstep * currentIndex) + widthOfstep;
+          }
+        }
+      } else {
+        if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex === -1) {
+          currentPositionHandle = end;
+        } else {
+          if (currentPositionCursor <= middleOfPosition) {
+            currentPositionHandle = widthOfstep * currentIndex;
+          } else if (currentPositionCursor > middleOfPosition) {
+            currentPositionHandle = (widthOfstep * currentIndex) + widthOfstep;
+          }
+        }
+      }
+    } else if ($element === this.$handleElemRange) {
+      if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || this.sliderValueRange === -1) {
+        currentPositionHandleRange = end;
+      } else if (this.sliderValueRange <= this.sliderValue + this.sliderStep) {
+        currentPositionHandleRange = widthOfstep * __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.inArray((this.sliderValue + this.sliderStep), position);
+      } else if (currentPositionCursor <= middleOfPosition) {
+        currentPositionHandleRange = widthOfstep * currentIndexRange;
+      } else if (currentPositionCursor > middleOfPosition) {
+        currentPositionHandleRange = (widthOfstep * currentIndexRange) + widthOfstep;
+      }
+      currentPositionHandle = currentPositionHandleRange;
+    }
+    return currentPositionHandle;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Model);
+
 
 /***/ }),
 /* 109 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+class ViewSlider {
+  constructor(thisForViewSlider) {
+    this.createSlider(thisForViewSlider);
+  }
+
+  createSlider(thisForViewSlider) {
+    thisForViewSlider.html('<div class="slider__element">'
+      + ' <div class="slider__handle slider__handle_left"> <div class="slider__value slider__value_left"></div></div>'
+      + '<div class="slider__handle slider__handle_right"> <div class="slider__value slider__value_right">');
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (ViewSlider);
 
 
-$(document).ready(function () {
-  $('.block_slider').each(function () {
-    $(this).efSlider({
+/***/ }),
+/* 110 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class ViewConfiguration {
+  constructor(sliderOptions, thisForViewConfiguration) {
+    this.createConfigurationPanel(sliderOptions, thisForViewConfiguration);
+  }
+
+  createConfigurationPanel(sliderOptions, thisForViewConfiguration) {
+    if (sliderOptions.sliderConfigPanel === true) {
+      thisForViewConfiguration.after('<div class="slider__configuration">'
+        + '<div class="configuration">'
+
+        + '<label> <input type="checkbox" class="configuration__show-handle-value">Убрать флажок</label>'
+        + '<label> <input type="checkbox" class="configuration__orientation">Включить вертикальное отображение</label>'
+        + '<label> <input type="checkbox"  class="configuration__range">Включить выбор интервала</label>'
+
+        + '<label>Текущее значение</label> <div class="configuration__current-value">'
+        + '<input type="number" class="configuration__current-value_left"> <input type="number" class="configuration__current-value_right"> </div>'
+        + '<label>Минимальное значение слайдера</label> <input type="number" class="configuration__minimum-value">'
+        + '<label>Максимальное значение слайдера</label> <input type="number" class="configuration__maximum-value">'
+        + '<label>Размер шага слайдера</label> <input type="number" class="configuration__size-of-step">');
+    }
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (ViewConfiguration);
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Controller {
+  constructor(model, view, viewConfig, thisForController) {
+    this.sliderEventsInits(model, view, viewConfig, thisForController);
+  }
+
+  sliderEventsInits(model, view, viewConfig, thisForController) {
+    // init slider elem
+    model.$sliderElem = thisForController.find('.slider__element');
+    model.$handleElem = thisForController.find('.slider__handle_left');
+    model.$valueElem = thisForController.find('.slider__value_left');
+    model.$generalValueElem = thisForController.find('.slider__value');
+    // init slider range elem
+    model.$handleElemRange = thisForController.find('.slider__handle_right');
+    model.$valueElemRange = thisForController.find('.slider__value_right');
+    // init slider configPanel elem
+    model.$configShowHandleValueElem = thisForController.next().find('.configuration__show-handle-value');
+    model.$configOrientationElem = thisForController.next().find('.configuration__orientation');
+    model.$configRangeElem = thisForController.next().find('.configuration__range');
+    model.$configCurrentValueElem = thisForController.next().find('.configuration__current-value_left');
+    model.$configCurrentValueRangeElem = thisForController.next().find('.configuration__current-value_right');
+    model.$configMinValueElem = thisForController.next().find('.configuration__minimum-value');
+    model.$configMaxValueElem = thisForController.next().find('.configuration__maximum-value');
+    model.$configSizeOfStepElem = thisForController.next().find('.configuration__size-of-step');
+
+    model.$configCurrentValueElem.attr({ min: model.sliderMin, max: model.sliderMax, value: model.sliderValue });
+    model.$configMinValueElem.attr({ max: (model.sliderMax - model.sliderStep), value: model.sliderMin });
+    model.$configMaxValueElem.attr({ min: (model.sliderMin + model.sliderStep), value: model.sliderMax });
+    model.$configSizeOfStepElem.attr({ min: 1, max: (model.sliderMax - model.sliderMin), value: model.sliderStep });
+    model.$configCurrentValueRangeElem.attr({ min: (model.sliderValue + model.sliderStep), max: model.sliderMax, value: model.sliderValueRange });
+
+    model.$handleElemRange.css('display', 'none');
+    model.$configCurrentValueRangeElem.css('display', 'none');
+
+    model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+
+    if (model.sliderHandleValueHide) {
+      model.$configShowHandleValueElem.click();
+      model.$valueElem.css('display', 'none');
+      model.$valueElemRange.css('display', 'none');
+    }
+    model.$configShowHandleValueElem.change(function () { // убрать флажок
+      if (this.checked) {
+        model.$valueElem.css('display', 'none');
+        model.$valueElemRange.css('display', 'none');
+      } else {
+        model.$valueElem.css('display', 'block');
+        model.$valueElemRange.css('display', 'block');
+      }
+    });
+
+    if (model.verticalOrientation) {
+      model.$configOrientationElem.click();
+      thisForController.addClass('slider_vertical');
+      model.$sliderElem.addClass('slider__element_vertical');
+      model.$handleElem.addClass('slider__handle_vertical');
+      model.$generalValueElem.addClass('slider__value_vertical');
+      model.$handleElemRange.addClass('slider__handle_vertical');
+      model.$valueElemRange.addClass('slider__value_vertical');
+      model.verticalOrientation = true;
+    }
+    model.$configOrientationElem.change(function () { // вкл/выкл вертикальной ориентации
+      if (this.checked) {
+        thisForController.addClass('slider_vertical');
+        model.$sliderElem.addClass('slider__element_vertical');
+        model.$handleElem.addClass('slider__handle_vertical');
+        model.$generalValueElem.addClass('slider__value_vertical');
+        model.$handleElemRange.addClass('slider__handle_vertical');
+        model.$valueElemRange.addClass('slider__value_vertical');
+        model.verticalOrientation = true;
+      } else {
+        thisForController.removeClass('slider_vertical');
+        model.$sliderElem.removeClass('slider__element_vertical');
+        model.$handleElem.removeClass('slider__handle_vertical');
+        model.$generalValueElem.removeClass('slider__value_vertical');
+        model.$handleElemRange.removeClass('slider__handle_vertical');
+        model.$valueElemRange.removeClass('slider__value_vertical');
+        model.verticalOrientation = false;
+      }
+    });
+
+    if (model.sliderRangeStatus) {
+      model.$configRangeElem.click();
+      model.createHandleRange();
+    }
+
+    model.$configRangeElem.change(() => { // вкл/выкл выбор диапазона
+      if (model.sliderRangeStatus) {
+        model.sliderRangeStatus = false;
+      } else {
+        model.sliderRangeStatus = true;
+      }
+      model.createHandleRange();
+    });
+
+    model.$configCurrentValueElem.focusout(function () { // текущее значение слайдера
+      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.$valueElem));
+      this.value = model.sliderValue;
+      model.$configCurrentValueRangeElem.attr('min', (model.sliderValue + model.sliderStep));
+    });
+
+    model.$configMinValueElem.focusout(function () { // минимальное значение слайдера
+      model.sliderMin = parseInt(this.value);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+      if (model.sliderRangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      }
+      model.$configCurrentValueElem.attr('min', model.sliderMin);
+      model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
+    });
+
+    model.$configMaxValueElem.focusout(function () { // максимальное значение слайдера
+      model.sliderMax = parseInt(this.value);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+      if (model.sliderRangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      }
+      model.$configCurrentValueElem.attr('max', model.sliderMax);
+      model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
+      model.$configCurrentValueRangeElem.attr('max', model.sliderMax);
+    });
+
+    model.$configSizeOfStepElem.focusout(function () { // размера шага слайдера
+      model.sliderStep = parseInt(this.value);
+      model.$configCurrentValueElem.attr('max', model.sliderMax);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+      if (model.sliderRangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      }
+    });
+
+    model.$sliderElem.click((event) => {
+      model.clickOnSlider(event);
+    });
+
+    model.$handleElem.mousedown((event) => {
+      const $currentElement = model.$handleElem;
+      model.mouseDown(event, $currentElement);
+    });
+
+    model.$handleElemRange.mousedown((event) => {
+      const $currentElement = model.$handleElemRange;
+      model.mouseDown(event, $currentElement);
+    });
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Controller);
+
+
+/***/ }),
+/* 112 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(() => {
+  __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.slider').each(function () {
+    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).efSlider({
       sliderConfigPanel: true,
       sliderMin: 10,
-      sliderMax: 20,
-      sliderValue: 14,
-      sliderValueRange: 18,
+      sliderMax: 100,
+      sliderValue: 50,
+      sliderValueRange: 80,
       sliderStep: 1,
       sliderHandleValueHide: false,
       verticalOrientation: false,
-      sliderRangeStatus: true
+      sliderRangeStatus: false,
     });
   });
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
