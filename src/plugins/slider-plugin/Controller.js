@@ -1,9 +1,9 @@
 class Controller {
   constructor(model, view, viewConfig, thisForController) {
-    this.sliderEventsInits(model, view, viewConfig, thisForController);
+    this.eventsInits(model, view, viewConfig, thisForController);
   }
 
-  sliderEventsInits(model, view, viewConfig, thisForController) {
+  eventsInits(model, view, viewConfig, thisForController) {
     // init slider elem
     model.$sliderElem = thisForController.find('.slider__element');
     model.$handleElem = thisForController.find('.slider__handle_left');
@@ -22,18 +22,18 @@ class Controller {
     model.$configMaxValueElem = thisForController.next().find('.configuration__maximum-value');
     model.$configSizeOfStepElem = thisForController.next().find('.configuration__size-of-step');
 
-    model.$configCurrentValueElem.attr({ min: model.sliderMin, max: model.sliderMax, value: model.sliderValue });
-    model.$configMinValueElem.attr({ max: (model.sliderMax - model.sliderStep), value: model.sliderMin });
-    model.$configMaxValueElem.attr({ min: (model.sliderMin + model.sliderStep), value: model.sliderMax });
-    model.$configSizeOfStepElem.attr({ min: 1, max: (model.sliderMax - model.sliderMin), value: model.sliderStep });
-    model.$configCurrentValueRangeElem.attr({ min: (model.sliderValue + model.sliderStep), max: model.sliderMax, value: model.sliderValueRange });
+    model.$configCurrentValueElem.attr({ min: model.minimum, max: model.maximum, value: model.value });
+    model.$configMinValueElem.attr({ max: (model.maximum - model.step), value: model.minimum });
+    model.$configMaxValueElem.attr({ min: (model.minimum + model.step), value: model.maximum });
+    model.$configSizeOfStepElem.attr({ min: 1, max: (model.maximum - model.minimum), value: model.step });
+    model.$configCurrentValueRangeElem.attr({ min: (model.value + model.step), max: model.maximum, value: model.valueRange });
 
     model.$handleElemRange.css('display', 'none');
     model.$configCurrentValueRangeElem.css('display', 'none');
 
-    model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
+    model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
 
-    if (model.sliderHandleValueHide) {
+    if (model.handleValueHide) {
       model.$configShowHandleValueElem.click();
       model.$valueElem.css('display', 'none');
       model.$valueElemRange.css('display', 'none');
@@ -78,53 +78,53 @@ class Controller {
       }
     });
 
-    if (model.sliderRangeStatus) {
+    if (model.rangeStatus) {
       model.$configRangeElem.click();
       model.createHandleRange();
     }
 
     model.$configRangeElem.change(() => { // вкл/выкл выбор диапазона
-      if (model.sliderRangeStatus) {
-        model.sliderRangeStatus = false;
+      if (model.rangeStatus) {
+        model.rangeStatus = false;
       } else {
-        model.sliderRangeStatus = true;
+        model.rangeStatus = true;
       }
       model.createHandleRange();
     });
 
     model.$configCurrentValueElem.focusout(function () { // текущее значение слайдера
-      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, parseInt(this.value), model.$valueElem));
-      this.value = model.sliderValue;
-      model.$configCurrentValueRangeElem.attr('min', (model.sliderValue + model.sliderStep));
+      model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, parseInt(this.value), model.$valueElem));
+      this.value = model.value;
+      model.$configCurrentValueRangeElem.attr('min', (model.value + model.step));
     });
 
     model.$configMinValueElem.focusout(function () { // минимальное значение слайдера
-      model.sliderMin = parseInt(this.value);
-      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
-      if (model.sliderRangeStatus) {
-        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      model.minimum = parseInt(this.value);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
+      if (model.rangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
       }
-      model.$configCurrentValueElem.attr('min', model.sliderMin);
-      model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
+      model.$configCurrentValueElem.attr('min', model.minimum);
+      model.$configSizeOfStepElem.attr('max', (model.maximum - model.minimum));
     });
 
     model.$configMaxValueElem.focusout(function () { // максимальное значение слайдера
-      model.sliderMax = parseInt(this.value);
-      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
-      if (model.sliderRangeStatus) {
-        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      model.maximum = parseInt(this.value);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
+      if (model.rangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
       }
-      model.$configCurrentValueElem.attr('max', model.sliderMax);
-      model.$configSizeOfStepElem.attr('max', (model.sliderMax - model.sliderMin));
-      model.$configCurrentValueRangeElem.attr('max', model.sliderMax);
+      model.$configCurrentValueElem.attr('max', model.maximum);
+      model.$configSizeOfStepElem.attr('max', (model.maximum - model.minimum));
+      model.$configCurrentValueRangeElem.attr('max', model.maximum);
     });
 
     model.$configSizeOfStepElem.focusout(function () { // размера шага слайдера
-      model.sliderStep = parseInt(this.value);
-      model.$configCurrentValueElem.attr('max', model.sliderMax);
-      model.$handleElem.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValue, model.$valueElem));
-      if (model.sliderRangeStatus) {
-        model.$handleElemRange.css('left', model.calculateDefaultValue(model.sliderMax, model.sliderMin, model.sliderValueRange, model.$valueElemRange));
+      model.step = parseInt(this.value);
+      model.$configCurrentValueElem.attr('max', model.maximum);
+      model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
+      if (model.rangeStatus) {
+        model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
       }
     });
 

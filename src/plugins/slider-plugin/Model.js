@@ -2,64 +2,64 @@ import $ from 'jquery';
 
 class Model {
   constructor(options) {
-    this.sliderConfigPanel = options.sliderConfigPanel || false;
-    this.sliderMin = options.sliderMin || 1;
-    this.sliderMax = options.sliderMax || 10;
-    this.sliderValue = options.sliderValue || this.sliderMin;
-    this.sliderValueRange = options.sliderValueRange || this.sliderMax;
-    this.sliderStep = options.sliderStep || 1;
+    this.showConfigPanel = options.showConfigPanel || false;
+    this.minimum = options.minimum || 1;
+    this.maximum = options.maximum || 10;
+    this.value = options.value || this.minimum;
+    this.valueRange = options.valueRange || this.maximum;
+    this.step = options.step || 1;
     this.verticalOrientation = options.verticalOrientation || false;
-    this.sliderRangeStatus = options.sliderRangeStatus || false;
-    this.sliderHandleValueHide = options.sliderHandleValueHide || false;
+    this.rangeStatus = options.rangeStatus || false;
+    this.handleValueHide = options.handleValueHide || false;
     this.inputValidation();
   }
 
   inputValidation() {
-    if (this.sliderMin > this.sliderMax) {
-      this.sliderMin = 1;
-      this.sliderMax = 10;
-      alert('Неккоректные значения sliderMin, sliderMax \nОбязательное условие: sliderMin < sliderMax \n Изменено на sliderMin = 1, sliderMax = 10.');
+    if (this.minimum > this.maximum) {
+      this.minimum = 1;
+      this.maximum = 10;
+      alert('Неккоректные значения minimum, maximum \nОбязательное условие: minimum < maximum \n Изменено на minimum = 1, maximum = 10.');
     }
-    if (this.sliderStep < 0 || this.sliderStep > (this.sliderMax - this.sliderMin)) {
-      this.sliderStep = 1;
-      alert('Неккоректное значение sliderStep \nОбязательное условие: \n0 > sliderStep || sliderStep > (sliderMax - sliderMin) \n Изменено на sliderStep = 1.');
+    if (this.step < 0 || this.step > (this.maximum - this.minimum)) {
+      this.step = 1;
+      alert('Неккоректное значение step \nОбязательное условие: \n0 > step || step > (maximum - minimum) \n Изменено на step = 1.');
     }
-    if (this.sliderValue > this.sliderValueRange) {
-      this.sliderValueRange = this.sliderValue;
-      this.sliderValue = this.sliderValue - this.sliderStep;
-      alert('Неккоректные значения sliderValue, sliderValueRange \nОбязательное условие: \nsliderValue < sliderValueRange \n Изменено на sliderValue = sliderValue - sliderStep, sliderValueRange = sliderValue.');
+    if (this.value > this.valueRange) {
+      this.valueRange = this.value;
+      this.value = this.value - this.step;
+      alert('Неккоректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \n Изменено на value = value - step, valueRange = value.');
     }
   }
 
   createHandleRange() {
-    if (this.sliderRangeStatus) {
-      this.$configCurrentValueElem.attr('max', (this.sliderValueRange - this.sliderStep));
+    if (this.rangeStatus) {
+      this.$configCurrentValueElem.attr('max', (this.valueRange - this.step));
       this.$handleElemRange.css('display', 'block');
       this.$configCurrentValueRangeElem.css('display', 'block');
-      this.$configCurrentValueRangeElem.val(this.sliderValueRange);
-      this.$valueElemRange.text(this.sliderValueRange);
-      if (this.sliderValue >= this.sliderValueRange) {
-        this.sliderValueRange = this.sliderValue;
-        this.sliderValue = this.sliderValueRange - this.sliderStep;
-        this.$handleElem.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValue, this.$valueElem));
-        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
+      this.$configCurrentValueRangeElem.val(this.valueRange);
+      this.$valueElemRange.text(this.valueRange);
+      if (this.value >= this.valueRange) {
+        this.valueRange = this.value;
+        this.value = this.valueRange - this.step;
+        this.$handleElem.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.value, this.$valueElem));
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
       } else {
-        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
       }
       this.$configCurrentValueRangeElem.focusout(function () {
-        this.sliderValueRange = parseInt(this.value);
-        this.$handleElemRange.css('left', this.calculateDefaultValue(this.sliderMax, this.sliderMin, this.sliderValueRange, this.$valueElemRange));
-        this.$valueElemRange.text(this.sliderValueRange);
-        this.$configCurrentValueElem.attr('max', (this.sliderValueRange - this.sliderStep));
+        this.valueRange = parseInt(this.value);
+        this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
+        this.$valueElemRange.text(this.valueRange);
+        this.$configCurrentValueElem.attr('max', (this.valueRange - this.step));
       });
     } else {
       this.$handleElemRange.css('display', 'none');
       this.$configCurrentValueRangeElem.css('display', 'none');
-      this.$configCurrentValueElem.attr('max', this.sliderMax);
+      this.$configCurrentValueElem.attr('max', this.maximum);
     }
   }
 
-  calculateDefaultValue(slMax, slMin, slVal, currentElem) { // установка ползунка в позицию "по-умолчанию" = sliderValue
+  calculateDefaultValue(slMax, slMin, slVal, currentElem) { // установка ползунка в позицию "по-умолчанию" = value
     const defaultValuesArray = [];
     let currentValue = 0;
 
@@ -69,23 +69,23 @@ class Model {
       slVal = slMax;
     }
 
-    let defSliderMin = slMin;
+    let defaultMinimum = slMin;
     for (; currentValue < slMax;) {
-      if (defSliderMin > slMax) {
+      if (defaultMinimum > slMax) {
         break;
       } else {
-        currentValue = defSliderMin;
-        defSliderMin += this.sliderStep;
+        currentValue = defaultMinimum;
+        defaultMinimum += this.step;
         defaultValuesArray.push(currentValue);
       }
     }
 
     if (currentElem === this.$valueElem) {
-      if (($.inArray(this.sliderValue, defaultValuesArray)) === -1) {
+      if (($.inArray(this.value, defaultValuesArray)) === -1) {
         slVal = slMin;
       }
     } else if (currentElem === this.$valueElemRange) {
-      if (($.inArray(this.sliderValueRange, defaultValuesArray)) === -1) {
+      if (($.inArray(this.valueRange, defaultValuesArray)) === -1) {
         slVal = slMax;
       }
     }
@@ -95,26 +95,26 @@ class Model {
     let defaultPosition = currentIndexDefaultPosition * stepOfDefaultPosition;
 
     if (currentElem === this.$valueElem) {
-      this.sliderValue = slVal;
+      this.value = slVal;
       if (currentIndexDefaultPosition === -1) {
         defaultPosition = 0;
-        this.sliderValue = defaultValuesArray[0];
+        this.value = defaultValuesArray[0];
       }
-      currentElem.html(this.sliderValue);
-      this.$configCurrentValueElem.val(this.sliderValue);
+      currentElem.html(this.value);
+      this.$configCurrentValueElem.val(this.value);
     } else if (currentElem === this.$valueElemRange) {
-      this.sliderValueRange = slVal;
+      this.valueRange = slVal;
       if (currentIndexDefaultPosition === -1) {
         defaultPosition = stepOfDefaultPosition * (defaultValuesArray.length - 1);
-        this.sliderValueRange = defaultValuesArray[defaultValuesArray.length - 1];
+        this.valueRange = defaultValuesArray[defaultValuesArray.length - 1];
       }
-      currentElem.html(this.sliderValueRange);
-      this.$configCurrentValueRangeElem.val(this.sliderValueRange);
+      currentElem.html(this.valueRange);
+      this.$configCurrentValueRangeElem.val(this.valueRange);
     }
     return defaultPosition;
   }
 
-  calculateSliderValue(slMax, slMin, begin, rangeStatus) { // расчет значения над ползунком
+  calculateValue(slMax, slMin, begin, rangeStatus) { // расчет значения над ползунком
     const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
     const values = [];
     let currentValue = 0;
@@ -123,32 +123,32 @@ class Model {
         break;
       } else {
         currentValue = slMin;
-        slMin += this.sliderStep;
+        slMin += this.step;
         values.push(currentValue);
       }
     }
-    const sliderValueStep = sliderWidth / (values[values.length - 1] - values[0]);
-    const currentSliderValue = ((begin + (sliderValueStep / 2)) / sliderValueStep) ^ 0;
+    const valueStep = sliderWidth / (values[values.length - 1] - values[0]);
+    const calculateValue = ((begin + (valueStep / 2)) / valueStep) ^ 0;
 
     if (rangeStatus) {
-      if (currentSliderValue <= $.inArray(this.sliderValue, values)) {
-        this.$valueElemRange.html(this.sliderValue + this.sliderStep);
-        this.sliderValueRange = parseInt(this.$valueElemRange.text());
-        this.$configCurrentValueRangeElem.val(this.sliderValue + this.sliderStep);
+      if (currentValue <= $.inArray(this.value, values)) {
+        this.$valueElemRange.html(this.value + this.step);
+        this.valueRange = parseInt(this.$valueElemRange.text());
+        this.$configCurrentValueRangeElem.val(this.value + this.step);
       } else {
-        this.$valueElemRange.html(values[currentSliderValue]);
-        this.sliderValueRange = parseInt(this.$valueElemRange.text());
-        this.$configCurrentValueRangeElem.val(this.sliderValueRange);
+        this.$valueElemRange.html(values[calculateValue]);
+        this.valueRange = parseInt(this.$valueElemRange.text());
+        this.$configCurrentValueRangeElem.val(this.valueRange);
       }
     } else {
-      if (this.sliderRangeStatus && currentSliderValue >= $.inArray((this.sliderValueRange - this.sliderStep), values)) {
-        this.$valueElem.html(this.sliderValueRange - this.sliderStep);
-        this.sliderValue = parseInt(this.$valueElem.text());
-        this.$configCurrentValueElem.val(this.sliderValueRange - this.sliderStep);
+      if (this.rangeStatus && calculateValue >= $.inArray((this.valueRange - this.step), values)) {
+        this.$valueElem.html(this.valueRange - this.step);
+        this.value = parseInt(this.$valueElem.text());
+        this.$configCurrentValueElem.val(this.valueRange - this.step);
       } else {
-        this.$valueElem.html(values[currentSliderValue]);
-        this.sliderValue = parseInt(this.$valueElem.text());
-        this.$configCurrentValueElem.val(this.sliderValue);
+        this.$valueElem.html(values[calculateValue]);
+        this.value = parseInt(this.$valueElem.text());
+        this.$configCurrentValueElem.val(this.value);
       }
     }
   }
@@ -164,14 +164,14 @@ class Model {
   clickOnSlider(event) { // обработка клика ЛКМ по шкале слайдера
     const clickPositionArray = [];
     let clickPositionValue = 0;
-    let slMin = this.sliderMin;
-    const slMax = this.sliderMax;
+    let slMin = this.minimum;
+    const slMax = this.maximum;
     for (; clickPositionValue < slMax;) {
       if (slMin > slMax) {
         break;
       } else {
         clickPositionValue = slMin;
-        slMin += this.sliderStep;
+        slMin += this.step;
         clickPositionArray.push(clickPositionValue);
       }
     }
@@ -185,37 +185,36 @@ class Model {
     }
 
     const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
-    const clickSliderValueStep = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / this.sliderStep));
+    const valueStepOnClick = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / this.step));
 
-    // debugger;
     let moveToPosition;
-    const currentSliderValue = ((shift + (clickSliderValueStep / 2)) / clickSliderValueStep) ^ 0;
-    const clickMiddlePosition = parseInt((clickSliderValueStep * currentSliderValue) + (clickSliderValueStep / 2));
+    const calculateValue = ((shift + (valueStepOnClick / 2)) / valueStepOnClick) ^ 0;
+    const clickMiddlePosition = parseInt((valueStepOnClick * calculateValue) + (valueStepOnClick / 2));
 
     if (shift < clickMiddlePosition) {
-      moveToPosition = (clickSliderValueStep * currentSliderValue);
+      moveToPosition = (valueStepOnClick * calculateValue);
     } else if (shift > clickMiddlePosition) {
-      moveToPosition = (clickSliderValueStep * currentSliderValue) + clickSliderValueStep;
+      moveToPosition = (valueStepOnClick * calculateValue) + valueStepOnClick;
     }
 
     if (moveToPosition > sliderWidth) {
       moveToPosition = sliderWidth;
     }
 
-    if (this.sliderRangeStatus) {
+    if (this.rangeStatus) {
       if (moveToPosition < parseInt(this.$handleElem.css('left'))) {
-        this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+        this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, false));
       } else if (moveToPosition > parseInt(this.$handleElemRange.css('left'))) {
-        this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, true));
+        this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, true));
       } else {
         if ((moveToPosition - parseInt(this.$handleElem.css('left'))) > (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
-          this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, true));
+          this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, true));
         } else if ((moveToPosition - parseInt(this.$handleElem.css('left'))) < (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
-          this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+          this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, false));
         }
       }
     } else {
-      this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateSliderValue(this.sliderMax, this.sliderMin, shift / this.sliderStep, false));
+      this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, false));
     }
   }
 
@@ -233,37 +232,37 @@ class Model {
       let beginEdge;
       const position = [];
       let currentValue = 0;
-      let slMin = this.sliderMin;
-      let slMax = this.sliderMax;
+      let slMin = this.minimum;
+      let slMax = this.maximum;
       for (; currentValue < slMax;) {
         if (slMin > slMax) {
           break;
         } else {
           currentValue = slMin;
-          slMin += this.sliderStep;
+          slMin += this.step;
           position.push(currentValue);
         }
       }
 
       const positionRange = [];
-      slMin = this.sliderMin;
+      slMin = this.minimum;
       currentValue = 0;
       if ($actualElement === this.$handleElem) {
-        slMax = this.sliderValueRange - this.sliderStep;
+        slMax = this.valueRange - this.step;
       }
       for (; currentValue < slMax;) {
         if (slMin > slMax) {
           break;
         } else {
           currentValue = slMin;
-          slMin += this.sliderStep;
+          slMin += this.step;
           positionRange.push(currentValue);
         }
       }
       if (this.verticalOrientation) {
-        beginEdge = (event.pageY - shift - sliderCoords.top) / this.sliderStep;
+        beginEdge = (event.pageY - shift - sliderCoords.top) / this.step;
       } else {
-        beginEdge = (event.pageX - shift - sliderCoords.left) / this.sliderStep;
+        beginEdge = (event.pageX - shift - sliderCoords.left) / this.step;
       }
 
       if (beginEdge < 0) {
@@ -276,9 +275,9 @@ class Model {
       $actualElement.css('left', `${this.searchPosition(beginEdge, endEdge, position, positionRange, $actualElement)}px`);
 
       if ($actualElement === this.$handleElem) {
-        this.calculateSliderValue(this.sliderMax, this.sliderMin, beginEdge, false);
+        this.calculateValue(this.maximum, this.minimum, beginEdge, false);
       } else if ($actualElement === this.$handleElemRange) {
-        this.calculateSliderValue(this.sliderMax, this.sliderMin, beginEdge, true);
+        this.calculateValue(this.maximum, this.minimum, beginEdge, true);
       }
     });
 
@@ -291,17 +290,17 @@ class Model {
     const widthOfstep = (end / (position.length - 1));
     const halfWidthOfStep = (widthOfstep / 2);
 
-    const currentIndex = $.inArray(this.sliderValue, position);
+    const currentIndex = $.inArray(this.value, position);
     let currentPositionHandle = widthOfstep * currentIndex;
 
-    const currentIndexRange = $.inArray(this.sliderValueRange - this.sliderStep, positionRange);
+    const currentIndexRange = $.inArray(this.valueRange - this.step, positionRange);
     let currentPositionHandleRange = widthOfstep * currentIndexRange;
 
-    const currentPositionCursor = begin * this.sliderStep;
+    const currentPositionCursor = begin * this.step;
     const middleOfPosition = currentPositionHandle + halfWidthOfStep;
 
     if ($element === this.$handleElem) {
-      if (this.sliderRangeStatus) {
+      if (this.rangeStatus) {
         if (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange === -1) {
           currentPositionHandle = currentPositionHandleRange;
         } else {
@@ -323,10 +322,10 @@ class Model {
         }
       }
     } else if ($element === this.$handleElemRange) {
-      if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || this.sliderValueRange === -1) {
+      if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || this.valueRange === -1) {
         currentPositionHandleRange = end;
-      } else if (this.sliderValueRange <= this.sliderValue + this.sliderStep) {
-        currentPositionHandleRange = widthOfstep * $.inArray((this.sliderValue + this.sliderStep), position);
+      } else if (this.valueRange <= this.value + this.step) {
+        currentPositionHandleRange = widthOfstep * $.inArray((this.value + this.step), position);
       } else if (currentPositionCursor <= middleOfPosition) {
         currentPositionHandleRange = widthOfstep * currentIndexRange;
       } else if (currentPositionCursor > middleOfPosition) {

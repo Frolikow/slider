@@ -1,10 +1,10 @@
 class ViewConfiguration {
-  constructor(sliderOptions, thisForViewConfiguration) {
-    this.createConfigurationPanel(sliderOptions, thisForViewConfiguration);
+  constructor(options, thisForViewConfiguration) {
+    this.createConfigurationPanel(options, thisForViewConfiguration);
   }
 
-  createConfigurationPanel(sliderOptions, thisForViewConfiguration) {
-    if (sliderOptions.sliderConfigPanel === true) {
+  createConfigurationPanel(options, thisForViewConfiguration) {
+    if (options.showConfigPanel === true) {
       thisForViewConfiguration.after('<div class="slider__configuration">'
         + '<div class="configuration">'
 
