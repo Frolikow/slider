@@ -36,8 +36,10 @@ class Model {
   createHandleRange() {
     if (this.rangeStatus) {
       this.$configCurrentValueElem.attr('max', (this.valueRange - this.step));
-      this.$handleElemRange.css('display', 'block');
-      this.$configCurrentValueRangeElem.css('display', 'block');
+      this.$handleElemRange.removeClass('slider__handle_hidden');
+      this.$configCurrentValueRangeElem.removeClass('configuration__current-value-range_hidden');
+      this.$handleElemRange.addClass('slider__handle_visible');
+      this.$configCurrentValueRangeElem.addClass('configuration__current-value-range_visible');
       this.$configCurrentValueRangeElem.val(this.valueRange);
       this.$valueElemRange.text(this.valueRange);
       if (this.value >= this.valueRange) {
@@ -49,8 +51,10 @@ class Model {
         this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
       }
     } else {
-      this.$handleElemRange.css('display', 'none');
-      this.$configCurrentValueRangeElem.css('display', 'none');
+      this.$handleElemRange.removeClass('slider__handle_visible');
+      this.$configCurrentValueRangeElem.removeClass('configuration__current-value-range_visible');
+      this.$handleElemRange.addClass('slider__handle_hidden');
+      this.$configCurrentValueRangeElem.addClass('configuration__current-value-range_hidden');
       this.$configCurrentValueElem.attr('max', this.maximum);
     }
   }

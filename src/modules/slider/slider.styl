@@ -15,8 +15,14 @@
   &__current-value
     display flex
 
-    &_right
+    &-range
       margin-left 0.9375rem
+
+    &_visible
+      display block
+    
+    &_hidden
+      display none
 
 .slider
   display flex
@@ -42,6 +48,12 @@
     position relative
     top -0.4375rem
 
+    &_visible
+      display block
+    
+    &_hidden
+      display none
+
   &__value
     width 2.1875rem
     height 1.5625rem
@@ -54,6 +66,12 @@
     position relative
     bottom 2.375rem
     right 0.5rem
+
+    &_visible
+      display block
+    
+    &_hidden
+      display none
 
     &::after
       content ""

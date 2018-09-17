@@ -16,8 +16,8 @@ class Controller {
     model.$configShowHandleValueElem = thisForController.next().find('.configuration__show-handle-value');
     model.$configOrientationElem = thisForController.next().find('.configuration__orientation');
     model.$configRangeElem = thisForController.next().find('.configuration__range');
-    model.$configCurrentValueElem = thisForController.next().find('.configuration__current-value_left');
-    model.$configCurrentValueRangeElem = thisForController.next().find('.configuration__current-value_right');
+    model.$configCurrentValueElem = thisForController.next().find('.configuration__current-value');
+    model.$configCurrentValueRangeElem = thisForController.next().find('.configuration__current-value-range');
     model.$configMinValueElem = thisForController.next().find('.configuration__minimum-value');
     model.$configMaxValueElem = thisForController.next().find('.configuration__maximum-value');
     model.$configSizeOfStepElem = thisForController.next().find('.configuration__size-of-step');
@@ -28,23 +28,27 @@ class Controller {
     model.$configSizeOfStepElem.attr({ min: 1, max: (model.maximum - model.minimum), value: model.step });
     model.$configCurrentValueRangeElem.attr({ min: (model.value + model.step), max: model.maximum, value: model.valueRange });
 
-    model.$handleElemRange.css('display', 'none');
-    model.$configCurrentValueRangeElem.css('display', 'none');
+    model.$handleElemRange.addClass('slider__handle_hidden');
+    model.$configCurrentValueRangeElem.addClass('configuration__current-value-range_hidden');
 
     model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
 
     if (model.handleValueHide) {
       model.$configShowHandleValueElem.click();
-      model.$valueElem.css('display', 'none');
-      model.$valueElemRange.css('display', 'none');
+      model.$valueElem.addClass('slider__value_hidden');
+      model.$valueElemRange.addClass('slider__value_hidden');
     }
     model.$configShowHandleValueElem.change(function () { // убрать флажок
       if (this.checked) {
-        model.$valueElem.css('display', 'none');
-        model.$valueElemRange.css('display', 'none');
+        model.$valueElem.removeClass('slider__value_visible');
+        model.$valueElemRange.removeClass('slider__value_visible');
+        model.$valueElem.addClass('slider__value_hidden');
+        model.$valueElemRange.addClass('slider__value_hidden');
       } else {
-        model.$valueElem.css('display', 'block');
-        model.$valueElemRange.css('display', 'block');
+        model.$valueElem.removeClass('slider__value_hidden');
+        model.$valueElemRange.removeClass('slider__value_hidden');
+        model.$valueElem.addClass('slider__value_visible');
+        model.$valueElemRange.addClass('slider__value_visible');
       }
     });
 

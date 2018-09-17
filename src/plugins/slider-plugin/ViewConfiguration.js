@@ -13,7 +13,7 @@ class ViewConfiguration {
         + '<label> <input type="checkbox"  class="configuration__range">Включить выбор интервала</label>'
 
         + '<label>Текущее значение</label> <div class="configuration__current-value">'
-        + '<input type="number" class="configuration__current-value_left"> <input type="number" class="configuration__current-value_right"> </div>'
+        + '<input type="number" class="configuration__current-value"> <input type="number" class="configuration__current-value-range"> </div>'
         + '<label>Минимальное значение слайдера</label> <input type="number" class="configuration__minimum-value">'
         + '<label>Максимальное значение слайдера</label> <input type="number" class="configuration__maximum-value">'
         + '<label>Размер шага слайдера</label> <input type="number" class="configuration__size-of-step">');
