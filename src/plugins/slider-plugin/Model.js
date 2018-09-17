@@ -15,14 +15,16 @@ class Model {
   }
 
   inputValidation() {
+    const validateStepValue = (this.step < 1 || this.step > (this.maximum - this.minimum)); // проверка корректности значения шага слайдера
+
     if (this.minimum > this.maximum) {
       this.minimum = 1;
       this.maximum = 10;
       alert('Неккоректные значения minimum, maximum \nОбязательное условие: minimum < maximum \n Изменено на minimum = 1, maximum = 10.');
     }
-    if (this.step < 0 || this.step > (this.maximum - this.minimum)) {
+    if (validateStepValue) {
       this.step = 1;
-      alert('Неккоректное значение step \nОбязательное условие: \n0 > step || step > (maximum - minimum) \n Изменено на step = 1.');
+      alert('Неккоректное значение step \nОбязательное условие: \nstep >=1 || step <= (maximum - minimum) \n Изменено на step = 1.');
     }
     if (this.value > this.valueRange) {
       this.valueRange = this.value;
@@ -46,12 +48,6 @@ class Model {
       } else {
         this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
       }
-      this.$configCurrentValueRangeElem.focusout(function () {
-        this.valueRange = parseInt(this.value);
-        this.$handleElemRange.css('left', this.calculateDefaultValue(this.maximum, this.minimum, this.valueRange, this.$valueElemRange));
-        this.$valueElemRange.text(this.valueRange);
-        this.$configCurrentValueElem.attr('max', (this.valueRange - this.step));
-      });
     } else {
       this.$handleElemRange.css('display', 'none');
       this.$configCurrentValueRangeElem.css('display', 'none');
@@ -130,8 +126,10 @@ class Model {
     const valueStep = sliderWidth / (values[values.length - 1] - values[0]);
     const calculateValue = ((begin + (valueStep / 2)) / valueStep) ^ 0;
 
+    const checkingTheValueWhenMoving = (this.rangeStatus && calculateValue) >= $.inArray((this.valueRange - this.step), values); // проверка значения при движении левого ползунка
+
     if (rangeStatus) {
-      if (currentValue <= $.inArray(this.value, values)) {
+      if (calculateValue <= $.inArray(this.value, values)) {
         this.$valueElemRange.html(this.value + this.step);
         this.valueRange = parseInt(this.$valueElemRange.text());
         this.$configCurrentValueRangeElem.val(this.value + this.step);
@@ -141,7 +139,7 @@ class Model {
         this.$configCurrentValueRangeElem.val(this.valueRange);
       }
     } else {
-      if (this.rangeStatus && calculateValue >= $.inArray((this.valueRange - this.step), values)) {
+      if (checkingTheValueWhenMoving) {
         this.$valueElem.html(this.valueRange - this.step);
         this.value = parseInt(this.$valueElem.text());
         this.$configCurrentValueElem.val(this.valueRange - this.step);
@@ -201,15 +199,18 @@ class Model {
       moveToPosition = sliderWidth;
     }
 
+    const checkPositionHandleForHandleElem = ((moveToPosition - parseInt(this.$handleElem.css('left'))) > (parseInt(this.$handleElemRange.css('left')) - moveToPosition));
+    const checkPositionHandleForHandleElemRange = ((moveToPosition - parseInt(this.$handleElem.css('left'))) < (parseInt(this.$handleElemRange.css('left')) - moveToPosition));
+
     if (this.rangeStatus) {
       if (moveToPosition < parseInt(this.$handleElem.css('left'))) {
         this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, false));
       } else if (moveToPosition > parseInt(this.$handleElemRange.css('left'))) {
         this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, true));
       } else {
-        if ((moveToPosition - parseInt(this.$handleElem.css('left'))) > (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
+        if (checkPositionHandleForHandleElem) {
           this.$handleElemRange.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, true));
-        } else if ((moveToPosition - parseInt(this.$handleElem.css('left'))) < (parseInt(this.$handleElemRange.css('left')) - moveToPosition)) {
+        } else if (checkPositionHandleForHandleElemRange) {
           this.$handleElem.animate({ left: `${moveToPosition}px` }, 300, this.calculateValue(this.maximum, this.minimum, shift / this.step, false));
         }
       }
@@ -299,9 +300,15 @@ class Model {
     const currentPositionCursor = begin * this.step;
     const middleOfPosition = currentPositionHandle + halfWidthOfStep;
 
+
+    const checkMaximumForHandleWithIntervalIncluded = (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange === -1);
+    const checkMaximumForHandleWithIntervalTurnedOff = (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex === -1);
+    const checkMaximumForHandleRange = (currentPositionCursor >= (widthOfstep * (position.length - 1)) || this.valueRange === -1);
+    const checkMinimumForHandleRange = (this.valueRange <= this.value + this.step);
+
     if ($element === this.$handleElem) {
       if (this.rangeStatus) {
-        if (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange === -1) {
+        if (checkMaximumForHandleWithIntervalIncluded) {
           currentPositionHandle = currentPositionHandleRange;
         } else {
           if (currentPositionCursor <= middleOfPosition) {
@@ -311,7 +318,7 @@ class Model {
           }
         }
       } else {
-        if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex === -1) {
+        if (checkMaximumForHandleWithIntervalTurnedOff) {
           currentPositionHandle = end;
         } else {
           if (currentPositionCursor <= middleOfPosition) {
@@ -322,9 +329,9 @@ class Model {
         }
       }
     } else if ($element === this.$handleElemRange) {
-      if (currentPositionCursor >= (widthOfstep * (position.length - 1)) || this.valueRange === -1) {
+      if (checkMaximumForHandleRange) {
         currentPositionHandleRange = end;
-      } else if (this.valueRange <= this.value + this.step) {
+      } else if (checkMinimumForHandleRange) {
         currentPositionHandleRange = widthOfstep * $.inArray((this.value + this.step), position);
       } else if (currentPositionCursor <= middleOfPosition) {
         currentPositionHandleRange = widthOfstep * currentIndexRange;

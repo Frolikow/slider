@@ -98,6 +98,14 @@ class Controller {
       model.$configCurrentValueRangeElem.attr('min', (model.value + model.step));
     });
 
+    model.$configCurrentValueRangeElem.focusout(function () {
+      model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, parseInt(this.value), model.$valueElemRange));
+      this.value = parseInt(model.valueRange);
+      model.$valueElemRange.text(this.value);
+      model.$configCurrentValueElem.attr('max', (this.value - model.step));
+    });
+
+
     model.$configMinValueElem.focusout(function () { // минимальное значение слайдера
       model.minimum = parseInt(this.value);
       model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));

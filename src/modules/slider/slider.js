@@ -11,7 +11,7 @@ $(document).ready(() => {
       step: 1,
       handleValueHide: false,
       verticalOrientation: false,
-      rangeStatus: false,
+      rangeStatus: true,
     });
   });
 });
