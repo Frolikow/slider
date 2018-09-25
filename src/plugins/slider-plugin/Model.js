@@ -81,17 +81,17 @@ class Model {
     }
 
     if (currentElem === this.$valueElem) {
-      if (($.inArray(this.value, defaultValuesArray)) === -1) {
+      if (defaultValuesArray.indexOf(this.value) === -1) {
         slVal = slMin;
       }
     } else if (currentElem === this.$valueElemRange) {
-      if (($.inArray(this.valueRange, defaultValuesArray)) === -1) {
+      if (defaultValuesArray.indexOf(this.valueRange) === -1) {
         slVal = slMax;
       }
     }
     const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
     const stepOfDefaultPosition = sliderWidth / (defaultValuesArray.length - 1);
-    const currentIndexDefaultPosition = $.inArray(slVal, defaultValuesArray);
+    const currentIndexDefaultPosition = defaultValuesArray.indexOf(slVal);
     let defaultPosition = currentIndexDefaultPosition * stepOfDefaultPosition;
 
     if (currentElem === this.$valueElem) {
@@ -130,10 +130,10 @@ class Model {
     const valueStep = sliderWidth / (values[values.length - 1] - values[0]);
     const calculateValue = ((begin + (valueStep / 2)) / valueStep) ^ 0;
 
-    const checkingTheValueWhenMoving = (this.rangeStatus && calculateValue) >= $.inArray((this.valueRange - this.step), values); // проверка значения при движении левого ползунка
+    const checkingTheValueWhenMoving = (this.rangeStatus && calculateValue) >= values.indexOf(this.valueRange - this.step); // проверка значения при движении левого ползунка
 
     if (rangeStatus) {
-      if (calculateValue <= $.inArray(this.value, values)) {
+      if (calculateValue <= values.indexOf(this.value)) {
         this.$valueElemRange.html(this.value + this.step);
         this.valueRange = parseInt(this.$valueElemRange.text());
         this.$configCurrentValueRangeElem.val(this.value + this.step);
@@ -295,10 +295,10 @@ class Model {
     const widthOfstep = (end / (position.length - 1));
     const halfWidthOfStep = (widthOfstep / 2);
 
-    const currentIndex = $.inArray(this.value, position);
+    const currentIndex = position.indexOf(this.value);
     let currentPositionHandle = widthOfstep * currentIndex;
 
-    const currentIndexRange = $.inArray(this.valueRange - this.step, positionRange);
+    const currentIndexRange = positionRange.indexOf(this.valueRange - this.step);
     let currentPositionHandleRange = widthOfstep * currentIndexRange;
 
     const currentPositionCursor = begin * this.step;
@@ -336,7 +336,7 @@ class Model {
       if (checkMaximumForHandleRange) {
         currentPositionHandleRange = end;
       } else if (checkMinimumForHandleRange) {
-        currentPositionHandleRange = widthOfstep * $.inArray((this.value + this.step), position);
+        currentPositionHandleRange = widthOfstep * position.indexOf(this.value + this.step);
       } else if (currentPositionCursor <= middleOfPosition) {
         currentPositionHandleRange = widthOfstep * currentIndexRange;
       } else if (currentPositionCursor > middleOfPosition) {
