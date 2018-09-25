@@ -70,7 +70,7 @@ class Model {
     }
 
     let defaultMinimum = slMin;
-    for (; currentValue < slMax;) {
+    while (currentValue < slMax) {
       if (defaultMinimum > slMax) {
         break;
       } else {
@@ -118,7 +118,7 @@ class Model {
     const sliderWidth = this.$sliderElem.outerWidth() - this.$handleElem.outerWidth();
     const values = [];
     let currentValue = 0;
-    for (; currentValue < slMax;) {
+    while (currentValue < slMax) {
       if (slMin > slMax) {
         break;
       } else {
@@ -168,7 +168,7 @@ class Model {
     let clickPositionValue = 0;
     let slMin = this.minimum;
     const slMax = this.maximum;
-    for (; clickPositionValue < slMax;) {
+    while (clickPositionValue < slMax) {
       if (slMin > slMax) {
         break;
       } else {
@@ -239,7 +239,7 @@ class Model {
       let currentValue = 0;
       let slMin = this.minimum;
       let slMax = this.maximum;
-      for (; currentValue < slMax;) {
+      while (currentValue < slMax) {
         if (slMin > slMax) {
           break;
         } else {
@@ -255,7 +255,7 @@ class Model {
       if ($actualElement === this.$handleElem) {
         slMax = this.valueRange - this.step;
       }
-      for (; currentValue < slMax;) {
+      while (currentValue < slMax) {
         if (slMin > slMax) {
           break;
         } else {
