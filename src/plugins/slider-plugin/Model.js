@@ -1,17 +1,26 @@
 import $ from 'jquery';
+import EventEmitter from './eventEmiter';
 
-class Model {
+class Model extends EventEmitter {
   constructor(options) {
-    this.showConfigPanel = options.showConfigPanel || false;
-    this.minimum = options.minimum || 1;
-    this.maximum = options.maximum || 10;
-    this.value = options.value || this.minimum;
-    this.valueRange = options.valueRange || this.maximum;
-    this.step = options.step || 1;
-    this.verticalOrientation = options.verticalOrientation || false;
-    this.rangeStatus = options.rangeStatus || false;
-    this.handleValueHide = options.handleValueHide || false;
-    this.inputValidation();
+    super();
+
+    // this.showConfigPanel = options.showConfigPanel || false;
+    // this.minimum = options.minimum || 1;
+    // this.maximum = options.maximum || 10;
+    // this.value = options.value || this.minimum;
+    // this.valueRange = options.valueRange || this.maximum;
+    // this.step = options.step || 1;
+    // this.verticalOrientation = options.verticalOrientation || false;
+    // this.rangeStatus = options.rangeStatus || false;
+    // this.handleValueHide = options.handleValueHide || false;
+    // this.inputValidation();
+  }
+  someMethod() {
+    console.log('call someMethod(model) complete');
+  }
+  someMethod1() {
+    console.log('call someMethod1(model) complete');
   }
 
   inputValidation() {

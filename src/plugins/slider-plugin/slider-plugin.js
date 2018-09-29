@@ -7,10 +7,22 @@ import Controller from './Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const model = new Model(options);
-    const view = new ViewSlider(this);
-    const viewConfiguration = new ViewConfiguration(options, this);
-    const controller = new Controller(model, view, viewConfiguration, this);
+    // const model = new Model(options); //-
+    // const view = new ViewSlider(this);
+    // const viewConfiguration = new ViewConfiguration(options, this);
+    // const controller = new Controller(model, view, viewConfiguration, this);
+
+    const model = new Model();
+    const viewSlider = new ViewSlider(options, this);
+    const viewControlPanel = new ViewConfiguration(options, this);
+    const controller = new Controller();
+    model.subscribe(controller);
+    viewSlider.subscribe(controller);
+    viewControlPanel.subscribe(controller);
+    controller.subscribe(model);
+    controller.subscribe(viewSlider);
+    controller.subscribe(viewControlPanel);
+    // controller.notify('someMethod4');
+    // viewControlPanel.notify('someMethod');
   };
 }(jQuery));
-
