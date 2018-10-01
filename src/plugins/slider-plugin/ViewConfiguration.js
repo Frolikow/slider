@@ -66,7 +66,13 @@ class ViewConfiguration extends EventEmitter {
       oriental.attr({ checked: this.verticalOrientationConfigPanel ? 'checked' : null });
       range.attr({ checked: this.rangeStatusConfigPanel ? 'checked' : null });
 
-      showHandle.on('change', () => this.notify('someMethod'));
+      showHandle.on('change', () => { // отображение значений над handle
+        let status;
+        showHandle.prop('checked') ? (status = true) : (status = false);
+        this.notify('someMethod', status);
+      });
+
+
       oriental.on('change', () => console.log('oriental - changed'));
       range.on('change', () => console.log('range - changed'));
       value.on('focusout', () => console.log('value - focusOut'));
@@ -75,6 +81,23 @@ class ViewConfiguration extends EventEmitter {
       valueMaximum.on('focusout', () => console.log('valueMaximum - focusOut'));
       valueStep.on('focusout', () => console.log('valueStep - focusOut'));
 
+      if (this.rangeStatusConfigPanel) {
+        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
+        // model.$valueElem.addClass('slider__value_hidden');
+        // model.$valueElemRange.addClass('slider__value_hidden');
+        // model.createHandleRange();
+      }
+      range.change(function () { // вкл/выкл выбор интервала
+        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
+        if (this.checked) {
+          console.log('вкл интервал');
+          //   model.rangeStatus = false;
+        } else {
+          console.log('выкл интервал');
+          //   model.rangeStatus = true;
+        }
+        // model.createHandleRange();
+      });
 
       // model.$configCurrentValueElem.focusout(function () { // текущее значение слайдера
       //   model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, parseInt(this.value), model.$valueElem));
@@ -121,55 +144,11 @@ class ViewConfiguration extends EventEmitter {
       // });
 
 
-      //  это нужно перенести во вьюху слайдера_____________________________________________________00000
       // model.$handleElemRange.addClass('slider__handle_hidden');
       // model.$configCurrentValueRangeElem.addClass('configuration__current-value-range_hidden');
 
       // model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
 
-      if (this.rangeStatusConfigPanel) {
-        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-        // model.$valueElem.addClass('slider__value_hidden');
-        // model.$valueElemRange.addClass('slider__value_hidden');
-        // model.createHandleRange();
-      }
-      range.change(function () { // вкл/выкл выбор интервала
-        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-        if (this.checked) {
-          console.log('вкл интервал');
-          //   model.rangeStatus = false;
-        } else {
-          console.log('выкл интервал');
-          //   model.rangeStatus = true;
-        }
-        // model.createHandleRange();
-      });
-
-
-      if (this.handleValueHideConfigPanel) {
-        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-        // model.$valueElem.removeClass('slider__value_visible');
-        // model.$valueElemRange.removeClass('slider__value_visible');
-        // model.$valueElem.addClass('slider__value_hidden');
-        // model.$valueElemRange.addClass('slider__value_hidden');
-      }
-      showHandle.change(function () { // убрать флажок
-        if (this.checked) {
-          console.log('скрыть флажки');
-          //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-          // model.$valueElem.removeClass('slider__value_visible');
-          // model.$valueElemRange.removeClass('slider__value_visible');
-          // model.$valueElem.addClass('slider__value_hidden');
-          // model.$valueElemRange.addClass('slider__value_hidden');
-        } else {
-          console.log('показать флажки');
-          //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-          // model.$valueElem.removeClass('slider__value_hidden');
-          // model.$valueElemRange.removeClass('slider__value_hidden');
-          // model.$valueElem.addClass('slider__value_visible');
-          // model.$valueElemRange.addClass('slider__value_visible');
-        }
-      });
 
       if (this.verticalOrientationConfigPanel) {
         // thisForController.addClass('slider_vertical');
