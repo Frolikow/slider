@@ -22,5 +22,7 @@ import Controller from './Controller';
     controller.subscribe(model);
     controller.subscribe(viewSlider);
     controller.subscribe(viewControlPanel);
+    // controller.notify('someMethod4');
+    // viewControlPanel.notify('someMethod');
   };
 }(jQuery));

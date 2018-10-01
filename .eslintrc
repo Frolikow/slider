@@ -11,26 +11,16 @@
     "no-param-reassign": 0,
     "max-len": 0,
     "radix": 0,
-    "prefer-destructuring": [
-      "error",
-      {
-        "array": false,
-        "object": true
-      }
-    ],
-    "func-names": "off",
-    "no-lonely-if": "off",
-    "no-bitwise": "off",
-    "no-alert": "off",
-    "no-shadow": "off",
-    "no-unused-vars": "off",
-    "class-methods-use-this": "off",
-    "no-unused-expressions": [
-      2,
-      {
-        "allowShortCircuit": true,
-        "allowTernary": true
-      }
-    ]
+    "prefer-destructuring": ["error", {
+      "array": false,
+      "object": true
+    }],
+    "func-names":"off",
+    "no-lonely-if":"off",
+    "no-bitwise":"off",
+    "no-alert":"off",
+    "no-shadow":"off",
+    "no-unused-vars":"off",
+    "class-methods-use-this":"off"
   }
 }
