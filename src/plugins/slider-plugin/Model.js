@@ -4,23 +4,10 @@ import EventEmitter from './eventEmiter';
 class Model extends EventEmitter {
   constructor(options) {
     super();
+  }
 
-    // this.showConfigPanel = options.showConfigPanel || false;
-    // this.minimum = options.minimum || 1;
-    // this.maximum = options.maximum || 10;
-    // this.value = options.value || this.minimum;
-    // this.valueRange = options.valueRange || this.maximum;
-    // this.step = options.step || 1;
-    // this.verticalOrientation = options.verticalOrientation || false;
-    // this.rangeStatus = options.rangeStatus || false;
-    // this.handleValueHide = options.handleValueHide || false;
-    // this.inputValidation();
-  }
-  someMethod() {
-    console.log('call someMethod(model) complete');
-  }
-  someMethod1() {
-    console.log('call someMethod1(model) complete');
+  someMethod(value) {
+    console.log(`call someMethod(model) complete === ${value}`);
   }
 
   inputValidation() {
@@ -46,9 +33,9 @@ class Model extends EventEmitter {
     if (this.rangeStatus) {
       this.$configCurrentValueElem.attr('max', (this.valueRange - this.step));
       this.$handleElemRange.removeClass('slider__handle_hidden');
-      this.$configCurrentValueRangeElem.removeClass('configuration__current-value-range_hidden');
+      this.$configCurrentValueRangeElem.removeClass('configuration__current-valuesecond_hidden');
       this.$handleElemRange.addClass('slider__handle_visible');
-      this.$configCurrentValueRangeElem.addClass('configuration__current-value-range_visible');
+      this.$configCurrentValueRangeElem.addClass('configuration__current-valuesecond_visible');
       this.$configCurrentValueRangeElem.val(this.valueRange);
       this.$valueElemRange.text(this.valueRange);
       if (this.value >= this.valueRange) {
@@ -61,9 +48,9 @@ class Model extends EventEmitter {
       }
     } else {
       this.$handleElemRange.removeClass('slider__handle_visible');
-      this.$configCurrentValueRangeElem.removeClass('configuration__current-value-range_visible');
+      this.$configCurrentValueRangeElem.removeClass('configuration__current-value_second_visible');
       this.$handleElemRange.addClass('slider__handle_hidden');
-      this.$configCurrentValueRangeElem.addClass('configuration__current-value-range_hidden');
+      this.$configCurrentValueRangeElem.addClass('configuration__current-valuesecond_hidden');
       this.$configCurrentValueElem.attr('max', this.maximum);
     }
   }

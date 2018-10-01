@@ -10,9 +10,9 @@ $(document).ready(() => {
       value: 5,
       valueRange: 8,
       step: 1,
-      handleValueHide: true,
+      handleValueHide: false,
       verticalOrientation: true,
-      rangeStatus: true,
+      rangeStatus: false,
     });
   });
 });
