@@ -2,186 +2,167 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewConfiguration extends EventEmitter {
-  constructor(options) {
-    super();
+  updateViewConfig({ slider, showConfigPanel, minimum, maximum, maximumForHandleFirst, minimumForHandleSecond, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
+    this.slider = slider;
+    this.showConfigPanel = showConfigPanel;
+    this.minimum = minimum;
+    this.maximum = maximum;
 
-    this.initState(options);
-    // this.unSubscribe();
+    this.maximumForHandleFirst = maximumForHandleFirst;
+    this.minimumForHandleSecond = minimumForHandleSecond;
+
+    this.value = value;
+    this.valueRange = valueRange;
+    this.step = step;
+
+    this.verticalOrientation = verticalOrientation;
+    this.rangeStatus = rangeStatus;
+    this.handleValueHide = handleValueHide;
+
+    this.render();
   }
 
-  someMethod() {
-    console.log('call someMethod(ViewConfiguration) complete');
-  }
-  someMethod4() {
-    console.log('call someMethod4(ViewConfiguration) complete');
-  }
-
-
-  initState(options) {
-    this.slider = $(options.slider);
-    this.showConfigPanel = options.showConfigPanel || false;
-    this.minimumConfigPanel = options.minimum || 1;
-    this.maximumConfigPanel = options.maximum || 10;
-    this.valueConfigPanel = options.value || this.minimumConfigPanel;
-    this.valueRangeConfigPanel = options.valueRange || this.maximumConfigPanel;
-    this.stepConfigPanel = options.step || 1;
-    this.verticalOrientationConfigPanel = options.verticalOrientation || false;
-    this.rangeStatusConfigPanel = options.rangeStatus || false;
-    this.handleValueHideConfigPanel = options.handleValueHide || false;
-
+  render() {
     if (this.showConfigPanel) {
-      this.slider.append(`<div class='slider__configuration'>
-              <div class='configuration'>
-              
-              <label> <input type='checkbox' class='configuration__show-handle-value'>Убрать флажок</label>
-              <label> <input type='checkbox' class='configuration__orientation'>Включить вертикальное отображение</label>
-              <label> <input type='checkbox'  class='configuration__range'>Включить выбор интервала</label>
-              
-              <label>Текущее значение</label> 
-                <div class='configuration__current-value'>
-                  <input type='number' class='configuration__current-value_first'> 
-                  <input type='number' class='configuration__current-value_second'> </div>
-              <label>Минимальное значение слайдера</label> 
-                <input type='number' class='configuration__minimum-value'>
-              <label>Максимальное значение слайдера</label> 
-                <input type='number' class='configuration__maximum-value'>
-              <label>Размер шага слайдера</label> 
-                <input type='number' class='configuration__size-of-step'>`);
+      $('.slider__configuration').remove();
+      this.createPanel();
 
-      const showHandle = this.slider.find('.configuration__show-handle-value');
+      const showHandleValue = this.slider.find('.configuration__show-handle-value');
       const oriental = this.slider.find('.configuration__orientation');
       const range = this.slider.find('.configuration__range');
+
       const value = this.slider.find('.configuration__current-value_first');
       const valueRange = this.slider.find('.configuration__current-value_second');
       const valueMinimum = this.slider.find('.configuration__minimum-value');
       const valueMaximum = this.slider.find('.configuration__maximum-value');
       const valueStep = this.slider.find('.configuration__size-of-step');
 
-      value.attr({ min: this.minimumConfigPanel, max: this.maximumConfigPanel, value: this.valueConfigPanel });
-      valueRange.attr({ min: (this.valueConfigPanel + this.stepConfigPanel), max: this.maximumConfigPanel, value: this.valueRangeConfigPanel });
-      valueMinimum.attr({ max: (this.maximumConfigPanel - this.stepConfigPanel), value: this.minimumConfigPanel });
-      valueMaximum.attr({ min: (this.minimumConfigPanel + this.stepConfigPanel), value: this.maximumConfigPanel });
-      valueStep.attr({ min: 1, max: (this.maximumConfigPanel - this.minimumConfigPanel), value: this.stepConfigPanel });
-      showHandle.attr({ checked: this.handleValueHideConfigPanel ? 'checked' : null });
-      oriental.attr({ checked: this.verticalOrientationConfigPanel ? 'checked' : null });
-      range.attr({ checked: this.rangeStatusConfigPanel ? 'checked' : null });
+      if (!this.rangeStatus) {
+        valueRange.removeClass('configuration__current-value_visible');
+        valueRange.addClass('configuration__current-value_hidden');
+      }
 
-      showHandle.on('change', () => { // отображение значений над handle
-        let status;
-        showHandle.prop('checked') ? (status = true) : (status = false);
-        this.notify('someMethod', status);
+      const kitElements = { showHandleValue, oriental, range, value, valueRange, valueMinimum, valueMaximum, valueStep };
+      this.initAttributes(kitElements);
+
+
+      showHandleValue.on('change', () => {
+        this.handleValueHide = showHandleValue.prop('checked');
+        this.updateView();
+      });
+      oriental.on('change', () => {
+        this.verticalOrientation = oriental.prop('checked');
+        this.updateView();
+      });
+      range.on('change', () => {
+        this.rangeStatus = range.prop('checked');
+        if (this.rangeStatus) {
+          valueRange.removeClass('configuration__current-value_hidden');
+          valueRange.addClass('configuration__current-value_visible');
+        } else {
+          valueRange.removeClass('configuration__current-value_visible');
+          valueRange.addClass('configuration__current-value_hidden');
+        }
+        this.updateView();
       });
 
-
-      oriental.on('change', () => console.log('oriental - changed'));
-      range.on('change', () => console.log('range - changed'));
-      value.on('focusout', () => console.log('value - focusOut'));
-      valueRange.on('focusout', () => console.log('valueRange - focusOut'));
-      valueMinimum.on('focusout', () => console.log('valueMinimum - focusOut'));
-      valueMaximum.on('focusout', () => console.log('valueMaximum - focusOut'));
-      valueStep.on('focusout', () => console.log('valueStep - focusOut'));
-
-      if (this.rangeStatusConfigPanel) {
-        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-        // model.$valueElem.addClass('slider__value_hidden');
-        // model.$valueElemRange.addClass('slider__value_hidden');
-        // model.createHandleRange();
-      }
-      range.change(function () { // вкл/выкл выбор интервала
-        //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-        if (this.checked) {
-          console.log('вкл интервал');
-          //   model.rangeStatus = false;
-        } else {
-          console.log('выкл интервал');
-          //   model.rangeStatus = true;
-        }
-        // model.createHandleRange();
+      value.on('focusout', () => {
+        this.value = +value.val();
+        this.updateView();
       });
-
-      // model.$configCurrentValueElem.focusout(function () { // текущее значение слайдера
-      //   model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, parseInt(this.value), model.$valueElem));
-      //   this.value = model.value;
-      //   model.$configCurrentValueRangeElem.attr('min', (model.value + model.step));
-      // });
-
-      // model.$configCurrentValueRangeElem.focusout(function () {
-      //   model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, parseInt(this.value), model.$valueElemRange));
-      //   this.value = parseInt(model.valueRange);
-      //   model.$valueElemRange.text(this.value);
-      //   model.$configCurrentValueElem.attr('max', (this.value - model.step));
-      // });
-
-
-      // model.$configMinValueElem.focusout(function () { // минимальное значение слайдера
-      //   model.minimum = parseInt(this.value);
-      //   model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
-      //   if (model.rangeStatus) {
-      //     model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
-      //   }
-      //   model.$configCurrentValueElem.attr('min', model.minimum);
-      //   model.$configSizeOfStepElem.attr('max', (model.maximum - model.minimum));
-      // });
-
-      // model.$configMaxValueElem.focusout(function () { // максимальное значение слайдера
-      //   model.maximum = parseInt(this.value);
-      //   model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
-      //   if (model.rangeStatus) {
-      //     model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
-      //   }
-      //   model.$configCurrentValueElem.attr('max', model.maximum);
-      //   model.$configSizeOfStepElem.attr('max', (model.maximum - model.minimum));
-      //   model.$configCurrentValueRangeElem.attr('max', model.maximum);
-      // });
-
-      // model.$configSizeOfStepElem.focusout(function () { // размера шага слайдера
-      //   model.step = parseInt(this.value);
-      //   model.$configCurrentValueElem.attr('max', model.maximum);
-      //   model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
-      //   if (model.rangeStatus) {
-      //     model.$handleElemRange.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.valueRange, model.$valueElemRange));
-      //   }
-      // });
-
-
-      // model.$handleElemRange.addClass('slider__handle_hidden');
-      // model.$configCurrentValueRangeElem.addClass('configuration__current-value-range_hidden');
-
-      // model.$handleElem.css('left', model.calculateDefaultValue(model.maximum, model.minimum, model.value, model.$valueElem));
-
-
-      if (this.verticalOrientationConfigPanel) {
-        // thisForController.addClass('slider_vertical');
-        // model.$sliderElem.addClass('slider__element_vertical');
-        // model.$handleElem.addClass('slider__handle_vertical');
-        // model.$generalValueElem.addClass('slider__value_vertical');
-        // model.$handleElemRange.addClass('slider__handle_vertical');
-        // model.$valueElemRange.addClass('slider__value_vertical');
-      }
-      oriental.change(function () { // вкл/выкл вертикальной ориентации
-        if (this.checked) {
-          console.log('вкл  вертикальной ориентации');
-          // this.verticalOrientationConfigPanel = true;
-          //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-          // thisForController.addClass('slider_vertical');
-          // model.$sliderElem.addClass('slider__element_vertical');
-          // model.$handleElem.addClass('slider__handle_vertical');
-          // model.$generalValueElem.addClass('slider__value_vertical');
-          // model.$handleElViewSlideremRange.addClass('slider__handle_vertical');
-          // model.$valueElemRange.addClass('slider__value_vertical');
-        } else {
-          console.log('выкл  вертикальной ориентации');
-          // this.verticalOrientationConfigPanel = false;
-          //  это нужно перенести во вьюху слайдера_____________________________________________________00000
-          // thisForController.removeClass('slider_vertical');
-          // model.$sliderElem.removeClass('slider__element_vertical');
-          // model.$handleElem.removeClass('slider__handle_vertical');
-          // model.$generalValueElem.removeClass('slider__value_vertical');
-          // model.$handleElemRange.removeClass('slider__handle_vertical');
-          // model.$valueElemRange.removeClass('slider__value_vertical');
-        }
+      valueRange.on('focusout', () => {
+        this.valueRange = +valueRange.val();
+        this.updateView();
+      });
+      valueMinimum.on('focusout', () => {
+        this.minimum = +valueMinimum.val();
+        this.updateView();
+      });
+      valueMaximum.on('focusout', () => {
+        this.maximum = +valueMaximum.val();
+        this.updateView();
+      });
+      valueStep.on('focusout', () => {
+        this.step = +valueStep.val();
+        this.updateView();
       });
     }
+  }
+
+  createPanel() {
+    this.slider.append(`<div class='slider__configuration'>
+    <div class='configuration'>
+    
+    <label> <input type='checkbox' class='configuration__show-handle-value'>Убрать флажок</label>
+          <label> <input type='checkbox' class='configuration__orientation'>Включить вертикальное отображение</label>
+          <label> <input type='checkbox'  class='configuration__range'>Включить выбор интервала</label>
+          
+          <label>Текущее значение</label> 
+          <div class='configuration__current-value'>
+          <input type='number' class='configuration__current-value_first'> 
+          <input type='number' class='configuration__current-value_second'> </div>
+          <label>Минимальное значение слайдера</label> 
+            <input type='number' class='configuration__minimum-value'>
+            <label>Максимальное значение слайдера</label> 
+            <input type='number' class='configuration__maximum-value'>
+            <label>Размер шага слайдера</label> 
+            <input type='number' class='configuration__size-of-step'>`);
+  }
+
+  updateView() {
+    const kitValues = {
+      slider: this.slider,
+      showConfigPanel: this.showConfigPanel,
+      minimum: this.minimum,
+      maximum: this.maximum,
+
+      maximumForHandleFirst: this.maximumForHandleFirst,
+      minimumForHandleSecond: this.minimumForHandleSecond,
+
+      value: this.value,
+      valueRange: this.valueRange,
+      step: this.step,
+
+      handleValueHide: this.handleValueHide,
+      verticalOrientation: this.verticalOrientation,
+      rangeStatus: this.rangeStatus,
+    };
+    this.notify('reinitState', kitValues);
+  }
+
+  initAttributes({ showHandleValue, oriental, range, value, valueRange, valueMinimum, valueMaximum, valueStep }) {
+    showHandleValue.attr({
+      checked: this.handleValueHide ? 'checked' : null,
+    });
+    oriental.attr({
+      checked: this.verticalOrientation ? 'checked' : null,
+    });
+    range.attr({
+      checked: this.rangeStatus ? 'checked' : null,
+    });
+    value.attr({
+      min: this.minimum,
+      max: this.rangeStatus ? this.maximumForHandleFirst : this.maximum,
+      value: this.value,
+    });
+    valueRange.attr({
+      min: this.minimumForHandleSecond,
+      max: this.maximum,
+      value: this.valueRange,
+    });
+    valueMinimum.attr({
+      max: this.maximum - this.step,
+      value: this.minimum,
+    });
+    valueMaximum.attr({
+      min: this.minimum + this.step,
+      value: this.maximum,
+    });
+    valueStep.attr({
+      min: 1,
+      max: this.maximum - this.minimum,
+      value: this.step,
+    });
   }
 }
 

@@ -8,12 +8,11 @@ class EventEmitter {
   }
 
   unSubscribe(instance) {
-    const test = this.observers.indexOf(instance);
-    this.observers.splice(test, 1);
+    this.observers.splice(this.observers.indexOf(instance), 1);
   }
 
   notify(name, data) {
-    this.observers.forEach(instance => instance[`${name}`] && instance[`${name}`](data));
+    this.observers.forEach(instance => instance[name] && instance[name](data));
   }
 }
 

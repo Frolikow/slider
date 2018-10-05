@@ -31,6 +31,7 @@
         "allowShortCircuit": true,
         "allowTernary": true
       }
-    ]
+    ],
+    "object-curly-newline":"off"
   }
 }
