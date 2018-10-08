@@ -2,14 +2,11 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewConfiguration extends EventEmitter {
-  updateViewConfig({ slider, showConfigPanel, minimum, maximum, maximumForHandleFirst, minimumForHandleSecond, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
+  updateViewConfig({ slider, showConfigPanel, minimum, maximum, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
     this.slider = slider;
     this.showConfigPanel = showConfigPanel;
     this.minimum = minimum;
     this.maximum = maximum;
-
-    this.maximumForHandleFirst = maximumForHandleFirst;
-    this.minimumForHandleSecond = minimumForHandleSecond;
 
     this.value = value;
     this.valueRange = valueRange;
@@ -24,7 +21,7 @@ class ViewConfiguration extends EventEmitter {
 
   render() {
     if (this.showConfigPanel) {
-      $('.slider__configuration').remove();
+      this.slider.find('.slider__configuration').remove();
       this.createPanel();
 
       const showHandleValue = this.slider.find('.configuration__show-handle-value');
@@ -116,9 +113,6 @@ class ViewConfiguration extends EventEmitter {
       minimum: this.minimum,
       maximum: this.maximum,
 
-      maximumForHandleFirst: this.maximumForHandleFirst,
-      minimumForHandleSecond: this.minimumForHandleSecond,
-
       value: this.value,
       valueRange: this.valueRange,
       step: this.step,
@@ -142,11 +136,11 @@ class ViewConfiguration extends EventEmitter {
     });
     value.attr({
       min: this.minimum,
-      max: this.rangeStatus ? this.maximumForHandleFirst : this.maximum,
+      max: this.rangeStatus ? this.valueRange - this.step : this.maximum,
       value: this.value,
     });
     valueRange.attr({
-      min: this.minimumForHandleSecond,
+      min: this.value + this.step,
       max: this.maximum,
       value: this.valueRange,
     });

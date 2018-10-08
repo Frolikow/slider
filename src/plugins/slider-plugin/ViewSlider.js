@@ -2,14 +2,11 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewSlider extends EventEmitter {
-  updateViewSlider({ slider, showConfigPanel, minimum, maximum, maximumForHandleFirst, minimumForHandleSecond, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
+  updateViewSlider({ slider, showConfigPanel, minimum, maximum, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
     this.slider = slider;
     this.showConfigPanel = showConfigPanel;
     this.minimum = minimum;
     this.maximum = maximum;
-
-    this.maximumForHandleFirst = maximumForHandleFirst;
-    this.minimumForHandleSecond = minimumForHandleSecond;
 
     this.value = value;
     this.valueRange = valueRange;
@@ -56,19 +53,15 @@ class ViewSlider extends EventEmitter {
       this.notify('clickTheSlider', { minimum: this.minimum, maximum: this.maximum, step: this.step, sliderWidth, positionCursorClick, rangeStatus: this.rangeStatus, valueRange: this.valueRange });
     });
 
-    // this.handleFirstElement.mousedown((event) => {
-    //   console.log('mousedown handleFIRST element');
-    //   const currentElement = this.handleFirstElement;
-    //   this.notify('mouseDown', { event, currentElement });
-    // });
+    this.handleFirstElement.mousedown((event) => {
+      this.moveHandle({ event, currentElement: this.handleFirstElement });
+    });
 
-    // this.handleSecondElement.mousedown((event) => {
-    //   console.log('mousedown   handleSECOND element');
-    //   const currentElement = this.handleSecondElement;
-    //   this.notify('mouseDown', { event, currentElement });
-    // });
+    this.handleSecondElement.mousedown((event) => {
+      this.moveHandle({ event, currentElement: this.handleSecondElement });
+    });
   }
-  updateAfterClickOnSlider({ positionCursorClick, moveToPosition, newValue }) {
+  updateAfterClickOnSlider({ positionCursorClick, moveToPosition, newValue, sliderWidth }) {
     const checkPositionForHandleElem = ((positionCursorClick - parseInt(this.handleFirstElement.css('left'))) > (parseInt(this.handleSecondElement.css('left')) - positionCursorClick));
     const checkPositionForHandleElemRange = ((positionCursorClick - parseInt(this.handleFirstElement.css('left'))) < (parseInt(this.handleSecondElement.css('left')) - positionCursorClick));
     if (this.rangeStatus) { // если интервал включен
@@ -77,9 +70,15 @@ class ViewSlider extends EventEmitter {
         this.value = parseInt(newValue);
         this.handleFirstElement.animate({ left: `${moveToPosition}px` }, 300);
       } else if (positionCursorClick > parseInt(this.handleSecondElement.css('left'))) { // если новая позиция > позиции второго элемента
-        this.valueSecondElement.html(newValue);
-        this.valueRange = parseInt(newValue);
-        this.handleSecondElement.animate({ left: `${moveToPosition}px` }, 300);
+        if (positionCursorClick > sliderWidth) {
+          this.valueSecondElement.html(this.maximum);
+          this.valueRange = parseInt(this.maximum);
+          this.handleSecondElement.animate({ left: `${moveToPosition}px` }, 300);
+        } else {
+          this.valueSecondElement.html(newValue);
+          this.valueRange = parseInt(newValue);
+          this.handleSecondElement.animate({ left: `${moveToPosition}px` }, 300);
+        }
       } else { // если новая позиция между элементами
         if (checkPositionForHandleElem) { // если клик между элементами ближе ко второму элементу
           this.valueSecondElement.html(newValue);
@@ -106,11 +105,10 @@ class ViewSlider extends EventEmitter {
     };
   }
 
-  // не сделано
-  moveHandle(event, actualElement) { // событие нажатой ЛКМ
+  moveHandle({ event, currentElement }) { // событие нажатой ЛКМ
     const sliderCoords = this.getCoords(this.scaleElement); // внутренние координаты слайдера
-    const handleCoords = this.getCoords(actualElement); // внутренние координаты ползунка
-    let positionCursorClick; // координаты левого края элемента
+    const handleCoords = this.getCoords(currentElement); // внутренние координаты ползунка
+    let positionCursorClick; // координаты клика внутри ползунка
     if (this.verticalOrientation === true) {
       positionCursorClick = event.pageY - handleCoords.top;
     } else {
@@ -118,7 +116,8 @@ class ViewSlider extends EventEmitter {
     }
     // движение нажатой ЛКМ
     $(document).on('mousemove', (event) => {
-      let beginEdge;
+      let beginEdge; // позиция курсора внутри слайдера
+      const endEdge = this.scaleElement.outerWidth() - currentElement.outerWidth();
       const position = [];
       let currentValue = 0;
       let slMin = this.minimum;
@@ -136,7 +135,7 @@ class ViewSlider extends EventEmitter {
       const positionRange = [];
       slMin = this.minimum;
       currentValue = 0;
-      if (actualElement === this.handleFirstElement) {
+      if (currentElement === this.handleFirstElement) {
         slMax = this.valueRange - this.step;
       }
       while (currentValue < slMax) {
@@ -148,6 +147,7 @@ class ViewSlider extends EventEmitter {
           positionRange.push(currentValue);
         }
       }
+
       if (this.verticalOrientation) {
         beginEdge = (event.pageY - positionCursorClick - sliderCoords.top) / this.step;
       } else {
@@ -157,24 +157,36 @@ class ViewSlider extends EventEmitter {
       if (beginEdge < 0) {
         beginEdge = 0;
       }
-      const endEdge = this.scaleElement.outerWidth() - actualElement.outerWidth();
       if (beginEdge > endEdge) {
         beginEdge = endEdge;
       }
-      actualElement.css('left', `${this.searchPosition(beginEdge, endEdge, position, positionRange, actualElement)}px`);
 
-      if (actualElement === this.handleFirstElement) {
-        this.calculateValue(this.maximum, this.minimum, beginEdge, false);
-      } else if (actualElement === this.handleSecondElement) {
-        this.calculateValue(this.maximum, this.minimum, beginEdge, true);
+      let testElement;
+      if (currentElement === this.handleFirstElement) {
+        testElement = 'first';
+      } else {
+        testElement = 'second';
       }
+      this.notify('searchPositionWhenMoving', { beginEdge, endEdge, position, positionRange, testElement, value: this.value, valueRange: this.valueRange, step: this.step, rangeStatus: this.rangeStatus, minimum: this.minimum, maximum: this.maximum });
     });
 
     $(document).mouseup(() => { // событие ОТжатой ЛКМ, отмена "mousemove"
       $(document).off('mousemove');
     });
   }
-
+  getPositionWhenMoving({ currentPositionHandle, testElement, valueTip }) {
+    if (testElement === 'first') {
+      this.handleFirstElement.css('left', `${currentPositionHandle}px`);
+      this.valueFirstElement.html(valueTip);
+      this.value = parseInt(valueTip);
+    }
+    if (testElement === 'second') {
+      this.handleSecondElement.css('left', `${currentPositionHandle}px`);
+      this.valueSecondElement.html(valueTip);
+      this.valueRange = parseInt(valueTip);
+    }
+    this.sendDataForViewConfig();
+  }
   defaultPosition(minimum, maximum, value, element, step) {
     const scaleWidth = this.scaleElement.outerWidth() - this.handleFirstElement.outerWidth();
 
@@ -236,9 +248,6 @@ class ViewSlider extends EventEmitter {
       showConfigPanel: this.showConfigPanel,
       minimum: this.minimum,
       maximum: this.maximum,
-
-      maximumForHandleFirst: this.maximumForHandleFirst,
-      minimumForHandleSecond: this.minimumForHandleSecond,
 
       value: this.value,
       valueRange: this.valueRange,

@@ -1,9 +1,6 @@
 import EventEmitter from './eventEmiter';
 
 class Controller extends EventEmitter {
-  // transferDataForRender(dataForRender) {
-  //   this.notify('getDataForRender', dataForRender);
-  // }
   updateViewConfig(dataForRender) {
     this.notify('updateViewConfig', dataForRender);
   }
@@ -26,13 +23,16 @@ class Controller extends EventEmitter {
   clickTheSlider({ minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange }) {
     this.notify('moveHandleOnClick', { minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange });
   }
-  updateAfterClickOnSlider({ positionCursorClick, moveToPosition, newValue }) {
-    this.notify('updateAfterClickOnSlider', { positionCursorClick, moveToPosition, newValue });
+  updateAfterClickOnSlider({ positionCursorClick, moveToPosition, newValue, sliderWidth }) {
+    this.notify('updateAfterClickOnSlider', { positionCursorClick, moveToPosition, newValue, sliderWidth });
   }
 
-  // updateConfiguration(){
-  //   this.notify('')
-  // }
+  searchPositionWhenMoving({ beginEdge, endEdge, position, positionRange, testElement, value, valueRange, step, rangeStatus, minimum, maximum }) {
+    this.notify('searchPositionWhenMoving', { beginEdge, endEdge, position, positionRange, testElement, value, valueRange, step, rangeStatus, minimum, maximum });
+  }
+  sendPositionWhenMoving({ currentPositionHandle, testElement, valueTip }) {
+    this.notify('getPositionWhenMoving', { currentPositionHandle, testElement, valueTip });
+  }
 }
 
 export default Controller;
