@@ -2,92 +2,113 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewConfiguration extends EventEmitter {
-  updateViewConfig({ slider, showConfigPanel, minimum, maximum, value, valueRange, step, handleValueHide, verticalOrientation, rangeStatus }) {
-    this.slider = slider;
-    this.showConfigPanel = showConfigPanel;
-    this.minimum = minimum;
-    this.maximum = maximum;
+  updateViewPanel(data) {
+    if (data.showConfigPanel) {
+      data.$slider.find('.slider__configuration').remove();
+      this.createPanel(data.$slider);
 
-    this.value = value;
-    this.valueRange = valueRange;
-    this.step = step;
+      const $showHandleValue = data.$slider.find('.configuration__show-handle-value');
+      const $oriental = data.$slider.find('.configuration__orientation');
+      const $range = data.$slider.find('.configuration__range');
 
-    this.verticalOrientation = verticalOrientation;
-    this.rangeStatus = rangeStatus;
-    this.handleValueHide = handleValueHide;
+      const $value = data.$slider.find('.configuration__current-value_first');
+      const $valueRange = data.$slider.find('.configuration__current-value_second');
+      const $valueMinimum = data.$slider.find('.configuration__minimum-value');
+      const $valueMaximum = data.$slider.find('.configuration__maximum-value');
+      const $valueStep = data.$slider.find('.configuration__size-of-step');
 
-    this.render();
-  }
-
-  render() {
-    if (this.showConfigPanel) {
-      this.slider.find('.slider__configuration').remove();
-      this.createPanel();
-
-      const showHandleValue = this.slider.find('.configuration__show-handle-value');
-      const oriental = this.slider.find('.configuration__orientation');
-      const range = this.slider.find('.configuration__range');
-
-      const value = this.slider.find('.configuration__current-value_first');
-      const valueRange = this.slider.find('.configuration__current-value_second');
-      const valueMinimum = this.slider.find('.configuration__minimum-value');
-      const valueMaximum = this.slider.find('.configuration__maximum-value');
-      const valueStep = this.slider.find('.configuration__size-of-step');
-
-      if (!this.rangeStatus) {
-        valueRange.removeClass('configuration__current-value_visible');
-        valueRange.addClass('configuration__current-value_hidden');
+      if (!data.rangeStatus) {
+        $valueRange.removeClass('configuration__current-value_visible');
+        $valueRange.addClass('configuration__current-value_hidden');
       }
 
-      const kitElements = { showHandleValue, oriental, range, value, valueRange, valueMinimum, valueMaximum, valueStep };
-      this.initAttributes(kitElements);
+      const kitElements = { $showHandleValue, $oriental, $range, $value, $valueRange, $valueMinimum, $valueMaximum, $valueStep };
+      this.initAttributes(kitElements, data);
 
-
-      showHandleValue.on('change', () => {
-        this.handleValueHide = showHandleValue.prop('checked');
-        this.updateView();
+      $showHandleValue.on('change', () => {
+        data.handleValueHide = $showHandleValue.prop('checked');
+        this.sendData(data);
       });
-      oriental.on('change', () => {
-        this.verticalOrientation = oriental.prop('checked');
-        this.updateView();
+      $oriental.on('change', () => {
+        data.verticalOrientation = $oriental.prop('checked');
+        this.sendData(data);
       });
-      range.on('change', () => {
-        this.rangeStatus = range.prop('checked');
-        if (this.rangeStatus) {
-          valueRange.removeClass('configuration__current-value_hidden');
-          valueRange.addClass('configuration__current-value_visible');
+      $range.on('change', () => {
+        data.rangeStatus = $range.prop('checked');
+        if (data.rangeStatus) {
+          $valueRange.removeClass('configuration__current-value_hidden');
+          $valueRange.addClass('configuration__current-value_visible');
         } else {
-          valueRange.removeClass('configuration__current-value_visible');
-          valueRange.addClass('configuration__current-value_hidden');
+          $valueRange.removeClass('configuration__current-value_visible');
+          $valueRange.addClass('configuration__current-value_hidden');
         }
-        this.updateView();
+        this.sendData(data);
       });
 
-      value.on('focusout', () => {
-        this.value = +value.val();
-        this.updateView();
+      $value.on('focusout', () => {
+        data.value = +$value.val();
+        this.sendData(data);
       });
-      valueRange.on('focusout', () => {
-        this.valueRange = +valueRange.val();
-        this.updateView();
+      $valueRange.on('focusout', () => {
+        data.valueRange = +$valueRange.val();
+        this.sendData(data);
       });
-      valueMinimum.on('focusout', () => {
-        this.minimum = +valueMinimum.val();
-        this.updateView();
+      $valueMinimum.on('focusout', () => {
+        data.minimum = +$valueMinimum.val();
+        data.value = data.value < data.minimum ? data.minimum : data.value;
+        data.valueRange = data.valueRange <= data.minimum ? data.maximum : data.valueRange;
+        this.sendData(data);
       });
-      valueMaximum.on('focusout', () => {
-        this.maximum = +valueMaximum.val();
-        this.updateView();
+      $valueMaximum.on('focusout', () => {
+        data.maximum = +$valueMaximum.val();
+        data.valueRange = data.valueRange > data.maximum ? data.maximum : data.valueRange;
+        data.value = data.value >= data.maximum ? data.minimum : data.value;
+        this.sendData(data);
       });
-      valueStep.on('focusout', () => {
-        this.step = +valueStep.val();
-        this.updateView();
+      $valueStep.on('focusout', () => {
+        data.step = +$valueStep.val();
+        this.sendData(data);
       });
     }
   }
 
-  createPanel() {
-    this.slider.append(`<div class='slider__configuration'>
+  initAttributes(kitElements, data) {
+    kitElements.$showHandleValue.attr({
+      checked: data.handleValueHide ? 'checked' : null,
+    });
+    kitElements.$oriental.attr({
+      checked: data.verticalOrientation ? 'checked' : null,
+    });
+    kitElements.$range.attr({
+      checked: data.rangeStatus ? 'checked' : null,
+    });
+    kitElements.$value.attr({
+      min: data.minimum,
+      max: data.rangeStatus ? data.valueRange - data.step : data.maximum,
+      value: data.value,
+    });
+    kitElements.$valueRange.attr({
+      min: data.value + data.step,
+      max: data.maximum,
+      value: data.valueRange,
+    });
+    kitElements.$valueMinimum.attr({
+      max: data.maximum - data.step,
+      value: data.minimum,
+    });
+    kitElements.$valueMaximum.attr({
+      min: data.minimum + data.step,
+      value: data.maximum,
+    });
+    kitElements.$valueStep.attr({
+      min: 1,
+      max: data.maximum - data.minimum,
+      value: data.step,
+    });
+  }
+
+  createPanel(sliderBlock) {
+    sliderBlock.append(`<div class='slider__configuration'>
     <div class='configuration'>
     
     <label> <input type='checkbox' class='configuration__show-handle-value'>Убрать флажок</label>
@@ -106,57 +127,8 @@ class ViewConfiguration extends EventEmitter {
             <input type='number' class='configuration__size-of-step'>`);
   }
 
-  updateView() {
-    const kitValues = {
-      slider: this.slider,
-      showConfigPanel: this.showConfigPanel,
-      minimum: this.minimum,
-      maximum: this.maximum,
-
-      value: this.value,
-      valueRange: this.valueRange,
-      step: this.step,
-
-      handleValueHide: this.handleValueHide,
-      verticalOrientation: this.verticalOrientation,
-      rangeStatus: this.rangeStatus,
-    };
-    this.notify('reinitState', kitValues);
-  }
-
-  initAttributes({ showHandleValue, oriental, range, value, valueRange, valueMinimum, valueMaximum, valueStep }) {
-    showHandleValue.attr({
-      checked: this.handleValueHide ? 'checked' : null,
-    });
-    oriental.attr({
-      checked: this.verticalOrientation ? 'checked' : null,
-    });
-    range.attr({
-      checked: this.rangeStatus ? 'checked' : null,
-    });
-    value.attr({
-      min: this.minimum,
-      max: this.rangeStatus ? this.valueRange - this.step : this.maximum,
-      value: this.value,
-    });
-    valueRange.attr({
-      min: this.value + this.step,
-      max: this.maximum,
-      value: this.valueRange,
-    });
-    valueMinimum.attr({
-      max: this.maximum - this.step,
-      value: this.minimum,
-    });
-    valueMaximum.attr({
-      min: this.minimum + this.step,
-      value: this.maximum,
-    });
-    valueStep.attr({
-      min: 1,
-      max: this.maximum - this.minimum,
-      value: this.step,
-    });
+  sendData(data) {
+    this.notify('changeData', data);
   }
 }
 

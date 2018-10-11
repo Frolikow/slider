@@ -1,54 +1,83 @@
 import EventEmitter from './eventEmiter';
 
 class Model extends EventEmitter {
-  initState(options) {
-    this.inputValuesValidation(options);
-    const dataForRender = {
-      slider: options.slider,
-      showConfigPanel: options.showConfigPanel || false,
-      minimum: options.minimum || 1,
-      maximum: options.maximum || 10,
-
-      value: options.value || this.minimum,
-      valueRange: options.valueRange || this.maximum,
-      step: options.step || 1,
-
-      handleValueHide: options.handleValueHide || false,
-      verticalOrientation: options.verticalOrientation || false,
-      rangeStatus: options.rangeStatus || false,
+  constructor(options) {
+    super();
+    this.data = {
+      $slider: options.slider,
+      showConfigPanel: options.showConfigPanel,
+      minimum: options.minimum,
+      maximum: options.maximum,
+      value: options.value,
+      valueRange: options.valueRange,
+      step: options.step,
+      handleValueHide: options.handleValueHide,
+      verticalOrientation: options.verticalOrientation,
+      rangeStatus: options.rangeStatus,
     };
-    this.notify('updateViewSlider', dataForRender);
-    this.notify('updateViewConfig', dataForRender);
+    this.validation();
   }
-  inputValuesValidation(options) {
-    if (options.minimum >= options.maximum) {
-      options.minimum = 1;
-      options.maximum = 10;
+  validation() {
+    this.data.showConfigPanel = Boolean(this.data.showConfigPanel) || false;
+    this.data.minimum = Number(this.data.minimum) || 1;
+    this.data.maximum = Number(this.data.maximum) || 10;
+    this.data.value = Number(this.data.value) || this.data.minimum;
+    this.data.valueRange = Number(this.data.valueRange) || this.data.maximum;
+    this.data.step = Number(this.data.step) || 1;
+    this.data.handleValueHide = Boolean(this.data.handleValueHide) || false;
+    this.data.verticalOrientation = Boolean(this.data.verticalOrientation) || false;
+    this.data.rangeStatus = Boolean(this.data.rangeStatus) || false;
+
+    if (this.data.minimum >= this.data.maximum) {
+      this.data.minimum = 1;
+      this.data.maximum = 10;
       console.log('Неккоректные значения minimum, maximum \nОбязательное условие: minimum < maximum \nИзменено на minimum = 1, maximum = 10.');
     }
-    const validateStepValue = (options.step < 1 || options.step > (options.maximum - options.minimum)); // проверка корректности значения шага слайдера
+    const validateStepValue = (this.data.step < 1 || this.data.step > (this.data.maximum - this.data.minimum));
     if (validateStepValue) {
-      options.step = 1;
+      this.data.step = 1;
       console.log('Неккоректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
     }
-    const valueValidate = options.value > options.maximum || options.value < options.minimum;
+    const valueValidate = this.data.value > this.data.maximum || this.data.value < this.data.minimum;
     if (valueValidate) {
-      options.value = options.minimum;
-      options.valueRange = options.maximum;
+      this.data.value = this.data.minimum;
+      this.data.valueRange = this.data.maximum;
       console.log('Неккоректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
     }
-    const valueRangeValidate = options.valueRange > options.maximum;
-    if (valueRangeValidate) {
-      options.value = options.minimum;
-      options.valueRange = options.maximum;
-      console.log('Неккоректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
-    }
-    if (options.value >= options.valueRange) {
-      options.valueRange = options.value;
-      options.value -= options.step;
-      console.log('Неккоректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
+    if (this.data.rangeStatus) {
+      const valueRangeValidate = this.data.valueRange > this.data.maximum;
+      if (valueRangeValidate) {
+        this.data.value = this.data.minimum;
+        this.data.valueRange = this.data.maximum;
+        console.log('Неккоректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
+      }
+      if (this.data.value >= this.data.valueRange) {
+        this.data.valueRange = this.data.value;
+        this.data.value -= this.data.step;
+        console.log('Неккоректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
+      }
     }
   }
+
+  getData() {
+    this.notify('updateViewSlider', this.data);
+    this.notify('updateViewPanel', this.data);
+  }
+  updateData(data) {
+    this.data.showConfigPanel = data.showConfigPanel;
+    this.data.minimum = data.minimum;
+    this.data.maximum = data.maximum;
+    this.data.value = data.value;
+    this.data.valueRange = data.valueRange;
+    this.data.step = data.step;
+    this.data.handleValueHide = data.handleValueHide;
+    this.data.verticalOrientation = data.verticalOrientation;
+    this.data.rangeStatus = data.rangeStatus;
+    this.validation();
+    this.notify('updateViewSlider', this.data);
+    this.notify('updateViewPanel', this.data);
+  }
+
   calculateDefaultPosition({ minimum, maximum, value, element, step, scaleWidth }) { // установка ползунка в позицию "по-умолчанию" = value
     const defaultValuesArray = [];
     let currentValue = 0;
@@ -69,34 +98,25 @@ class Model extends EventEmitter {
       }
     }
 
-    if (element === 'first') {
-      if (defaultValuesArray.indexOf(value) === -1) {
-        value = minimum;
-      }
-    } else if (element === 'second') {
-      if (defaultValuesArray.indexOf(value) === -1) {
-        value = maximum;
-      }
-    }
-
     const stepOfDefaultPosition = scaleWidth / (defaultValuesArray.length - 1);
     const currentIndexDefaultPosition = defaultValuesArray.indexOf(value);
     let defaultPosition = currentIndexDefaultPosition * stepOfDefaultPosition;
 
     if (element === 'first') {
-      this.value = value;
+      this.data.value = value;
       if (currentIndexDefaultPosition === -1) {
         defaultPosition = 0;
-        this.value = defaultValuesArray[0];
+        this.data.value = defaultValuesArray[0];
       }
     } else if (element === 'second') {
-      this.valueRange = value;
+      this.data.valueRange = value;
       if (currentIndexDefaultPosition === -1) {
         defaultPosition = stepOfDefaultPosition * (defaultValuesArray.length - 1);
-        this.valueRange = defaultValuesArray[defaultValuesArray.length - 1];
+        this.data.valueRange = defaultValuesArray[defaultValuesArray.length - 1];
       }
     }
-    this.notify('returnDefaultPosition', { defaultPosition, element });
+
+    this.notify('returnDefaultPosition', { defaultPosition, element, value });
   }
 
   calculateValue(minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange) { // расчет значения над ползунком
@@ -117,11 +137,7 @@ class Model extends EventEmitter {
     const checkingTheValueWhenMoving = rangeStatus && (calculateValue >= values.indexOf(valueRange - step)); // проверка значения при движении левого ползунка
     let newValue;
     if (rangeStatus) {
-      if (calculateValue <= values.indexOf(this.value)) {
-        newValue = (calculateValue + step);
-      } else {
-        newValue = values[calculateValue];
-      }
+      newValue = values[calculateValue];
     } else {
       if (checkingTheValueWhenMoving) {
         newValue = (valueRange - step);
@@ -132,23 +148,23 @@ class Model extends EventEmitter {
     return newValue;
   }
 
-  moveHandleOnClick({ minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange }) { // обработка клика по шкале слайдера
+  moveHandleOnClick({ data, sliderWidth, positionCursorClick, positionFirstElement, positionSecondElement }) { // обработка клика по шкале слайдера
     const clickPositionArray = [];
     let clickPositionValue = 0;
-    let min = minimum;
-    const max = maximum;
+    let min = data.minimum;
+    const max = data.maximum;
 
     while (clickPositionValue < max) {
       if (min > max) {
         break;
       } else {
         clickPositionValue = min;
-        min += step;
+        min += data.step;
         clickPositionArray.push(clickPositionValue);
       }
     }
 
-    const valueStepOnClick = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / step));
+    const valueStepOnClick = (sliderWidth / ((clickPositionArray[clickPositionArray.length - 1] - clickPositionArray[0]) / data.step));
     let moveToPosition;
     const calculateValue = ((positionCursorClick + (valueStepOnClick / 2)) / valueStepOnClick) ^ 0;
     const clickMiddlePosition = parseInt((valueStepOnClick * calculateValue) + (valueStepOnClick / 2));
@@ -162,37 +178,94 @@ class Model extends EventEmitter {
     if (moveToPosition > sliderWidth) {
       moveToPosition = sliderWidth;
     }
-    const newValue = this.calculateValue(minimum, maximum, step, sliderWidth, positionCursorClick / step, rangeStatus, valueRange);
 
-    this.notify('updateAfterClickOnSlider', { positionCursorClick, moveToPosition, newValue, sliderWidth });
+    const newValue = this.calculateValue(data.minimum, data.maximum, data.step, sliderWidth, positionCursorClick / data.step, data.rangeStatus, data.valueRange);
+
+    const checkPositionForHandleElem = ((positionCursorClick - positionFirstElement) > (positionSecondElement - positionCursorClick));
+    const checkPositionForHandleElemRange = ((positionCursorClick - positionFirstElement) < (positionSecondElement - positionCursorClick));
+
+    if (data.rangeStatus) { // если интервал включен
+      if (positionCursorClick < positionFirstElement) { // если новая позиция < позиции первого элемента
+        data.value = parseInt(newValue);
+      } else if (positionCursorClick > positionSecondElement) { // если новая позиция > позиции второго элемента
+        if (positionCursorClick > sliderWidth) {
+          data.valueRange = parseInt(data.maximum);
+        } else {
+          data.valueRange = parseInt(newValue);
+        }
+      } else { // если новая позиция между элементами
+        if (checkPositionForHandleElem) { // если клик между элементами ближе ко второму элементу
+          data.valueRange = parseInt(newValue);
+        } else if (checkPositionForHandleElemRange) { // если клик между элементами ближе к первому элементу
+          data.value = parseInt(newValue);
+        }
+      }
+    } else { // если интервал ВЫКЛючен
+      data.value = parseInt(newValue);
+    }
+    this.updateData(data);
   }
 
-  // не сделано
-  searchPositionWhenMoving({ beginEdge, endEdge, position, positionRange, testElement, value, valueRange, step, rangeStatus, minimum, maximum }) {
-    let valueTip = this.calculateValue(minimum, maximum, step, endEdge, beginEdge, rangeStatus, valueRange);
+  searchPositionWhenMoving({ beginEdge, endEdge, element, data }) {
+    let currentValue = 0;
+    let slMin = data.minimum;
+    let slMax = data.maximum;
+    const position = [];
+    while (currentValue < slMax) {
+      if (slMin > slMax) {
+        break;
+      } else {
+        currentValue = slMin;
+        slMin += data.step;
+        position.push(currentValue);
+      }
+    }
+
+    slMin = data.minimum;
+    currentValue = 0;
+    const positionRange = [];
+    if (element === 'first') {
+      slMax = data.valueRange - data.step;
+    }
+    while (currentValue < slMax) {
+      if (slMin > slMax) {
+        break;
+      } else {
+        currentValue = slMin;
+        slMin += data.step;
+        positionRange.push(currentValue);
+      }
+    }
+    if (beginEdge < 0) {
+      beginEdge = 0;
+    }
+    if (beginEdge > endEdge) {
+      beginEdge = endEdge;
+    }
+
+    let valueTip = this.calculateValue(data.minimum, data.maximum, data.step, endEdge, beginEdge, data.rangeStatus, data.valueRange);
 
     const widthOfstep = (endEdge / (position.length - 1)); // ширина шага
     const halfWidthOfStep = (widthOfstep / 2); // половина щирины шага
 
-    const currentIndex = position.indexOf(value); // индекс первого значения в массиве position
+    const currentIndex = position.indexOf(data.value); // индекс первого значения в массиве position
     let currentPositionHandle = widthOfstep * currentIndex; // текущая позиция первого элемента
 
-    const currentIndexRange = positionRange.indexOf(valueRange - step);// индекс второго значения в массиве positionRange
+    const currentIndexRange = positionRange.indexOf(data.valueRange - data.step);// индекс второго значения в массиве positionRange
     let currentPositionHandleRange = widthOfstep * currentIndexRange;// текущая позиция второго элемента
 
-    const currentPositionCursor = beginEdge * step; // текущее положение курсора внутри слайдера???
+    const currentPositionCursor = beginEdge * data.step; // текущее положение курсора внутри слайдера???
     const middleOfPosition = currentPositionHandle + halfWidthOfStep; // расстояние в пол шага справа от первого элемента
-
     const checkMaximumForHandleWithIntervalIncluded = (currentPositionCursor >= (widthOfstep * (positionRange.length - 1)) || currentIndexRange === -1);
     const checkMaximumForHandleWithIntervalTurnedOff = (currentPositionCursor >= (widthOfstep * (position.length - 1)) || currentIndex === -1);
-    const checkMaximumForHandleRange = (currentPositionCursor >= (widthOfstep * (position.length - 1)) || valueRange === -1);
-    const checkMinimumForHandleRange = (currentPositionCursor <= (widthOfstep * position.indexOf(value + step)));
+    const checkMaximumForHandleRange = (currentPositionCursor >= (widthOfstep * (position.length - 1)) || data.valueRange === -1);
+    const checkMinimumForHandleRange = (currentPositionCursor <= (widthOfstep * position.indexOf(data.value + data.step)));
 
-    if (testElement === 'first') {
-      if (rangeStatus) {
+    if (element === 'first') {
+      if (data.rangeStatus) {
         if (checkMaximumForHandleWithIntervalIncluded) { // проверка максимума для первого элемента при включенном интервале
           currentPositionHandle = currentPositionHandleRange;
-          valueTip = valueRange - step;
+          valueTip = data.valueRange - data.step;
         } else {
           if (currentPositionCursor <= middleOfPosition) { // если положение курсора меньше или равно  middleOfPosition
             currentPositionHandle = widthOfstep * currentIndex;
@@ -211,20 +284,23 @@ class Model extends EventEmitter {
           }
         }
       }
-    } else if (testElement === 'second') {
+      data.value = valueTip;
+    } else if (element === 'second') {
       if (checkMaximumForHandleRange) { // проверка максимума второго элемента
         currentPositionHandleRange = endEdge;
       } else if (checkMinimumForHandleRange) { // проверка минимума второго элемента
-        currentPositionHandleRange = widthOfstep * position.indexOf(value + step);
-        valueTip = value + step;
+        currentPositionHandleRange = widthOfstep * position.indexOf(data.value + data.step);
+        valueTip = data.value + data.step;
       } else if (currentPositionCursor <= middleOfPosition) { // если положение курсора меньше или равно  middleOfPosition
         currentPositionHandleRange = widthOfstep * currentIndexRange;
       } else if (currentPositionCursor > middleOfPosition) { // если положение курсора больше  middleOfPosition
         currentPositionHandleRange = (widthOfstep * currentIndexRange) + widthOfstep;
       }
       currentPositionHandle = currentPositionHandleRange;
+      data.valueRange = valueTip;
     }
-    this.notify('sendPositionWhenMoving', { currentPositionHandle, testElement, valueTip });
+    this.notify('sendPositionWhenMoving', { currentPositionHandle, element, valueTip });
+    this.notify('updateViewPanel', this.data);
   }
 }
 

@@ -1,37 +1,37 @@
 import EventEmitter from './eventEmiter';
 
 class Controller extends EventEmitter {
-  updateViewConfig(dataForRender) {
-    this.notify('updateViewConfig', dataForRender);
+  initViews() {
+    this.notify('getData');
   }
   updateViewSlider(dataForRender) {
     this.notify('updateViewSlider', dataForRender);
   }
-
-  reinitState(dataForReinit) {
-    this.notify('initState', dataForReinit);
+  updateViewPanel(dataForRender) {
+    this.notify('updateViewPanel', dataForRender);
   }
+  changeData(data) {
+    this.notify('updateData', data);
+  }
+
 
   requestDefaultPosition({ minimum, maximum, value, element, step, scaleWidth }) {
     this.notify('calculateDefaultPosition', { minimum, maximum, value, element, step, scaleWidth });
   }
 
-  returnDefaultPosition({ defaultPosition, element }) {
-    this.notify('getDefaultPosition', { defaultPosition, element });
+  returnDefaultPosition({ defaultPosition, element, value }) {
+    this.notify('getDefaultPosition', { defaultPosition, element, value });
   }
 
-  clickTheSlider({ minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange }) {
-    this.notify('moveHandleOnClick', { minimum, maximum, step, sliderWidth, positionCursorClick, rangeStatus, valueRange });
-  }
-  updateAfterClickOnSlider({ positionCursorClick, moveToPosition, newValue, sliderWidth }) {
-    this.notify('updateAfterClickOnSlider', { positionCursorClick, moveToPosition, newValue, sliderWidth });
+  clickTheSlider({ data, sliderWidth, positionCursorClick, positionFirstElement, positionSecondElement }) {
+    this.notify('moveHandleOnClick', { data, sliderWidth, positionCursorClick, positionFirstElement, positionSecondElement });
   }
 
-  searchPositionWhenMoving({ beginEdge, endEdge, position, positionRange, testElement, value, valueRange, step, rangeStatus, minimum, maximum }) {
-    this.notify('searchPositionWhenMoving', { beginEdge, endEdge, position, positionRange, testElement, value, valueRange, step, rangeStatus, minimum, maximum });
+  searchPositionWhenMoving({ beginEdge, endEdge, element, data }) {
+    this.notify('searchPositionWhenMoving', { beginEdge, endEdge, element, data });
   }
-  sendPositionWhenMoving({ currentPositionHandle, testElement, valueTip }) {
-    this.notify('getPositionWhenMoving', { currentPositionHandle, testElement, valueTip });
+  sendPositionWhenMoving({ currentPositionHandle, element, valueTip }) {
+    this.notify('getPositionWhenMoving', { currentPositionHandle, element, valueTip });
   }
 }
 

@@ -5,9 +5,9 @@ $(document).ready(() => {
     $(this).efSlider({
       slider: $(this),
       showConfigPanel: true,
-      minimum: 1,
+      minimum: 2,
       maximum: 10,
-      value: 5,
+      value: undefined,
       valueRange: 8,
       step: 1,
       handleValueHide: false,
