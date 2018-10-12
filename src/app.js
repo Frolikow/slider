@@ -1,7 +1,7 @@
 import './../node_modules/jquery/src/jquery';
-import './plugins/slider-plugin/slider-plugin';
 
-import './modules/slider/slider';
+function importAll(r) { r.keys().forEach(r); }
 
-import './base.styl';
-import './modules/slider/slider.styl';
+importAll(require.context('./plugins/', true, /^\.\/.*\.js$/));
+importAll(require.context('./modules/', true, /^\.\/.*\.js$/));
+importAll(require.context('./../src/', true, /^\.\/.*\.styl$/));

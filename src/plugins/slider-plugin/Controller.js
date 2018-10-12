@@ -15,23 +15,23 @@ class Controller extends EventEmitter {
   }
 
 
-  requestDefaultPosition({ minimum, maximum, value, element, step, scaleWidth }) {
-    this.notify('calculateDefaultPosition', { minimum, maximum, value, element, step, scaleWidth });
+  requestDefaultPosition({ minimum, maximum, value, elementName, step, scaleWidth }) {
+    this.notify('calculateDefaultPosition', { minimum, maximum, value, elementName, step, scaleWidth });
   }
 
-  returnDefaultPosition({ defaultPosition, element, value }) {
-    this.notify('getDefaultPosition', { defaultPosition, element, value });
+  returnDefaultPosition({ defaultPosition, elementName, value }) {
+    this.notify('getDefaultPosition', { defaultPosition, elementName, value });
   }
 
-  clickTheSlider({ data, sliderWidth, positionCursorClick, positionFirstElement, positionSecondElement }) {
-    this.notify('moveHandleOnClick', { data, sliderWidth, positionCursorClick, positionFirstElement, positionSecondElement });
+  clickTheSlider({ data, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle }) {
+    this.notify('moveHandleOnClick', { data, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle });
   }
 
-  searchPositionWhenMoving({ beginEdge, endEdge, element, data }) {
-    this.notify('searchPositionWhenMoving', { beginEdge, endEdge, element, data });
+  searchPositionWhenMoving({ coordinatesInsideTheSlider, sliderWidth, elementName, data }) {
+    this.notify('searchPositionWhenMoving', { coordinatesInsideTheSlider, sliderWidth, elementName, data });
   }
-  sendPositionWhenMoving({ currentPositionHandle, element, valueTip }) {
-    this.notify('getPositionWhenMoving', { currentPositionHandle, element, valueTip });
+  sendPositionWhenMoving({ currentPositionHandle, elementName, valueTip }) {
+    this.notify('getPosition', { currentPositionHandle, elementName, valueTip });
   }
 }
 

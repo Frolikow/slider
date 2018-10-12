@@ -1,106 +1,106 @@
 import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
-class ViewConfiguration extends EventEmitter {
+class ViewPanel extends EventEmitter {
   updateViewPanel(data) {
     if (data.showConfigPanel) {
       data.$slider.find('.slider__configuration').remove();
       this.createPanel(data.$slider);
 
-      const $showHandleValue = data.$slider.find('.configuration__show-handle-value');
-      const $oriental = data.$slider.find('.configuration__orientation');
-      const $range = data.$slider.find('.configuration__range');
+      const $switchVisibilityTooltips = data.$slider.find('.configuration__show-handle-value');
+      const $orientationSwitch = data.$slider.find('.configuration__orientation');
+      const $rangeSwitch = data.$slider.find('.configuration__range');
 
-      const $value = data.$slider.find('.configuration__current-value_first');
-      const $valueRange = data.$slider.find('.configuration__current-value_second');
-      const $valueMinimum = data.$slider.find('.configuration__minimum-value');
-      const $valueMaximum = data.$slider.find('.configuration__maximum-value');
-      const $valueStep = data.$slider.find('.configuration__size-of-step');
+      const $currentValueFirstHandle = data.$slider.find('.configuration__current-value_first');
+      const $currentValueSecondHandle = data.$slider.find('.configuration__current-value_second');
+      const $minimumValue = data.$slider.find('.configuration__minimum-value');
+      const $maximumValue = data.$slider.find('.configuration__maximum-value');
+      const $stepSizeValue = data.$slider.find('.configuration__size-of-step');
 
       if (!data.rangeStatus) {
-        $valueRange.removeClass('configuration__current-value_visible');
-        $valueRange.addClass('configuration__current-value_hidden');
+        $currentValueSecondHandle.removeClass('configuration__current-value_visible');
+        $currentValueSecondHandle.addClass('configuration__current-value_hidden');
       }
 
-      const kitElements = { $showHandleValue, $oriental, $range, $value, $valueRange, $valueMinimum, $valueMaximum, $valueStep };
+      const kitElements = { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle, $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue };
       this.initAttributes(kitElements, data);
 
-      $showHandleValue.on('change', () => {
-        data.handleValueHide = $showHandleValue.prop('checked');
+      $switchVisibilityTooltips.on('change', () => {
+        data.handleValueHide = $switchVisibilityTooltips.prop('checked');
         this.sendData(data);
       });
-      $oriental.on('change', () => {
-        data.verticalOrientation = $oriental.prop('checked');
+      $orientationSwitch.on('change', () => {
+        data.verticalOrientation = $orientationSwitch.prop('checked');
         this.sendData(data);
       });
-      $range.on('change', () => {
-        data.rangeStatus = $range.prop('checked');
+      $rangeSwitch.on('change', () => {
+        data.rangeStatus = $rangeSwitch.prop('checked');
         if (data.rangeStatus) {
-          $valueRange.removeClass('configuration__current-value_hidden');
-          $valueRange.addClass('configuration__current-value_visible');
+          $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
+          $currentValueSecondHandle.addClass('configuration__current-value_visible');
         } else {
-          $valueRange.removeClass('configuration__current-value_visible');
-          $valueRange.addClass('configuration__current-value_hidden');
+          $currentValueSecondHandle.removeClass('configuration__current-value_visible');
+          $currentValueSecondHandle.addClass('configuration__current-value_hidden');
         }
         this.sendData(data);
       });
 
-      $value.on('focusout', () => {
-        data.value = +$value.val();
+      $currentValueFirstHandle.on('focusout', () => {
+        data.value = +$currentValueFirstHandle.val();
         this.sendData(data);
       });
-      $valueRange.on('focusout', () => {
-        data.valueRange = +$valueRange.val();
+      $currentValueSecondHandle.on('focusout', () => {
+        data.valueRange = +$currentValueSecondHandle.val();
         this.sendData(data);
       });
-      $valueMinimum.on('focusout', () => {
-        data.minimum = +$valueMinimum.val();
+      $minimumValue.on('focusout', () => {
+        data.minimum = +$minimumValue.val();
         data.value = data.value < data.minimum ? data.minimum : data.value;
         data.valueRange = data.valueRange <= data.minimum ? data.maximum : data.valueRange;
         this.sendData(data);
       });
-      $valueMaximum.on('focusout', () => {
-        data.maximum = +$valueMaximum.val();
+      $maximumValue.on('focusout', () => {
+        data.maximum = +$maximumValue.val();
         data.valueRange = data.valueRange > data.maximum ? data.maximum : data.valueRange;
         data.value = data.value >= data.maximum ? data.minimum : data.value;
         this.sendData(data);
       });
-      $valueStep.on('focusout', () => {
-        data.step = +$valueStep.val();
+      $stepSizeValue.on('focusout', () => {
+        data.step = +$stepSizeValue.val();
         this.sendData(data);
       });
     }
   }
 
   initAttributes(kitElements, data) {
-    kitElements.$showHandleValue.attr({
+    kitElements.$switchVisibilityTooltips.attr({
       checked: data.handleValueHide ? 'checked' : null,
     });
-    kitElements.$oriental.attr({
+    kitElements.$orientationSwitch.attr({
       checked: data.verticalOrientation ? 'checked' : null,
     });
-    kitElements.$range.attr({
+    kitElements.$rangeSwitch.attr({
       checked: data.rangeStatus ? 'checked' : null,
     });
-    kitElements.$value.attr({
+    kitElements.$currentValueFirstHandle.attr({
       min: data.minimum,
       max: data.rangeStatus ? data.valueRange - data.step : data.maximum,
       value: data.value,
     });
-    kitElements.$valueRange.attr({
+    kitElements.$currentValueSecondHandle.attr({
       min: data.value + data.step,
       max: data.maximum,
       value: data.valueRange,
     });
-    kitElements.$valueMinimum.attr({
+    kitElements.$minimumValue.attr({
       max: data.maximum - data.step,
       value: data.minimum,
     });
-    kitElements.$valueMaximum.attr({
+    kitElements.$maximumValue.attr({
       min: data.minimum + data.step,
       value: data.maximum,
     });
-    kitElements.$valueStep.attr({
+    kitElements.$stepSizeValue.attr({
       min: 1,
       max: data.maximum - data.minimum,
       value: data.step,
@@ -132,4 +132,4 @@ class ViewConfiguration extends EventEmitter {
   }
 }
 
-export default ViewConfiguration;
+export default ViewPanel;
