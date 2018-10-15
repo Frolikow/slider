@@ -2,33 +2,33 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewSlider extends EventEmitter {
-  updateViewSlider(data) {
-    data.$slider.html(`<div class='slider__element'>
+  updateViewSlider(dataViewSlider) {
+    dataViewSlider.$slider.html(`<div class='slider__element'>
                       <div class='slider__handle slider__handle_left'> <div class='slider__value slider__value_left'></div></div>
                       <div class='slider__handle slider__handle_right'> <div class='slider__value slider__value_right'>
                     `);
 
-    this.$sliderScale = data.$slider.find('.slider__element');
-    this.$firstHandle = data.$slider.find('.slider__handle_left');
-    this.$firstTooltip = data.$slider.find('.slider__value_left');
-    this.$secondHandle = data.$slider.find('.slider__handle_right');
-    this.$secondTooltip = data.$slider.find('.slider__value_right');
+    this.$sliderScale = dataViewSlider.$slider.find('.slider__element');
+    this.$firstHandle = dataViewSlider.$slider.find('.slider__handle_left');
+    this.$firstTooltip = dataViewSlider.$slider.find('.slider__value_left');
+    this.$secondHandle = dataViewSlider.$slider.find('.slider__handle_right');
+    this.$secondTooltip = dataViewSlider.$slider.find('.slider__value_right');
 
-    data.handleValueHide ? this.switchingVisibilityTooltips(true) : this.switchingVisibilityTooltips(false);
-    data.verticalOrientation ? this.switchingOrientation(true) : this.switchingOrientation(false);
-    data.rangeStatus ? this.switchingRangeSelection(true) : this.switchingRangeSelection(false);
+    dataViewSlider.visibilityTooltips ? this.enableVisibilityTooltips(true) : this.enableVisibilityTooltips(false);
+    dataViewSlider.verticalOrientation ? this.orientationChange(true) : this.orientationChange(false);
+    dataViewSlider.rangeStatus ? this.enableRangeSelection(true) : this.enableRangeSelection(false);
 
-    this.defaultPosition(data.minimum, data.maximum, data.value, 'first', data.step);
-    if (data.rangeStatus) {
-      this.defaultPosition(data.minimum, data.maximum, data.valueRange, 'second', data.step);
+    this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.value, 'first', dataViewSlider.step);
+    if (dataViewSlider.rangeStatus) {
+      this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.valueRange, 'second', dataViewSlider.step);
     }
-    this.renderValueInTooltip(data.value, data.valueRange);
+    this.renderValueInTooltip(dataViewSlider.value, dataViewSlider.valueRange);
 
     const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
     this.$sliderScale.click((event) => {
       let clickCoordinatesInsideTheHandle;
       const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
-      if (data.verticalOrientation) {
+      if (dataViewSlider.verticalOrientation) {
         clickCoordinatesInsideTheHandle = (event.pageY - sliderCoords.top - (this.$firstHandle.outerHeight() / 2));
       } else {
         clickCoordinatesInsideTheHandle = (event.pageX - sliderCoords.left - (this.$firstHandle.outerWidth() / 2));
@@ -38,7 +38,7 @@ class ViewSlider extends EventEmitter {
       const positionSecondHandle = parseInt(this.$secondHandle.css('left'));
 
       this.notify('clickTheSlider', {
-        data,
+        dataForMoveHandleOnClick: dataViewSlider,
         sliderWidth,
         clickCoordinatesInsideTheHandle,
         positionFirstHandle,
@@ -46,10 +46,10 @@ class ViewSlider extends EventEmitter {
       });
     });
     this.$firstHandle.mousedown((event) => {
-      this.moveHandle({ event, currentItem: this.$firstHandle, data, sliderWidth });
+      this.moveHandle({ event, currentItem: this.$firstHandle, dataViewSlider, sliderWidth });
     });
     this.$secondHandle.mousedown((event) => {
-      this.moveHandle({ event, currentItem: this.$secondHandle, data, sliderWidth });
+      this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
     });
   }
 
@@ -61,11 +61,11 @@ class ViewSlider extends EventEmitter {
     };
   }
 
-  moveHandle({ event, currentItem, data, sliderWidth }) { // событие нажатой ЛКМ
+  moveHandle({ event, currentItem, dataViewSlider, sliderWidth }) { // событие нажатой ЛКМ
     const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
     const handleCoords = this.getCoords(currentItem); // внутренние координаты ползунка
     let clickCoordinatesInsideTheHandle; // координаты клика внутри ползунка
-    if (data.verticalOrientation === true) {
+    if (dataViewSlider.verticalOrientation === true) {
       clickCoordinatesInsideTheHandle = event.pageY - handleCoords.top;
     } else {
       clickCoordinatesInsideTheHandle = event.pageX - handleCoords.left;
@@ -75,10 +75,10 @@ class ViewSlider extends EventEmitter {
     $(document).on('mousemove', (event) => {
       let coordinatesInsideTheSlider; // позиция курсора внутри слайдера
 
-      if (data.verticalOrientation) {
-        coordinatesInsideTheSlider = (event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top) / data.step;
+      if (dataViewSlider.verticalOrientation) {
+        coordinatesInsideTheSlider = (event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top) / dataViewSlider.step;
       } else {
-        coordinatesInsideTheSlider = (event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left) / data.step;
+        coordinatesInsideTheSlider = (event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left) / dataViewSlider.step;
       }
 
       let elementName;
@@ -91,7 +91,7 @@ class ViewSlider extends EventEmitter {
         coordinatesInsideTheSlider,
         sliderWidth,
         elementName,
-        data,
+        dataForSearchPosition: dataViewSlider,
       });
     });
 
@@ -99,7 +99,7 @@ class ViewSlider extends EventEmitter {
       $(document).off('mousemove');
     });
   }
-  getPosition({ currentPositionHandle, elementName, valueTip }) {
+  setPosition({ currentPositionHandle, elementName, valueTip }) {
     if (elementName === 'first') {
       this.$firstHandle.css('left', `${currentPositionHandle}px`);
       this.$firstTooltip.html(valueTip);
@@ -109,10 +109,10 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.html(valueTip);
     }
   }
-  defaultPosition(minimum, maximum, value, elementName, step) {
+  defaultPosition(minimum, maximum, valueCurrentHandle, elementName, step) {
     const scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
 
-    const dataForRequestDefaultPosition = { minimum, maximum, value, elementName, step, scaleWidth };
+    const dataForRequestDefaultPosition = { minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth };
     this.notify('requestDefaultPosition', dataForRequestDefaultPosition);
   }
   getDefaultPosition({ defaultPosition, elementName }) {
@@ -123,21 +123,21 @@ class ViewSlider extends EventEmitter {
       this.$secondHandle.css('left', defaultPosition);
     }
   }
-  switchingVisibilityTooltips(value) {
-    if (value) {
-      this.$firstTooltip.removeClass('slider__value_visible');
-      this.$secondTooltip.removeClass('slider__value_visible');
-      this.$firstTooltip.addClass('slider__value_hidden');
-      this.$secondTooltip.addClass('slider__value_hidden');
-    } else {
+  enableVisibilityTooltips(isEnabled) {
+    if (isEnabled) {
       this.$firstTooltip.removeClass('slider__value_hidden');
       this.$secondTooltip.removeClass('slider__value_hidden');
       this.$firstTooltip.addClass('slider__value_visible');
       this.$secondTooltip.addClass('slider__value_visible');
+    } else {
+      this.$firstTooltip.removeClass('slider__value_visible');
+      this.$secondTooltip.removeClass('slider__value_visible');
+      this.$firstTooltip.addClass('slider__value_hidden');
+      this.$secondTooltip.addClass('slider__value_hidden');
     }
   }
-  switchingOrientation(value) {
-    if (value) {
+  orientationChange(isEnabled) {
+    if (isEnabled) {
       this.$sliderScale.addClass('slider__element_vertical');
       this.$firstHandle.addClass('slider__handle_vertical');
       this.$firstTooltip.addClass('slider__value_vertical');
@@ -151,8 +151,8 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.removeClass('slider__value_vertical');
     }
   }
-  switchingRangeSelection(value) {
-    if (value) {
+  enableRangeSelection(isEnabled) {
+    if (isEnabled) {
       this.$secondHandle.addClass('slider__handle_visible');
       this.$secondHandle.removeClass('slider__handle_hidden');
     } else {
@@ -164,8 +164,8 @@ class ViewSlider extends EventEmitter {
     this.$firstTooltip.text(firstValue);
     this.$secondTooltip.text(secondValue);
   }
-  sendData(data) {
-    this.notify('changeData', data);
+  sendData(dataToSend) {
+    this.notify('updatePluginOptions', dataToSend);
   }
 }
 

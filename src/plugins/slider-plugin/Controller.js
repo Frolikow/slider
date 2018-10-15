@@ -2,7 +2,7 @@ import EventEmitter from './eventEmiter';
 
 class Controller extends EventEmitter {
   initViews() {
-    this.notify('getData');
+    this.notify('sendDataToRender');
   }
   updateViewSlider(dataForRender) {
     this.notify('updateViewSlider', dataForRender);
@@ -10,28 +10,28 @@ class Controller extends EventEmitter {
   updateViewPanel(dataForRender) {
     this.notify('updateViewPanel', dataForRender);
   }
-  changeData(data) {
-    this.notify('updateData', data);
+  updatePluginOptions(dataForUpdatePlugin) {
+    this.notify('updatePluginOptionsAndSendDataToRedner', dataForUpdatePlugin);
   }
 
 
-  requestDefaultPosition({ minimum, maximum, value, elementName, step, scaleWidth }) {
-    this.notify('calculateDefaultPosition', { minimum, maximum, value, elementName, step, scaleWidth });
+  requestDefaultPosition({ minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth }) {
+    this.notify('calculationDefaultPosition', { minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth });
   }
 
   returnDefaultPosition({ defaultPosition, elementName, value }) {
     this.notify('getDefaultPosition', { defaultPosition, elementName, value });
   }
 
-  clickTheSlider({ data, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle }) {
-    this.notify('moveHandleOnClick', { data, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle });
+  clickTheSlider({ dataForMoveHandleOnClick, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle }) {
+    this.notify('moveHandleOnClick', { dataForMoveHandleOnClick, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle });
   }
 
-  searchPositionWhenMoving({ coordinatesInsideTheSlider, sliderWidth, elementName, data }) {
-    this.notify('searchPositionWhenMoving', { coordinatesInsideTheSlider, sliderWidth, elementName, data });
+  searchPositionWhenMoving({ coordinatesInsideTheSlider, sliderWidth, elementName, dataForSearchPosition }) {
+    this.notify('searchPositionWhenMoving', { coordinatesInsideTheSlider, sliderWidth, elementName, dataForSearchPosition });
   }
   sendPositionWhenMoving({ currentPositionHandle, elementName, valueTip }) {
-    this.notify('getPosition', { currentPositionHandle, elementName, valueTip });
+    this.notify('setPosition', { currentPositionHandle, elementName, valueTip });
   }
 }
 

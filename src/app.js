@@ -1,3 +1,4 @@
+import './../node_modules/handlebars/dist/handlebars';
 import './../node_modules/jquery/src/jquery';
 
 function importAll(r) { r.keys().forEach(r); }

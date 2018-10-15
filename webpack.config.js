@@ -34,8 +34,13 @@ const common = {
         options: {
           pretty: true
         }
-      },
-      ]
+      }
+      // ,
+      // {
+      //   test: /\.handlebars$/,
+      //   loader: "handlebars-loader"
+      // }
+    ]
   },
 
   plugins: [

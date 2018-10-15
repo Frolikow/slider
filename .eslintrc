@@ -33,6 +33,8 @@
       }
     ],
     "object-curly-newline":"off",
-    "no-restricted-globals":"off"
+    "no-restricted-globals":"off",
+    "no-console":"off",
+    "global-require":"off"
   }
 }
