@@ -102,20 +102,24 @@ class ViewPanel extends EventEmitter {
       checked: dataForInitAttributes.rangeStatus ? 'checked' : null,
     });
     kitElements.$currentValueFirstHandle.attr({
+      step: dataForInitAttributes.step,
       min: dataForInitAttributes.minimum,
       max: dataForInitAttributes.rangeStatus ? dataForInitAttributes.valueRange - dataForInitAttributes.step : dataForInitAttributes.maximum,
       value: dataForInitAttributes.value,
     });
     kitElements.$currentValueSecondHandle.attr({
+      step: dataForInitAttributes.step,
       min: dataForInitAttributes.value + dataForInitAttributes.step,
       max: dataForInitAttributes.maximum,
       value: dataForInitAttributes.valueRange,
     });
     kitElements.$minimumValue.attr({
+      step: dataForInitAttributes.step,
       max: dataForInitAttributes.maximum - dataForInitAttributes.step,
       value: dataForInitAttributes.minimum,
     });
     kitElements.$maximumValue.attr({
+      step: dataForInitAttributes.step,
       min: dataForInitAttributes.minimum + dataForInitAttributes.step,
       value: dataForInitAttributes.maximum,
     });

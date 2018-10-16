@@ -120,8 +120,8 @@ class Model extends EventEmitter {
 
   calculationValue({ dataForCalculation, sliderWidth, coordinates }) { // расчет значения над ползунком
     const arrayOfValues = this.createArrayOfPosition(null, dataForCalculation);
-    const valueStep = sliderWidth / (arrayOfValues[arrayOfValues.length - 1] - arrayOfValues[0]);
-    const indexNumberValue = ((coordinates + (valueStep / 2)) / valueStep) ^ 0;
+    const valueStep = sliderWidth / ((arrayOfValues[arrayOfValues.length - 1] - arrayOfValues[0]) / dataForCalculation.step);
+    const indexNumberValue = (((coordinates * dataForCalculation.step) + (valueStep / 2)) / valueStep) ^ 0;
 
     const checkingTheValueWhenMoving = dataForCalculation.rangeStatus && (indexNumberValue >= arrayOfValues.indexOf(dataForCalculation.valueRange - dataForCalculation.step)); // проверка значения при движении левого ползунка
     let newValue;
@@ -139,12 +139,12 @@ class Model extends EventEmitter {
 
   moveHandleOnClick({ dataForMoveHandleOnClick, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle }) { // обработка клика по шкале слайдера
     const arrayPositionAtClick = this.createArrayOfPosition(null, dataForMoveHandleOnClick);
+    clickCoordinatesInsideTheHandle /= dataForMoveHandleOnClick.step;
 
     const stepWidth = (sliderWidth / ((arrayPositionAtClick[arrayPositionAtClick.length - 1] - arrayPositionAtClick[0]) / dataForMoveHandleOnClick.step));
     let newPosition;
     const indexNumberValue = ((clickCoordinatesInsideTheHandle + (stepWidth / 2)) / stepWidth) ^ 0;
     const middleBetweenElements = parseInt((stepWidth * indexNumberValue) + (stepWidth / 2));
-
     if (clickCoordinatesInsideTheHandle < middleBetweenElements) {
       newPosition = (stepWidth * indexNumberValue);
     } else if (clickCoordinatesInsideTheHandle > middleBetweenElements) {
@@ -154,8 +154,8 @@ class Model extends EventEmitter {
     if (newPosition > sliderWidth) {
       newPosition = sliderWidth;
     }
-
     const newValue = this.calculationValue({ dataForCalculation: dataForMoveHandleOnClick, sliderWidth, coordinates: clickCoordinatesInsideTheHandle });
+    clickCoordinatesInsideTheHandle *= dataForMoveHandleOnClick.step;
 
     const checkingPositionForHandleElem = ((clickCoordinatesInsideTheHandle - positionFirstHandle) > (positionSecondHandle - clickCoordinatesInsideTheHandle));
     const checkingPositionForHandleElemRange = ((clickCoordinatesInsideTheHandle - positionFirstHandle) < (positionSecondHandle - clickCoordinatesInsideTheHandle));
@@ -211,17 +211,18 @@ class Model extends EventEmitter {
     if (coordinatesInsideTheSlider > sliderWidth) {
       coordinatesInsideTheSlider = sliderWidth;
     }
-
     let valueTip = this.calculationValue({ dataForCalculation: dataForSearchPosition, sliderWidth, coordinates: coordinatesInsideTheSlider });
 
-    const widthOfstep = (sliderWidth / (arrayOfPosition.length - 1)); // ширина шага
+    const widthOfstep = (sliderWidth / ((arrayOfPosition[arrayOfPosition.length - 1] - arrayOfPosition[0]) / dataForSearchPosition.step)); // ширина шага
     const halfWidthOfStep = (widthOfstep / 2); // половина щирины шага
 
+
     const currentIndex = arrayOfPosition.indexOf(dataForSearchPosition.value); // индекс первого значения в массиве arrayOfPosition
-    let currentPositionHandle = widthOfstep * currentIndex; // текущая позиция первого элемента
+    let currentPositionHandle = widthOfstep * (currentIndex); // текущая позиция первого элемента
 
     const currentIndexRange = arrayOfPositionRange.indexOf(dataForSearchPosition.valueRange - dataForSearchPosition.step);// индекс второго значения в массиве arrayOfPositionRange
     let currentPositionHandleRange = widthOfstep * currentIndexRange;// текущая позиция второго элемента
+
 
     const currentPositionCursor = coordinatesInsideTheSlider * dataForSearchPosition.step; // текущее положение курсора внутри слайдера
     const middleOfPosition = currentPositionHandle + halfWidthOfStep; // расстояние в пол шага справа от первого элемента
@@ -237,7 +238,7 @@ class Model extends EventEmitter {
           valueTip = dataForSearchPosition.valueRange - dataForSearchPosition.step;
         } else {
           if (currentPositionCursor <= middleOfPosition) { // если положение курсора меньше или равно  middleOfPosition
-            currentPositionHandle = widthOfstep * currentIndex;
+            currentPositionHandle = (widthOfstep * currentIndex);
           } else if (currentPositionCursor > middleOfPosition) { // если положение курсора больше  middleOfPosition
             currentPositionHandle = (widthOfstep * currentIndex) + widthOfstep;
           }
@@ -247,13 +248,13 @@ class Model extends EventEmitter {
           currentPositionHandle = sliderWidth;
         } else {
           if (currentPositionCursor <= middleOfPosition) { // если положение курсора меньше или равно  middleOfPosition
-            currentPositionHandle = widthOfstep * currentIndex;
+            currentPositionHandle = (widthOfstep * currentIndex);
           } else if (currentPositionCursor > middleOfPosition) { // если положение курсора больше  middleOfPosition
             currentPositionHandle = (widthOfstep * currentIndex) + widthOfstep;
           }
         }
       }
-      dataForSearchPosition.value = valueTip;
+      this.pluginOptions.value = valueTip;
     } else if (elementName === 'second') {
       if (checkingMaximumForHandleRange) { // проверка максимума второго элемента
         currentPositionHandleRange = sliderWidth;
@@ -266,7 +267,7 @@ class Model extends EventEmitter {
         currentPositionHandleRange = (widthOfstep * currentIndexRange) + widthOfstep;
       }
       currentPositionHandle = currentPositionHandleRange;
-      dataForSearchPosition.valueRange = valueTip;
+      this.pluginOptions.valueRange = valueTip;
     }
     this.notify('sendPositionWhenMoving', { currentPositionHandle, elementName, valueTip });
     this.notify('updateViewPanel', this.pluginOptions);

@@ -101,12 +101,20 @@ class ViewSlider extends EventEmitter {
   }
   setPosition({ currentPositionHandle, elementName, valueTip }) {
     if (elementName === 'first') {
-      this.$firstHandle.css('left', `${currentPositionHandle}px`);
-      this.$firstTooltip.html(valueTip);
+      const positionBeforeMoving = parseInt(this.$firstHandle.css('left'));
+      const positionAfterMoving = (currentPositionHandle ^ 0);
+      if (positionBeforeMoving !== positionAfterMoving) {
+        this.$firstHandle.css('left', `${currentPositionHandle}px`);
+        this.$firstTooltip.html(valueTip);
+      }
     }
     if (elementName === 'second') {
-      this.$secondHandle.css('left', `${currentPositionHandle}px`);
-      this.$secondTooltip.html(valueTip);
+      const positionBeforeMoving = parseInt(this.$secondHandle.css('left'));
+      const positionAfterMoving = (currentPositionHandle ^ 0);
+      if (positionBeforeMoving !== positionAfterMoving) {
+        this.$secondHandle.css('left', `${currentPositionHandle}px`);
+        this.$secondTooltip.html(valueTip);
+      }
     }
   }
   defaultPosition(minimum, maximum, valueCurrentHandle, elementName, step) {
