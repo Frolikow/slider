@@ -1,37 +1,56 @@
 import EventEmitter from './eventEmiter';
 
 class Controller extends EventEmitter {
+  constructor() {
+    super();
+    this.events = {
+      model: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
+        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
+      viewSlider: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
+        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
+      viewPanel: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
+        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
+    };
+  }
   initViews() {
-    this.notify('sendDataToRender');
+    this.notify('sendDataToRender', { type: 'controller' });
   }
-  updateViewSlider(dataForRender) {
-    this.notify('updateViewSlider', dataForRender);
+  updateViewSlider(dataViewSlider) {
+    dataViewSlider.type = 'controller';
+    this.notify('updateViewSlider', dataViewSlider);
   }
-  updateViewPanel(dataForRender) {
-    this.notify('updateViewPanel', dataForRender);
+  updateViewPanel(dataViewPanel) {
+    dataViewPanel.type = 'controller';
+    this.notify('updateViewPanel', dataViewPanel);
   }
   updatePluginOptions(dataForUpdatePlugin) {
+    dataForUpdatePlugin.type = 'controller';
     this.notify('updatePluginOptionsAndSendDataToRedner', dataForUpdatePlugin);
   }
 
 
-  requestDefaultPosition({ minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth }) {
-    this.notify('calculationDefaultPosition', { minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth });
+  requestDefaultPosition(dataForRequestDefaultPosition) {
+    dataForRequestDefaultPosition.type = 'controller';
+    this.notify('calculationDefaultPosition', dataForRequestDefaultPosition);
   }
 
-  returnDefaultPosition({ defaultPosition, elementName, value }) {
-    this.notify('getDefaultPosition', { defaultPosition, elementName, value });
+  returnDefaultPosition(dataForReturnDefaultPosition) {
+    dataForReturnDefaultPosition.type = 'controller';
+    this.notify('getDefaultPosition', dataForReturnDefaultPosition);
   }
 
-  clickTheSlider({ dataForMoveHandleOnClick, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle }) {
-    this.notify('moveHandleOnClick', { dataForMoveHandleOnClick, sliderWidth, clickCoordinatesInsideTheHandle, positionFirstHandle, positionSecondHandle });
+  clickTheSlider(dataForMoveHandleOnClick) {
+    dataForMoveHandleOnClick.type = 'controller';
+    this.notify('moveHandleOnClick', dataForMoveHandleOnClick);
   }
 
-  searchPositionWhenMoving({ coordinatesInsideTheSlider, sliderWidth, elementName, dataForSearchPosition }) {
-    this.notify('searchPositionWhenMoving', { coordinatesInsideTheSlider, sliderWidth, elementName, dataForSearchPosition });
+  searchPositionWhenMoving(dataForSearchPosition) {
+    dataForSearchPosition.type = 'controller';
+    this.notify('searchPositionWhenMoving', dataForSearchPosition);
   }
-  sendPositionWhenMoving({ currentPositionHandle, elementName, valueTip }) {
-    this.notify('setPosition', { currentPositionHandle, elementName, valueTip });
+  sendPositionWhenMoving(dataWhenMoving) {
+    dataWhenMoving.type = 'controller';
+    this.notify('setPosition', dataWhenMoving);
   }
 }
 

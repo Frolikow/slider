@@ -4,6 +4,13 @@ import EventEmitter from './eventEmiter';
 // const source = require('./template.handlebars');
 
 class ViewPanel extends EventEmitter {
+  constructor() {
+    super();
+    this.events = {
+      controller: ['updateViewPanel', 'initAttributes', 'createPanel', 'sendData'],
+    };
+  }
+
   updateViewPanel(dataViewPanel) {
     if (dataViewPanel.visibilityConfigPanel) {
       dataViewPanel.$slider.find('.slider__configuration').remove();
@@ -151,6 +158,7 @@ class ViewPanel extends EventEmitter {
   }
 
   sendData(dataForUpdatePlugin) {
+    dataForUpdatePlugin.type = 'viewPanel';
     this.notify('updatePluginOptions', dataForUpdatePlugin);
   }
 }

@@ -12,8 +12,12 @@ class EventEmitter {
   }
 
   notify(name, data) {
-    this.observers.forEach(instance => instance[name] && instance[name](data));
+    this.observers.forEach((instance) => {
+      const observerList = instance.events[data.type];
+      const instanceHasMethod = observerList && observerList.includes(name);
+
+      const methodCheck = instanceHasMethod && instance[name](data);
+    });
   }
 }
-
 export default EventEmitter;
