@@ -2,40 +2,25 @@ import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
 class ViewSlider extends EventEmitter {
-  constructor() {
+  constructor(viewOptions) {
     super();
+    this.slider = viewOptions.slider;
+    this.visibilityTooltips = viewOptions.visibilityTooltips;
+    this.verticalOrientation = viewOptions.verticalOrientation;
+    this.rangeStatus = viewOptions.rangeStatus;
     this.events = {
       controller: ['updateViewSlider', 'getCoords', 'moveHandle', 'setPosition', 'defaultPosition',
         'getDefaultPosition', 'enableVisibilityTooltips', 'orientationChange', 'enableRangeSelection', 'renderValueInTooltip', 'sendData'],
     };
   }
   updateViewSlider(dataViewSlider) {
-    dataViewSlider.$slider.html(`<div class='slider__element'>
-                      <div class='slider__handle slider__handle_left'> <div class='slider__value slider__value_left'></div></div>
-                      <div class='slider__handle slider__handle_right'> <div class='slider__value slider__value_right'>
-                    `);
-
-    this.$sliderScale = dataViewSlider.$slider.find('.slider__element');
-    this.$firstHandle = dataViewSlider.$slider.find('.slider__handle_left');
-    this.$firstTooltip = dataViewSlider.$slider.find('.slider__value_left');
-    this.$secondHandle = dataViewSlider.$slider.find('.slider__handle_right');
-    this.$secondTooltip = dataViewSlider.$slider.find('.slider__value_right');
-
-    dataViewSlider.visibilityTooltips ? this.enableVisibilityTooltips(true) : this.enableVisibilityTooltips(false);
-    dataViewSlider.verticalOrientation ? this.orientationChange(true) : this.orientationChange(false);
-    dataViewSlider.rangeStatus ? this.enableRangeSelection(true) : this.enableRangeSelection(false);
-
-    this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.value, 'first', dataViewSlider.step);
-    if (dataViewSlider.rangeStatus) {
-      this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.valueRange, 'second', dataViewSlider.step);
-    }
-    this.renderValueInTooltip(dataViewSlider.value, dataViewSlider.valueRange);
+    this.createSlider(dataViewSlider);
 
     const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
     this.$sliderScale.click((event) => {
       let clickCoordinatesInsideTheHandle;
       const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
-      if (dataViewSlider.verticalOrientation) {
+      if (this.verticalOrientation) {
         clickCoordinatesInsideTheHandle = (event.pageY - sliderCoords.top - (this.$firstHandle.outerHeight() / 2));
       } else {
         clickCoordinatesInsideTheHandle = (event.pageX - sliderCoords.left - (this.$firstHandle.outerWidth() / 2));
@@ -63,6 +48,49 @@ class ViewSlider extends EventEmitter {
     });
   }
 
+  createSlider(dataViewSlider) {
+    this.slider.html(`<div class='slider__element'>
+                      <div class='slider__handle slider__handle_left'> <div class='slider__value slider__value_left'></div></div>
+                      <div class='slider__handle slider__handle_right'> <div class='slider__value slider__value_right'>
+                    `);
+
+    this.$sliderScale = this.slider.find('.slider__element');
+    this.$firstHandle = this.slider.find('.slider__handle_left');
+    this.$firstTooltip = this.slider.find('.slider__value_left');
+    this.$secondHandle = this.slider.find('.slider__handle_right');
+    this.$secondTooltip = this.slider.find('.slider__value_right');
+
+    if (dataViewSlider.rangeStatus === undefined) {
+      dataViewSlider.rangeStatus = this.rangeStatus;
+    } else {
+      dataViewSlider.rangeStatus = dataViewSlider.rangeStatus;
+    }
+
+    if (dataViewSlider.visibilityTooltips === undefined) {
+      dataViewSlider.visibilityTooltips = this.visibilityTooltips;
+    } else {
+      dataViewSlider.visibilityTooltips = dataViewSlider.visibilityTooltips;
+    }
+
+    if (dataViewSlider.verticalOrientation === undefined) {
+      dataViewSlider.verticalOrientation = this.verticalOrientation;
+    } else {
+      dataViewSlider.verticalOrientation = dataViewSlider.verticalOrientation;
+    }
+    this.visibilityTooltips = dataViewSlider.visibilityTooltips;
+    this.verticalOrientation = dataViewSlider.verticalOrientation;
+    this.rangeStatus = dataViewSlider.rangeStatus;
+
+    this.visibilityTooltips ? this.enableVisibilityTooltips(true) : this.enableVisibilityTooltips(false);
+    this.verticalOrientation ? this.orientationChange(true) : this.orientationChange(false);
+    this.rangeStatus ? this.enableRangeSelection(true) : this.enableRangeSelection(false);
+
+    this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.value, 'first', dataViewSlider.step);
+    if (this.rangeStatus) {
+      this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.valueRange, 'second', dataViewSlider.step);
+    }
+    this.renderValueInTooltip(dataViewSlider.value, dataViewSlider.valueRange);
+  }
   getCoords(element) { // получение координат курсора внутри элемента
     const box = element.get(0).getBoundingClientRect();
     return {
@@ -75,7 +103,7 @@ class ViewSlider extends EventEmitter {
     const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
     const handleCoords = this.getCoords(currentItem); // внутренние координаты ползунка
     let clickCoordinatesInsideTheHandle; // координаты клика внутри ползунка
-    if (dataViewSlider.verticalOrientation === true) {
+    if (this.verticalOrientation === true) {
       clickCoordinatesInsideTheHandle = event.pageY - handleCoords.top;
     } else {
       clickCoordinatesInsideTheHandle = event.pageX - handleCoords.left;
@@ -85,7 +113,7 @@ class ViewSlider extends EventEmitter {
     $(document).on('mousemove', (event) => {
       let coordinatesInsideTheSlider; // позиция курсора внутри слайдера
 
-      if (dataViewSlider.verticalOrientation) {
+      if (this.verticalOrientation) {
         coordinatesInsideTheSlider = (event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top) / dataViewSlider.step;
       } else {
         coordinatesInsideTheSlider = (event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left) / dataViewSlider.step;
@@ -102,6 +130,7 @@ class ViewSlider extends EventEmitter {
       dataForSearchPosition.sliderWidth = sliderWidth;
       dataForSearchPosition.elementName = elementName;
       dataForSearchPosition.type = 'viewSlider';
+      dataForSearchPosition.rangeStatus = this.rangeStatus;
       this.notify('searchPositionWhenMoving', dataForSearchPosition);
     });
 

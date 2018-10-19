@@ -7,9 +7,16 @@ import Controller from './Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const model = new Model(options);
-    const viewSlider = new ViewSlider();
-    const viewPanel = new ViewPanel();
+    const { slider, visibilityConfigPanel, visibilityTooltips, verticalOrientation, rangeStatus } = options;
+    const viewOptions = { slider, visibilityConfigPanel, visibilityTooltips, verticalOrientation, rangeStatus };
+    const { minimum, maximum, value, valueRange, step } = options;
+    const stateOptions = { minimum, maximum, value, valueRange, step };
+    console.log(viewOptions);
+    console.log(stateOptions);
+
+    const model = new Model(stateOptions);
+    const viewSlider = new ViewSlider(viewOptions);
+    const viewPanel = new ViewPanel(viewOptions);
     const controller = new Controller();
 
     model.subscribe(controller);

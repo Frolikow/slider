@@ -10,29 +10,20 @@ class Model extends EventEmitter {
     };
 
     this.pluginOptions = {
-      $slider: options.slider,
-      visibilityConfigPanel: options.visibilityConfigPanel,
       minimum: options.minimum,
       maximum: options.maximum,
       value: options.value,
       valueRange: options.valueRange,
       step: options.step,
-      visibilityTooltips: options.visibilityTooltips,
-      verticalOrientation: options.verticalOrientation,
-      rangeStatus: options.rangeStatus,
     };
     this.checksIncomingData();
   }
   checksIncomingData() {
-    this.pluginOptions.visibilityConfigPanel = Boolean(this.pluginOptions.visibilityConfigPanel) || false;
     this.pluginOptions.minimum = Number(this.pluginOptions.minimum) || 1;
     this.pluginOptions.maximum = Number(this.pluginOptions.maximum) || 10;
     this.pluginOptions.value = Number(this.pluginOptions.value) || this.pluginOptions.minimum;
     this.pluginOptions.valueRange = Number(this.pluginOptions.valueRange) || this.pluginOptions.maximum;
     this.pluginOptions.step = Number(this.pluginOptions.step) || 1;
-    this.pluginOptions.visibilityTooltips = Boolean(this.pluginOptions.visibilityTooltips) || false;
-    this.pluginOptions.verticalOrientation = Boolean(this.pluginOptions.verticalOrientation) || false;
-    this.pluginOptions.rangeStatus = Boolean(this.pluginOptions.rangeStatus) || false;
 
     if (this.pluginOptions.minimum >= this.pluginOptions.maximum) {
       this.pluginOptions.minimum = 1;
@@ -73,14 +64,11 @@ class Model extends EventEmitter {
     this.notify('updateViewPanel', dataForRender);
   }
   updatePluginOptionsAndSendDataToRedner(newData) {
-    this.pluginOptions.visibilityConfigPanel = newData.visibilityConfigPanel;
     this.pluginOptions.minimum = newData.minimum;
     this.pluginOptions.maximum = newData.maximum;
     this.pluginOptions.value = newData.value;
     this.pluginOptions.valueRange = newData.valueRange;
     this.pluginOptions.step = newData.step;
-    this.pluginOptions.visibilityTooltips = newData.visibilityTooltips;
-    this.pluginOptions.verticalOrientation = newData.verticalOrientation;
     this.pluginOptions.rangeStatus = newData.rangeStatus;
     this.checksIncomingData();
     this.sendDataToRender();

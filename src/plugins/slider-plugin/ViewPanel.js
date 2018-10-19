@@ -4,17 +4,22 @@ import EventEmitter from './eventEmiter';
 // const source = require('./template.handlebars');
 
 class ViewPanel extends EventEmitter {
-  constructor() {
+  constructor(viewOptions) {
     super();
+    this.slider = viewOptions.slider;
+    this.visibilityConfigPanel = viewOptions.visibilityConfigPanel;
+    this.visibilityTooltips = viewOptions.visibilityTooltips;
+    this.verticalOrientation = viewOptions.verticalOrientation;
+    this.rangeStatus = viewOptions.rangeStatus;
     this.events = {
       controller: ['updateViewPanel', 'initAttributes', 'createPanel', 'sendData'],
     };
   }
 
   updateViewPanel(dataViewPanel) {
-    if (dataViewPanel.visibilityConfigPanel) {
-      dataViewPanel.$slider.find('.slider__configuration').remove();
-      this.createPanel(dataViewPanel.$slider);
+    if (this.visibilityConfigPanel) {
+      this.slider.find('.slider__configuration').remove();
+      this.createPanel(this.slider);
       // /////////////////////////////////////////////
 
       // $(document).find('.test').remove();
@@ -33,17 +38,17 @@ class ViewPanel extends EventEmitter {
       // document.body.appendChild(div);
 
       // /////////////////////////////////////////////
-      const $switchVisibilityTooltips = dataViewPanel.$slider.find('.configuration__show-handle-value');
-      const $orientationSwitch = dataViewPanel.$slider.find('.configuration__orientation');
-      const $rangeSwitch = dataViewPanel.$slider.find('.configuration__range');
+      const $switchVisibilityTooltips = this.slider.find('.configuration__show-handle-value');
+      const $orientationSwitch = this.slider.find('.configuration__orientation');
+      const $rangeSwitch = this.slider.find('.configuration__range');
 
-      const $currentValueFirstHandle = dataViewPanel.$slider.find('.configuration__current-value_first');
-      const $currentValueSecondHandle = dataViewPanel.$slider.find('.configuration__current-value_second');
-      const $minimumValue = dataViewPanel.$slider.find('.configuration__minimum-value');
-      const $maximumValue = dataViewPanel.$slider.find('.configuration__maximum-value');
-      const $stepSizeValue = dataViewPanel.$slider.find('.configuration__size-of-step');
+      const $currentValueFirstHandle = this.slider.find('.configuration__current-value_first');
+      const $currentValueSecondHandle = this.slider.find('.configuration__current-value_second');
+      const $minimumValue = this.slider.find('.configuration__minimum-value');
+      const $maximumValue = this.slider.find('.configuration__maximum-value');
+      const $stepSizeValue = this.slider.find('.configuration__size-of-step');
 
-      if (!dataViewPanel.rangeStatus) {
+      if (!this.rangeStatus) {
         $currentValueSecondHandle.removeClass('configuration__current-value_visible');
         $currentValueSecondHandle.addClass('configuration__current-value_hidden');
       }
@@ -52,16 +57,16 @@ class ViewPanel extends EventEmitter {
       this.initAttributes(kitElements, dataViewPanel);
 
       $switchVisibilityTooltips.on('change', () => {
-        dataViewPanel.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
+        this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
         this.sendData(dataViewPanel);
       });
       $orientationSwitch.on('change', () => {
-        dataViewPanel.verticalOrientation = $orientationSwitch.prop('checked');
+        this.verticalOrientation = $orientationSwitch.prop('checked');
         this.sendData(dataViewPanel);
       });
       $rangeSwitch.on('change', () => {
-        dataViewPanel.rangeStatus = $rangeSwitch.prop('checked');
-        if (dataViewPanel.rangeStatus) {
+        this.rangeStatus = $rangeSwitch.prop('checked');
+        if (this.rangeStatus) {
           $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
           $currentValueSecondHandle.addClass('configuration__current-value_visible');
         } else {
@@ -100,18 +105,18 @@ class ViewPanel extends EventEmitter {
 
   initAttributes(kitElements, dataForInitAttributes) {
     kitElements.$switchVisibilityTooltips.attr({
-      checked: dataForInitAttributes.visibilityTooltips ? 'checked' : null,
+      checked: this.visibilityTooltips ? 'checked' : null,
     });
     kitElements.$orientationSwitch.attr({
-      checked: dataForInitAttributes.verticalOrientation ? 'checked' : null,
+      checked: this.verticalOrientation ? 'checked' : null,
     });
     kitElements.$rangeSwitch.attr({
-      checked: dataForInitAttributes.rangeStatus ? 'checked' : null,
+      checked: this.rangeStatus ? 'checked' : null,
     });
     kitElements.$currentValueFirstHandle.attr({
       step: dataForInitAttributes.step,
       min: dataForInitAttributes.minimum,
-      max: dataForInitAttributes.rangeStatus ? dataForInitAttributes.valueRange - dataForInitAttributes.step : dataForInitAttributes.maximum,
+      max: this.rangeStatus ? dataForInitAttributes.valueRange - dataForInitAttributes.step : dataForInitAttributes.maximum,
       value: dataForInitAttributes.value,
     });
     kitElements.$currentValueSecondHandle.attr({
@@ -159,6 +164,9 @@ class ViewPanel extends EventEmitter {
 
   sendData(dataForUpdatePlugin) {
     dataForUpdatePlugin.type = 'viewPanel';
+    dataForUpdatePlugin.rangeStatus = this.rangeStatus;
+    dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
+    dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;
     this.notify('updatePluginOptions', dataForUpdatePlugin);
   }
 }
