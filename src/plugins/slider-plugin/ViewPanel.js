@@ -45,11 +45,11 @@ class ViewPanel extends EventEmitter {
         $maximumValue,
         $stepSizeValue,
       };
-      this.eveneListeners(kitElements, dataViewPanel);
+      this.eventListeners(kitElements, dataViewPanel);
       this.initAttributes(kitElements, dataViewPanel);
     }
   }
-  eveneListeners(kitElements, dataViewPanel) {
+  eventListeners(kitElements, dataViewPanel) {
     const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle,
       $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = kitElements;
     $switchVisibilityTooltips.on('change', () => {

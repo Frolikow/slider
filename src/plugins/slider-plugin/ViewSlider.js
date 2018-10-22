@@ -13,7 +13,9 @@ class ViewSlider extends EventEmitter {
   }
   updateViewSlider(dataViewSlider) {
     this.createSlider(dataViewSlider);
-
+    this.eventListener(dataViewSlider);
+  }
+  eventListener(dataViewSlider) {
     const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
     this.$sliderScale.click((event) => {
       let clickCoordinatesInsideTheHandle;
@@ -44,7 +46,7 @@ class ViewSlider extends EventEmitter {
       this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
     });
   }
-
+  
   createSlider(dataViewSlider) {
     this.slider.html(`<div class='slider__element'>
                       <div class='slider__handle slider__handle_left'> <div class='slider__value slider__value_left'></div></div>
