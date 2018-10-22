@@ -34,7 +34,6 @@ class ViewSlider extends EventEmitter {
       dataForMoveHandleOnClick.positionFirstHandle = positionFirstHandle;
       dataForMoveHandleOnClick.positionSecondHandle = positionSecondHandle;
 
-      dataForMoveHandleOnClick.type = 'viewSlider';
       this.notify('clickTheSlider', dataForMoveHandleOnClick);
     });
 
@@ -127,7 +126,6 @@ class ViewSlider extends EventEmitter {
       dataForSearchPosition.coordinatesInsideTheSlider = coordinatesInsideTheSlider;
       dataForSearchPosition.sliderWidth = sliderWidth;
       dataForSearchPosition.elementName = elementName;
-      dataForSearchPosition.type = 'viewSlider';
       dataForSearchPosition.rangeStatus = this.rangeStatus;
       this.notify('searchPositionWhenMoving', dataForSearchPosition);
     });
@@ -158,7 +156,6 @@ class ViewSlider extends EventEmitter {
     const scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
 
     const dataForRequestDefaultPosition = { minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth };
-    dataForRequestDefaultPosition.type = 'viewSlider';
     this.notify('requestDefaultPosition', dataForRequestDefaultPosition);
   }
   getDefaultPosition(dataForReturnDefaultPosition) {
@@ -211,7 +208,6 @@ class ViewSlider extends EventEmitter {
     this.$secondTooltip.text(secondValue);
   }
   sendData(dataToSend) {
-    dataToSend.type = 'viewSlider';
     this.notify('updatePluginOptions', dataToSend);
   }
 }

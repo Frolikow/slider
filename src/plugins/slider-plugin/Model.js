@@ -54,9 +54,7 @@ class Model extends EventEmitter {
 
   sendDataToRender() {
     const dataForRender = this.pluginOptions;
-    dataForRender.type = 'model';
     this.notify('updateViewSlider', dataForRender);
-    dataForRender.type = 'model';
     this.notify('updateViewPanel', dataForRender);
   }
   updatePluginOptionsAndSendDataToRedner(newData) {
@@ -71,23 +69,12 @@ class Model extends EventEmitter {
   }
 
   calculationDefaultPosition(dataForRequestDefaultPosition) { // установка ползунка в позицию "по-умолчанию" = value
-    const defaultValuesArray = [];
-    let currentValue = 0;
+    const defaultValuesArray = this.createArrayOfPosition(null, dataForRequestDefaultPosition);
 
     if (dataForRequestDefaultPosition.valueCurrentHandle <= dataForRequestDefaultPosition.minimum) {
       dataForRequestDefaultPosition.valueCurrentHandle = dataForRequestDefaultPosition.minimum;
     } else if (dataForRequestDefaultPosition.valueCurrentHandle >= dataForRequestDefaultPosition.maximum) {
       dataForRequestDefaultPosition.valueCurrentHandle = dataForRequestDefaultPosition.maximum;
-    }
-    let defaultMinimum = dataForRequestDefaultPosition.minimum;
-    while (currentValue < dataForRequestDefaultPosition.maximum) {
-      if (defaultMinimum > dataForRequestDefaultPosition.maximum) {
-        break;
-      } else {
-        currentValue = defaultMinimum;
-        defaultMinimum += dataForRequestDefaultPosition.step;
-        defaultValuesArray.push(currentValue);
-      }
     }
 
     const stepOfDefaultPosition = dataForRequestDefaultPosition.scaleWidth / (defaultValuesArray.length - 1);
@@ -107,7 +94,7 @@ class Model extends EventEmitter {
         this.pluginOptions.valueRange = defaultValuesArray[defaultValuesArray.length - 1];
       }
     }
-    const dataForReturnDefaultPosition = { defaultPosition, elementName: dataForRequestDefaultPosition.elementName, valueCurrentHandle: dataForRequestDefaultPosition.valueCurrentHandle, type: 'model' };
+    const dataForReturnDefaultPosition = { defaultPosition, elementName: dataForRequestDefaultPosition.elementName, valueCurrentHandle: dataForRequestDefaultPosition.valueCurrentHandle };
     this.notify('returnDefaultPosition', dataForReturnDefaultPosition);
   }
 
@@ -130,23 +117,27 @@ class Model extends EventEmitter {
     return newValue;
   }
 
-  moveHandleOnClick(dataForMoveHandleOnClick) { // обработка клика по шкале слайдера
-    const arrayPositionAtClick = this.createArrayOfPosition(null, dataForMoveHandleOnClick);
-    dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle /= dataForMoveHandleOnClick.step;
-
-    const stepWidth = (dataForMoveHandleOnClick.sliderWidth / ((arrayPositionAtClick[arrayPositionAtClick.length - 1] - arrayPositionAtClick[0]) / dataForMoveHandleOnClick.step));
+  searchPositionOnClick(dataForSearchPositionOnClick) {
+    const arrayPositionAtClick = this.createArrayOfPosition(null, dataForSearchPositionOnClick);
+    const stepWidth = (dataForSearchPositionOnClick.sliderWidth / ((arrayPositionAtClick[arrayPositionAtClick.length - 1] - arrayPositionAtClick[0]) / dataForSearchPositionOnClick.step));
     let newPosition;
-    const indexNumberValue = ((dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle + (stepWidth / 2)) / stepWidth) ^ 0;
+    const indexNumberValue = ((dataForSearchPositionOnClick.clickCoordinatesInsideTheHandle + (stepWidth / 2)) / stepWidth) ^ 0;
     const middleBetweenElements = parseInt((stepWidth * indexNumberValue) + (stepWidth / 2));
-    if (dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle < middleBetweenElements) {
+    if (dataForSearchPositionOnClick.clickCoordinatesInsideTheHandle < middleBetweenElements) {
       newPosition = (stepWidth * indexNumberValue);
-    } else if (dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle > middleBetweenElements) {
+    } else if (dataForSearchPositionOnClick.clickCoordinatesInsideTheHandle > middleBetweenElements) {
       newPosition = (stepWidth * indexNumberValue) + stepWidth;
     }
 
-    if (newPosition > dataForMoveHandleOnClick.sliderWidth) {
-      newPosition = dataForMoveHandleOnClick.sliderWidth;
+    if (newPosition > dataForSearchPositionOnClick.sliderWidth) {
+      newPosition = dataForSearchPositionOnClick.sliderWidth;
     }
+  }
+  moveHandleOnClick(dataForMoveHandleOnClick) { // обработка клика по шкале слайдера
+    dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle /= dataForMoveHandleOnClick.step;
+
+    this.searchPositionOnClick(dataForMoveHandleOnClick);
+
     const newValue = this.calculationValue({ dataForCalculation: dataForMoveHandleOnClick, sliderWidth: dataForMoveHandleOnClick.sliderWidth, coordinates: dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle });
     dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle *= dataForMoveHandleOnClick.step;
 
@@ -204,25 +195,48 @@ class Model extends EventEmitter {
     if (dataForSearchPosition.coordinatesInsideTheSlider > dataForSearchPosition.sliderWidth) {
       dataForSearchPosition.coordinatesInsideTheSlider = dataForSearchPosition.sliderWidth;
     }
-    let valueTip = this.calculationValue({ dataForCalculation: dataForSearchPosition, sliderWidth: dataForSearchPosition.sliderWidth, coordinates: dataForSearchPosition.coordinatesInsideTheSlider });
 
     const widthOfstep = (dataForSearchPosition.sliderWidth / ((arrayOfPosition[arrayOfPosition.length - 1] - arrayOfPosition[0]) / dataForSearchPosition.step)); // ширина шага
-    const halfWidthOfStep = (widthOfstep / 2); // половина щирины шага
 
 
     const currentIndex = arrayOfPosition.indexOf(dataForSearchPosition.value); // индекс первого значения в массиве arrayOfPosition
-    let currentPositionHandle = widthOfstep * (currentIndex); // текущая позиция первого элемента
 
     const currentIndexRange = arrayOfPositionRange.indexOf(dataForSearchPosition.valueRange - dataForSearchPosition.step);// индекс второго значения в массиве arrayOfPositionRange
-    let currentPositionHandleRange = widthOfstep * currentIndexRange;// текущая позиция второго элемента
 
 
     const currentPositionCursor = dataForSearchPosition.coordinatesInsideTheSlider * dataForSearchPosition.step; // текущее положение курсора внутри слайдера
-    const middleOfPosition = currentPositionHandle + halfWidthOfStep; // расстояние в пол шага справа от первого элемента
     const checkingMaximumForHandleWithIntervalIncluded = (currentPositionCursor >= (widthOfstep * (arrayOfPositionRange.length - 1)) || currentIndexRange === -1);
     const checkingMaximumForHandleWithIntervalTurnedOff = (currentPositionCursor >= (widthOfstep * (arrayOfPosition.length - 1)) || currentIndex === -1);
     const checkingMaximumForHandleRange = (currentPositionCursor >= (widthOfstep * (arrayOfPosition.length - 1)) || dataForSearchPosition.valueRange === -1);
     const checkingMinimumForHandleRange = (currentPositionCursor <= (widthOfstep * arrayOfPosition.indexOf(dataForSearchPosition.value + dataForSearchPosition.step)));
+
+    this.positionDeterminationWhenMoving({
+      dataForSearchPosition,
+      widthOfstep,
+      currentIndexRange,
+      currentPositionCursor,
+      currentIndex,
+      checkingMaximumForHandleWithIntervalIncluded,
+      checkingMaximumForHandleWithIntervalTurnedOff,
+      checkingMaximumForHandleRange,
+      checkingMinimumForHandleRange,
+      arrayOfPosition,
+    });
+  }
+
+  positionDeterminationWhenMoving({ dataForSearchPosition, widthOfstep, currentIndexRange,
+    currentPositionCursor, currentIndex, checkingMaximumForHandleWithIntervalIncluded,
+    checkingMaximumForHandleWithIntervalTurnedOff, checkingMaximumForHandleRange, checkingMinimumForHandleRange, arrayOfPosition }) {
+    let valueTip = this.calculationValue({
+      dataForCalculation: dataForSearchPosition,
+      sliderWidth: dataForSearchPosition.sliderWidth,
+      coordinates: dataForSearchPosition.coordinatesInsideTheSlider,
+    });
+    let currentPositionHandle = widthOfstep * (currentIndex); // текущая позиция первого элемента
+    let currentPositionHandleRange = widthOfstep * currentIndexRange;// текущая позиция второго элемента
+
+    const halfWidthOfStep = (widthOfstep / 2); // половина щирины шага
+    const middleOfPosition = currentPositionHandle + halfWidthOfStep; // расстояние в пол шага справа от первого элемента
 
     if (dataForSearchPosition.elementName === 'first') {
       if (dataForSearchPosition.rangeStatus) {
@@ -263,10 +277,8 @@ class Model extends EventEmitter {
       this.pluginOptions.valueRange = valueTip;
     }
     const dataWhenMoving = { currentPositionHandle, elementName: dataForSearchPosition.elementName, valueTip };
-    dataWhenMoving.type = 'model';
 
     const dataForUpdateViewPanel = this.pluginOptions;
-    dataForUpdateViewPanel.type = 'model';
 
     this.notify('sendPositionWhenMoving', dataWhenMoving);
     this.notify('updateViewPanel', dataForUpdateViewPanel);

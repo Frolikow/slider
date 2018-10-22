@@ -19,28 +19,11 @@ class ViewPanel extends EventEmitter {
     if (this.visibilityConfigPanel) {
       this.slider.find('.slider__configuration').remove();
       this.createPanel(this.slider);
-      // /////////////////////////////////////////////
 
-      // $(document).find('.test').remove();
-      // this.bookListingTemplate = require('./template.handlebars');
-      // const div = document.createElement('div');
-      // div.className = 'test';
-      // div.innerHTML = this.bookListingTemplate({
-      //   title: 'test',
-      //   body: 'Your books are due next Tuesday',
-      //   // books: [
-      //   //   { title: 'A book', synopsis: 'With a description' },
-      //   //   { title: 'Another book', synopsis: 'From a very good author' },
-      //   //   { title: 'Book without synopsis' },
-      //   // ],
-      // });
-      // document.body.appendChild(div);
 
-      // /////////////////////////////////////////////
       const $switchVisibilityTooltips = this.slider.find('.configuration__show-handle-value');
       const $orientationSwitch = this.slider.find('.configuration__orientation');
       const $rangeSwitch = this.slider.find('.configuration__range');
-
       const $currentValueFirstHandle = this.slider.find('.configuration__current-value_first');
       const $currentValueSecondHandle = this.slider.find('.configuration__current-value_second');
       const $minimumValue = this.slider.find('.configuration__minimum-value');
@@ -52,54 +35,67 @@ class ViewPanel extends EventEmitter {
         $currentValueSecondHandle.addClass('configuration__current-value_hidden');
       }
 
-      const kitElements = { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle, $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue };
+      const kitElements = {
+        $switchVisibilityTooltips,
+        $orientationSwitch,
+        $rangeSwitch,
+        $currentValueFirstHandle,
+        $currentValueSecondHandle,
+        $minimumValue,
+        $maximumValue,
+        $stepSizeValue,
+      };
+      this.eveneListeners(kitElements, dataViewPanel);
       this.initAttributes(kitElements, dataViewPanel);
-
-      $switchVisibilityTooltips.on('change', () => {
-        this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
-        this.sendData(dataViewPanel);
-      });
-      $orientationSwitch.on('change', () => {
-        this.verticalOrientation = $orientationSwitch.prop('checked');
-        this.sendData(dataViewPanel);
-      });
-      $rangeSwitch.on('change', () => {
-        this.rangeStatus = $rangeSwitch.prop('checked');
-        if (this.rangeStatus) {
-          $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
-          $currentValueSecondHandle.addClass('configuration__current-value_visible');
-        } else {
-          $currentValueSecondHandle.removeClass('configuration__current-value_visible');
-          $currentValueSecondHandle.addClass('configuration__current-value_hidden');
-        }
-        this.sendData(dataViewPanel);
-      });
-
-      $currentValueFirstHandle.on('focusout', () => {
-        dataViewPanel.value = +$currentValueFirstHandle.val();
-        this.sendData(dataViewPanel);
-      });
-      $currentValueSecondHandle.on('focusout', () => {
-        dataViewPanel.valueRange = +$currentValueSecondHandle.val();
-        this.sendData(dataViewPanel);
-      });
-      $minimumValue.on('focusout', () => {
-        dataViewPanel.minimum = +$minimumValue.val();
-        dataViewPanel.value = dataViewPanel.value < dataViewPanel.minimum ? dataViewPanel.minimum : dataViewPanel.value;
-        dataViewPanel.valueRange = dataViewPanel.valueRange <= dataViewPanel.minimum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-        this.sendData(dataViewPanel);
-      });
-      $maximumValue.on('focusout', () => {
-        dataViewPanel.maximum = +$maximumValue.val();
-        dataViewPanel.valueRange = dataViewPanel.valueRange > dataViewPanel.maximum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-        dataViewPanel.value = dataViewPanel.value >= dataViewPanel.maximum ? dataViewPanel.minimum : dataViewPanel.value;
-        this.sendData(dataViewPanel);
-      });
-      $stepSizeValue.on('focusout', () => {
-        dataViewPanel.step = +$stepSizeValue.val();
-        this.sendData(dataViewPanel);
-      });
     }
+  }
+  eveneListeners(kitElements, dataViewPanel) {
+    const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle,
+      $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = kitElements;
+    $switchVisibilityTooltips.on('change', () => {
+      this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
+      this.sendData(dataViewPanel);
+    });
+    $orientationSwitch.on('change', () => {
+      this.verticalOrientation = $orientationSwitch.prop('checked');
+      this.sendData(dataViewPanel);
+    });
+    $rangeSwitch.on('change', () => {
+      this.rangeStatus = $rangeSwitch.prop('checked');
+      if (this.rangeStatus) {
+        $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
+        $currentValueSecondHandle.addClass('configuration__current-value_visible');
+      } else {
+        $currentValueSecondHandle.removeClass('configuration__current-value_visible');
+        $currentValueSecondHandle.addClass('configuration__current-value_hidden');
+      }
+      this.sendData(dataViewPanel);
+    });
+
+    $currentValueFirstHandle.on('focusout', () => {
+      dataViewPanel.value = +$currentValueFirstHandle.val();
+      this.sendData(dataViewPanel);
+    });
+    $currentValueSecondHandle.on('focusout', () => {
+      dataViewPanel.valueRange = +$currentValueSecondHandle.val();
+      this.sendData(dataViewPanel);
+    });
+    $minimumValue.on('focusout', () => {
+      dataViewPanel.minimum = +$minimumValue.val();
+      dataViewPanel.value = dataViewPanel.value < dataViewPanel.minimum ? dataViewPanel.minimum : dataViewPanel.value;
+      dataViewPanel.valueRange = dataViewPanel.valueRange <= dataViewPanel.minimum ? dataViewPanel.maximum : dataViewPanel.valueRange;
+      this.sendData(dataViewPanel);
+    });
+    $maximumValue.on('focusout', () => {
+      dataViewPanel.maximum = +$maximumValue.val();
+      dataViewPanel.valueRange = dataViewPanel.valueRange > dataViewPanel.maximum ? dataViewPanel.maximum : dataViewPanel.valueRange;
+      dataViewPanel.value = dataViewPanel.value >= dataViewPanel.maximum ? dataViewPanel.minimum : dataViewPanel.value;
+      this.sendData(dataViewPanel);
+    });
+    $stepSizeValue.on('focusout', () => {
+      dataViewPanel.step = +$stepSizeValue.val();
+      this.sendData(dataViewPanel);
+    });
   }
 
   initAttributes(kitElements, dataForInitAttributes) {
@@ -159,10 +155,29 @@ class ViewPanel extends EventEmitter {
             <input type='number' class='configuration__maximum-value'>
             <label>Размер шага слайдера</label> 
             <input type='number' class='configuration__size-of-step'>`);
+
+
+    // /////////////////////////////////////////////
+
+    // $(document).find('.test').remove();
+    // this.bookListingTemplate = require('./template.handlebars');
+    // const div = document.createElement('div');
+    // div.className = 'test';
+    // div.innerHTML = this.bookListingTemplate({
+    //   title: 'test',
+    //   body: 'Your books are due next Tuesday',
+    //   // books: [
+    //   //   { title: 'A book', synopsis: 'With a description' },
+    //   //   { title: 'Another book', synopsis: 'From a very good author' },
+    //   //   { title: 'Book without synopsis' },
+    //   // ],
+    // });
+    // document.body.appendChild(div);
+
+    // /////////////////////////////////////////////
   }
 
   sendData(dataForUpdatePlugin) {
-    dataForUpdatePlugin.type = 'viewPanel';
     dataForUpdatePlugin.rangeStatus = this.rangeStatus;
     dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
     dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;
