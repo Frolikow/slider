@@ -1,6 +1,10 @@
-class EventEmitter {
+import Checkers from './Checkers';
+
+class EventEmitter extends Checkers {
   constructor() {
+    super();
     this.observers = [];
+    this.emitter = null;
   }
 
   subscribe(instance) {
@@ -10,13 +14,12 @@ class EventEmitter {
   unSubscribe(instance) {
     this.observers.splice(this.observers.indexOf(instance), 1);
   }
-
-  notify(name, data) {
+  addEmitter(constructorName) {
+    this.emitter = constructorName;
+  }
+  notify(methodName, data) {
     this.observers.forEach((instance) => {
-      const observerList = instance.events[data.type];
-      const instanceHasMethod = observerList && observerList.includes(name);
-
-      const methodCheck = instanceHasMethod && instance[name](data);
+      this.methodCheck(instance.constructor.name, this.emitter, methodName) && instance[methodName](data);
     });
   }
 }

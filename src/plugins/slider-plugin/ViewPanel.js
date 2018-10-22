@@ -6,14 +6,13 @@ import EventEmitter from './eventEmiter';
 class ViewPanel extends EventEmitter {
   constructor(viewOptions) {
     super();
+    super.addEmitter(this.constructor.name);
+
     this.slider = viewOptions.slider;
     this.visibilityConfigPanel = viewOptions.visibilityConfigPanel;
     this.visibilityTooltips = viewOptions.visibilityTooltips;
     this.verticalOrientation = viewOptions.verticalOrientation;
     this.rangeStatus = viewOptions.rangeStatus;
-    this.events = {
-      controller: ['updateViewPanel', 'initAttributes', 'createPanel', 'sendData'],
-    };
   }
 
   updateViewPanel(dataViewPanel) {

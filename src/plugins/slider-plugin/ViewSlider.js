@@ -4,14 +4,12 @@ import EventEmitter from './eventEmiter';
 class ViewSlider extends EventEmitter {
   constructor(viewOptions) {
     super();
+    super.addEmitter(this.constructor.name);
+
     this.slider = viewOptions.slider;
     this.visibilityTooltips = viewOptions.visibilityTooltips;
     this.verticalOrientation = viewOptions.verticalOrientation;
     this.rangeStatus = viewOptions.rangeStatus;
-    this.events = {
-      controller: ['updateViewSlider', 'getCoords', 'moveHandle', 'setPosition', 'defaultPosition',
-        'getDefaultPosition', 'enableVisibilityTooltips', 'orientationChange', 'enableRangeSelection', 'renderValueInTooltip', 'sendData'],
-    };
   }
   updateViewSlider(dataViewSlider) {
     this.createSlider(dataViewSlider);

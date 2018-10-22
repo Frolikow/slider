@@ -3,11 +3,7 @@ import EventEmitter from './eventEmiter';
 class Model extends EventEmitter {
   constructor(options) {
     super();
-
-    this.events = {
-      controller: ['checksIncomingData', 'sendDataToRender', 'updatePluginOptionsAndSendDataToRedner', 'calculationDefaultPosition', 'calculationValue',
-        'moveHandleOnClick', 'createArrayOfPosition', 'searchPositionWhenMoving'],
-    };
+    super.addEmitter(this.constructor.name);
 
     this.pluginOptions = {
       minimum: options.minimum,

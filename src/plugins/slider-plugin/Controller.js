@@ -3,14 +3,7 @@ import EventEmitter from './eventEmiter';
 class Controller extends EventEmitter {
   constructor() {
     super();
-    this.events = {
-      model: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
-        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
-      viewSlider: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
-        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
-      viewPanel: ['initViews', 'updateViewSlider', 'updateViewPanel', 'updatePluginOptions', 'requestDefaultPosition',
-        'returnDefaultPosition', 'clickTheSlider', 'searchPositionWhenMoving', 'sendPositionWhenMoving'],
-    };
+    super.addEmitter(this.constructor.name);
   }
   initViews() {
     this.notify('sendDataToRender', { type: 'controller' });

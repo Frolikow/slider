@@ -11,8 +11,6 @@ import Controller from './Controller';
     const viewOptions = { slider, visibilityConfigPanel, visibilityTooltips, verticalOrientation, rangeStatus };
     const { minimum, maximum, value, valueRange, step } = options;
     const stateOptions = { minimum, maximum, value, valueRange, step };
-    console.log(viewOptions);
-    console.log(stateOptions);
 
     const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(viewOptions);
