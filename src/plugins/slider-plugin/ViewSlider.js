@@ -12,7 +12,7 @@ class ViewSlider extends EventEmitter {
     this.rangeStatus = viewOptions.rangeStatus;
   }
   updateViewSlider(dataViewSlider) {
-    this.createSlider(dataViewSlider);
+    this.updateSlider(dataViewSlider);
     this.eventListener(dataViewSlider);
   }
   eventListener(dataViewSlider) {
@@ -46,12 +46,10 @@ class ViewSlider extends EventEmitter {
       this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
     });
   }
-  
-  createSlider(dataViewSlider) {
-    this.slider.html(`<div class='slider__element'>
-                      <div class='slider__handle slider__handle_left'> <div class='slider__value slider__value_left'></div></div>
-                      <div class='slider__handle slider__handle_right'> <div class='slider__value slider__value_right'>
-                    `);
+
+  updateSlider(dataViewSlider) {
+    this.slider.find('.slider__element').remove();
+    this.createSlider();
 
     this.$sliderScale = this.slider.find('.slider__element');
     this.$firstHandle = this.slider.find('.slider__handle_left');
@@ -211,6 +209,27 @@ class ViewSlider extends EventEmitter {
   }
   sendData(dataToSend) {
     this.notify('updatePluginOptions', dataToSend);
+  }
+
+  createSlider() {
+    this.bookListingTemplate = require('./sliderTemplate.handlebars');
+    const sliderElement = document.createElement('div');
+    sliderElement.className = 'slider__element';
+
+    sliderElement.innerHTML = this.bookListingTemplate({
+      handles: [{
+        className: 'slider__handle slider__handle_left',
+        tooltip: [{
+          className: 'slider__value slider__value_left',
+        }],
+      }, {
+        className: 'slider__handle slider__handle_right',
+        tooltip: [{
+          className: 'slider__value slider__value_right',
+        }],
+      }],
+    });
+    this.slider.append(sliderElement);
   }
 }
 

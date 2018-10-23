@@ -35,11 +35,11 @@ const common = {
           pretty: true
         }
       }
-      // ,
-      // {
-      //   test: /\.handlebars$/,
-      //   loader: "handlebars-loader"
-      // }
+      ,
+      {
+        test: /\.handlebars$/,
+        loader: "handlebars-loader"
+      }
     ]
   },
 

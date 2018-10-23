@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import EventEmitter from './eventEmiter';
 
-// const source = require('./template.handlebars');
-
 class ViewPanel extends EventEmitter {
   constructor(viewOptions) {
     super();
@@ -19,7 +17,6 @@ class ViewPanel extends EventEmitter {
     if (this.visibilityConfigPanel) {
       this.slider.find('.slider__configuration').remove();
       this.createPanel(this.slider);
-
 
       const $switchVisibilityTooltips = this.slider.find('.configuration__show-handle-value');
       const $orientationSwitch = this.slider.find('.configuration__orientation');
@@ -137,51 +134,68 @@ class ViewPanel extends EventEmitter {
     });
   }
 
-  createPanel(sliderBlock) {
-    sliderBlock.append(`<div class='slider__configuration'>
-    <div class='configuration'>
-    
-    <label> <input type='checkbox' class='configuration__show-handle-value'>Включить  флажки</label>
-          <label> <input type='checkbox' class='configuration__orientation'>Включить вертикальное отображение</label>
-          <label> <input type='checkbox'  class='configuration__range'>Включить выбор интервала</label>
-          
-          <label>Текущее значение</label> 
-          <div class='configuration__current-value'>
-          <input type='number' class='configuration__current-value_first'> 
-          <input type='number' class='configuration__current-value_second'> </div>
-          <label>Минимальное значение слайдера</label> 
-            <input type='number' class='configuration__minimum-value'>
-            <label>Максимальное значение слайдера</label> 
-            <input type='number' class='configuration__maximum-value'>
-            <label>Размер шага слайдера</label> 
-            <input type='number' class='configuration__size-of-step'>`);
-
-
-    // /////////////////////////////////////////////
-
-    // $(document).find('.test').remove();
-    // this.bookListingTemplate = require('./template.handlebars');
-    // const div = document.createElement('div');
-    // div.className = 'test';
-    // div.innerHTML = this.bookListingTemplate({
-    //   title: 'test',
-    //   body: 'Your books are due next Tuesday',
-    //   // books: [
-    //   //   { title: 'A book', synopsis: 'With a description' },
-    //   //   { title: 'Another book', synopsis: 'From a very good author' },
-    //   //   { title: 'Book without synopsis' },
-    //   // ],
-    // });
-    // document.body.appendChild(div);
-
-    // /////////////////////////////////////////////
-  }
-
   sendData(dataForUpdatePlugin) {
     dataForUpdatePlugin.rangeStatus = this.rangeStatus;
     dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
     dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;
     this.notify('updatePluginOptions', dataForUpdatePlugin);
+  }
+
+  createPanel(sliderBlock) {
+    this.bookListingTemplate = require('./panelTemplate.handlebars');
+    const configurationPanel = document.createElement('div');
+    configurationPanel.className = 'slider__configuration';
+
+    configurationPanel.innerHTML = this.bookListingTemplate({
+      elements: [{
+        blockClassName: 'configuration',
+        checkboxElements: [{
+          title: 'Включить флажки',
+          inputType: 'checkbox',
+          className: 'configuration__show-handle-value',
+        }, {
+          title: 'Включить вертикальное отображение',
+          inputType: 'checkbox',
+          className: 'configuration__orientation',
+        }, {
+          title: 'Включить выбор интервала',
+          inputType: 'checkbox',
+          className: 'configuration__range',
+        }],
+        inputElements: [
+          {
+            title: 'Текущее значение',
+            className: 'configuration__current-value',
+            valuesInput: [{
+              inputType: 'number',
+              className: 'configuration__current-value_first',
+            }, {
+              inputType: 'number',
+              className: 'configuration__current-value_second',
+            }],
+          }, {
+            title: 'Минимальное значение слайдера',
+            valuesInput: [{
+              inputType: 'number',
+              className: 'configuration__minimum-value',
+            }],
+          }, {
+            title: 'Максимальное значение слайдера',
+            valuesInput: [{
+              inputType: 'number',
+              className: 'configuration__maximum-value',
+            }],
+          }, {
+            title: 'Размер шага слайдера',
+            valuesInput: [{
+              inputType: 'number',
+              className: 'configuration__size-of-step',
+            }],
+          },
+        ],
+      }],
+    });
+    sliderBlock.append(configurationPanel);
   }
 }
 

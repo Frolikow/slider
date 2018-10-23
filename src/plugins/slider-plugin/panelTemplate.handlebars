@@ -1,0 +1,15 @@
+{{#each elements}}
+<div class='{{blockClassName}}'>
+    {{#each checkboxElements}}
+    <label> <input type='{{inputType}}' class='{{className}}'>{{title}}</label>
+    {{/each}}
+
+    {{#each inputElements}}
+    <label>{{title}}</label>
+    <div class='{{className}}'>
+        {{#each valuesInput}}
+        <input type='{{inputType}}' class='{{className}}'>
+        {{/each}}
+    </div>
+    {{/each}}
+    {{/each}}

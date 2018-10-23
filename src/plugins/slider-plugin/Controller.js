@@ -6,7 +6,7 @@ class Controller extends EventEmitter {
     super.addEmitter(this.constructor.name);
   }
   initViews() {
-    this.notify('sendDataToRender');
+    this.notify('sendDataFromModel');
   }
   updateViewSlider(dataViewSlider) {
     this.notify('updateViewSlider', dataViewSlider);
@@ -15,7 +15,7 @@ class Controller extends EventEmitter {
     this.notify('updateViewPanel', dataViewPanel);
   }
   updatePluginOptions(dataForUpdatePlugin) {
-    this.notify('updatePluginOptionsAndSendDataToRedner', dataForUpdatePlugin);
+    this.notify('updatePluginOptionsAndSendData', dataForUpdatePlugin);
   }
 
 

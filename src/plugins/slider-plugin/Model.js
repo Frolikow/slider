@@ -52,12 +52,12 @@ class Model extends EventEmitter {
     }
   }
 
-  sendDataToRender() {
+  sendDataFromModel() {
     const dataForRender = this.pluginOptions;
     this.notify('updateViewSlider', dataForRender);
     this.notify('updateViewPanel', dataForRender);
   }
-  updatePluginOptionsAndSendDataToRedner(newData) {
+  updatePluginOptionsAndSendData(newData) {
     this.pluginOptions.minimum = newData.minimum;
     this.pluginOptions.maximum = newData.maximum;
     this.pluginOptions.value = newData.value;
@@ -65,7 +65,7 @@ class Model extends EventEmitter {
     this.pluginOptions.step = newData.step;
     this.pluginOptions.rangeStatus = newData.rangeStatus;
     this.checksIncomingData();
-    this.sendDataToRender();
+    this.sendDataFromModel();
   }
 
   calculationDefaultPosition(dataForRequestDefaultPosition) { // установка ползунка в позицию "по-умолчанию" = value
@@ -163,7 +163,7 @@ class Model extends EventEmitter {
     } else { // если интервал ВЫКЛючен
       dataForMoveHandleOnClick.value = parseInt(newValue);
     }
-    this.updatePluginOptionsAndSendDataToRedner(dataForMoveHandleOnClick);
+    this.updatePluginOptionsAndSendData(dataForMoveHandleOnClick);
   }
   createArrayOfPosition(elementName, dataForCreateArrays) {
     let currentValue = 0;
