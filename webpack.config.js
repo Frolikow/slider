@@ -39,7 +39,8 @@ const common = {
       {
         test: /\.handlebars$/,
         loader: "handlebars-loader"
-      }
+      },
+      { test: /\.test.js$/, loader: 'ignore-loader' }
     ]
   },
 

@@ -1,4 +1,4 @@
-import Checkers from './Checkers';
+import Checkers from '../Checkers/Checkers';
 
 class EventEmitter extends Checkers {
   constructor() {

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import EventEmitter from './eventEmiter';
+import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewSlider extends EventEmitter {
   constructor(viewOptions) {
@@ -16,7 +16,8 @@ class ViewSlider extends EventEmitter {
     this.eventListener(dataViewSlider);
   }
   eventListener(dataViewSlider) {
-    const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
+    const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth(); // убрать в ссвойства класса!!!
+
     this.$sliderScale.click((event) => {
       let clickCoordinatesInsideTheHandle;
       const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
@@ -32,7 +33,7 @@ class ViewSlider extends EventEmitter {
       const dataForMoveHandleOnClick = dataViewSlider;
 
       dataForMoveHandleOnClick.sliderWidth = sliderWidth;
-      dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle = clickCoordinatesInsideTheHandle;
+      dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle = clickCoordinatesInsideTheHandle; // переимиенговать
       dataForMoveHandleOnClick.positionFirstHandle = positionFirstHandle;
       dataForMoveHandleOnClick.positionSecondHandle = positionSecondHandle;
 
@@ -46,8 +47,8 @@ class ViewSlider extends EventEmitter {
       this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
     });
   }
-
-  updateSlider(dataViewSlider) {
+  // для событий сделать общей метод!!!!!
+  updateSlider(dataViewSlider) { // переделать чтоб работало только для инициализации!!! (только для обноваления, инициализация отдельно)
     this.slider.find('.slider__element').remove();
     this.createSlider();
 
@@ -125,7 +126,7 @@ class ViewSlider extends EventEmitter {
       const dataForSearchPosition = dataViewSlider;
       dataForSearchPosition.coordinatesInsideTheSlider = coordinatesInsideTheSlider;
       dataForSearchPosition.sliderWidth = sliderWidth;
-      dataForSearchPosition.elementName = elementName;
+      dataForSearchPosition.elementName = elementName; // переименовать везде на type !!!!!!!!!!!1
       dataForSearchPosition.rangeStatus = this.rangeStatus;
       this.notify('searchPositionWhenMoving', dataForSearchPosition);
     });
@@ -207,9 +208,9 @@ class ViewSlider extends EventEmitter {
     this.$firstTooltip.text(firstValue);
     this.$secondTooltip.text(secondValue);
   }
-  sendData(dataToSend) {
-    this.notify('updatePluginOptions', dataToSend);
-  }
+  // sendData(dataToSend) {
+  //   this.notify('updatePluginOptions', dataToSend);
+  // }
 
   createSlider() {
     this.bookListingTemplate = require('./sliderTemplate.handlebars');

@@ -1,18 +1,17 @@
-import EventEmitter from './eventEmiter';
+import EventEmitter from '../eventEmiter/eventEmiter';
 
 class Model extends EventEmitter {
   constructor(options) {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.pluginOptions = {
-      minimum: options.minimum,
-      maximum: options.maximum,
-      value: options.value,
-      valueRange: options.valueRange,
-      step: options.step,
-    };
+    const { minimum, maximum, value, valueRange, step } = options;
+    this.pluginOptions = { minimum, maximum, value, valueRange, step };
+
     this.checksIncomingData();
+  }
+  checkTest(a, b) {
+    return a + b;
   }
   checksIncomingData() {
     this.pluginOptions.minimum = Number(this.pluginOptions.minimum) || 1;

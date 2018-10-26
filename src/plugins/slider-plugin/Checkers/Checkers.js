@@ -1,5 +1,3 @@
-// import EventEmitter from './EventEmitter';
-
 class Checkers {
   constructor() {
     this.allEvents = [

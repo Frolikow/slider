@@ -1,5 +1,5 @@
-import $ from 'jquery';
-import EventEmitter from './eventEmiter';
+// import $ from 'jquery';
+import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewPanel extends EventEmitter {
   constructor(viewOptions) {

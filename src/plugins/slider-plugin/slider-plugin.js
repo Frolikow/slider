@@ -1,9 +1,9 @@
 import jQuery from 'jquery';
 
-import Model from './Model';
-import ViewSlider from './ViewSlider';
-import ViewPanel from './ViewPanel';
-import Controller from './Controller';
+import Model from './Model/Model';
+import ViewSlider from './ViewSlider/ViewSlider';
+import ViewPanel from './ViewPanel/ViewPanel';
+import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
