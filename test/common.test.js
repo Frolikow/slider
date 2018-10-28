@@ -1,1 +1,1 @@
-const tests = require('../src/plugins/slider-plugin/Model/Model.test');
+const tests = require('../src/plugins/slider-plugin/Model/test/Model.test');

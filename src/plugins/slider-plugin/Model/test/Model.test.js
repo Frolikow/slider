@@ -1,5 +1,5 @@
 
-import Model from './Model';
+import Model from '../Model';
 
 const mockOptions = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
 const assert = require('assert');

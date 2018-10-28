@@ -1,5 +1,5 @@
 
-import ViewPanel from './ViewPanel';
+import ViewPanel from '../ViewPanel';
 
 // const mockOptions = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
 // const assert = require('assert');

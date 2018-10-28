@@ -16,7 +16,7 @@ class ViewSlider extends EventEmitter {
     this.eventListener(dataViewSlider);
   }
   eventListener(dataViewSlider) {
-    const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth(); // убрать в ссвойства класса!!!
+    const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth(); // убрать в свойства класса!!!
 
     this.$sliderScale.click((event) => {
       let clickCoordinatesInsideTheHandle;
@@ -33,7 +33,7 @@ class ViewSlider extends EventEmitter {
       const dataForMoveHandleOnClick = dataViewSlider;
 
       dataForMoveHandleOnClick.sliderWidth = sliderWidth;
-      dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle = clickCoordinatesInsideTheHandle; // переимиенговать
+      dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle = clickCoordinatesInsideTheHandle; // переименовать
       dataForMoveHandleOnClick.positionFirstHandle = positionFirstHandle;
       dataForMoveHandleOnClick.positionSecondHandle = positionSecondHandle;
 
@@ -47,8 +47,9 @@ class ViewSlider extends EventEmitter {
       this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
     });
   }
-  // для событий сделать общей метод!!!!!
-  updateSlider(dataViewSlider) { // переделать чтоб работало только для инициализации!!! (только для обноваления, инициализация отдельно)
+  // публичные методы = инициализация, обновление, и движение ползунков!!!!!!!!!!!!!!!
+  // для событий сделать общий метод!!!!!
+  updateSlider(dataViewSlider) { // переделать чтоб работало только для инициализации!!! (только для обновления, инициализация отдельно)
     this.slider.find('.slider__element').remove();
     this.createSlider();
 
