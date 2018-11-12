@@ -20,28 +20,30 @@ const common = {
     modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
 
+
   module: {
     rules:
-      [{
-        test: /\.styl$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: ['css-loader', 'stylus-loader']
-        })
-      }, {
-        test: /\.pug$/,
-        loader: 'pug-loader',
-        options: {
-          pretty: true
+      [
+        {
+          test: /\.styl$/,
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: ['css-loader', 'stylus-loader']
+          })
+        }, {
+          test: /\.pug$/,
+          loader: 'pug-loader',
+          options: {
+            pretty: true
+          }
+        }, {
+          test: /\.handlebars$/,
+          loader: "handlebars-loader"
+        }, {
+          test: /\.test.js$/,
+          loader: 'ignore-loader'
         }
-      }
-      ,
-      {
-        test: /\.handlebars$/,
-        loader: "handlebars-loader"
-      },
-      { test: /\.test.js$/, loader: 'ignore-loader' }
-    ]
+      ]
   },
 
   plugins: [
@@ -58,8 +60,8 @@ const common = {
     })
   ]
 };
-
 const developmentConfig = {
+  devtool: 'eval',
   devServer: {
     stats: 'minimal',
     port: 9000

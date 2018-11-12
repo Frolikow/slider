@@ -5,37 +5,46 @@ class Controller extends EventEmitter {
     super();
     super.addEmitter(this.constructor.name);
   }
-  initViews() {
-    this.notify('sendDataFromModel');
+  initPlugin() {
+    this.notify('initSlider');
+    this.notify('updateViews');
   }
   updateViewSlider(dataViewSlider) {
+    dataViewSlider.firstPosition = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
+    dataViewSlider.secondPosition = this._convertValuesForViews(dataViewSlider.secondRelativePosition);
+    delete dataViewSlider.firstRelativePosition;
+    delete dataViewSlider.secondRelativePosition;
     this.notify('updateViewSlider', dataViewSlider);
   }
   updateViewPanel(dataViewPanel) {
     this.notify('updateViewPanel', dataViewPanel);
   }
-  updatePluginOptions(dataForUpdatePlugin) {
-    this.notify('updatePluginOptionsAndSendData', dataForUpdatePlugin);
+
+  updateState(dataForUpdatePlugin) {
+    this.notify('updateState', dataForUpdatePlugin);
   }
 
-
-  requestDefaultPosition(dataForRequestDefaultPosition) {
-    this.notify('calculationDefaultPosition', dataForRequestDefaultPosition);
+  sendCoordinatesWhenClick(coordinates) {
+    const relativeCoordinates = this._convertValuesForModel(coordinates);
+    this.notify('updateValuesWhenClick', relativeCoordinates);
   }
 
-  returnDefaultPosition(dataForReturnDefaultPosition) {
-    this.notify('getDefaultPosition', dataForReturnDefaultPosition);
+  sendCoordinatesWhenMoving(dataForSearchPosition) {
+    dataForSearchPosition.relativeCoordinates = this._convertValuesForModel(dataForSearchPosition.coordinates);
+    delete dataForSearchPosition.coordinates;
+    this.notify('updateValuesWhenMoving', dataForSearchPosition);
   }
 
-  clickTheSlider(dataForMoveHandleOnClick) {
-    this.notify('moveHandleOnClick', dataForMoveHandleOnClick);
+  calculateIndexOfRelativeCoordinates(sliderWidth) {
+    this.indexOfRelativeValues = sliderWidth / 1000;
   }
-
-  searchPositionWhenMoving(dataForSearchPosition) {
-    this.notify('searchPositionWhenMoving', dataForSearchPosition);
+  _convertValuesForViews(data) {
+    data *= this.indexOfRelativeValues;
+    return data;
   }
-  sendPositionWhenMoving(dataWhenMoving) {
-    this.notify('setPosition', dataWhenMoving);
+  _convertValuesForModel(data) {
+    data /= this.indexOfRelativeValues;
+    return data;
   }
 }
 

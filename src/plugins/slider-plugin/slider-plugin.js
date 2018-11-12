@@ -7,14 +7,25 @@ import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const { slider, visibilityConfigPanel, visibilityTooltips, verticalOrientation, rangeStatus } = options;
-    const viewOptions = { slider, visibilityConfigPanel, visibilityTooltips, verticalOrientation, rangeStatus };
-    const { minimum, maximum, value, valueRange, step } = options;
-    const stateOptions = { minimum, maximum, value, valueRange, step };
+    const { slider, visibilityTooltips, verticalOrientation, rangeStatus, value, valueRange } = options;
+    const viewSliderOptions = { slider, visibilityTooltips, verticalOrientation, rangeStatus, value, valueRange };
+
+    const viewPanelOptions = options;
+
+    const stateOptions = {
+      minimum: options.minimum,
+      maximum: options.maximum,
+      value: options.value,
+      valueRange: options.valueRange,
+      step: options.step,
+      rangeStatus: options.rangeStatus,
+      visibilityTooltips: options.visibilityTooltips,
+      verticalOrientation: options.verticalOrientation,
+    };
 
     const model = new Model(stateOptions);
-    const viewSlider = new ViewSlider(viewOptions);
-    const viewPanel = new ViewPanel(viewOptions);
+    const viewSlider = new ViewSlider(viewSliderOptions);
+    const viewPanel = new ViewPanel(viewPanelOptions);
     const controller = new Controller();
 
     model.subscribe(controller);
@@ -23,6 +34,6 @@ import Controller from './Controller/Controller';
     controller.subscribe(model);
     controller.subscribe(viewSlider);
     controller.subscribe(viewPanel);
-    controller.initViews();
+    controller.initPlugin();
   };
 }(jQuery));

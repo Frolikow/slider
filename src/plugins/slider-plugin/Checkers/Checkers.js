@@ -3,39 +3,37 @@ class Checkers {
     this.allEvents = [
       {
         ViewSlider: [{
-          Controller: ['initViews', 'updateViewSlider',
-            'updateViewPanel', 'updatePluginOptions',
-            'requestDefaultPosition', 'returnDefaultPosition',
-            'clickTheSlider', 'searchPositionWhenMoving',
-            'sendPositionWhenMoving'],
+          Controller: [
+            'sendCoordinatesWhenMoving',
+            'sendCoordinatesWhenClick',
+            'calculateIndexOfRelativeCoordinates',
+          ],
         }],
         ViewPanel: [{
-          Controller: ['initViews', 'updateViewSlider',
-            'updateViewPanel', 'updatePluginOptions',
-            'requestDefaultPosition', 'returnDefaultPosition',
-            'clickTheSlider', 'searchPositionWhenMoving',
-            'sendPositionWhenMoving'],
+          Controller: [
+            'updateState',
+          ],
         }],
         Model: [{
-          Controller: ['initViews', 'updateViewSlider',
-            'updateViewPanel', 'updatePluginOptions',
-            'requestDefaultPosition', 'returnDefaultPosition',
-            'clickTheSlider', 'searchPositionWhenMoving',
-            'sendPositionWhenMoving'],
+          Controller: [
+            'updateViewSlider',
+            'updateViewPanel',
+          ],
         }],
         Controller: [{
-          ViewSlider: ['updateViewSlider', 'getCoords',
-            'moveHandle', 'setPosition',
-            'defaultPosition', 'getDefaultPosition',
-            'enableVisibilityTooltips', 'orientationChange',
-            'enableRangeSelection', 'renderValueInTooltip',
-            'sendData'],
-          ViewPanel: ['updateViewPanel', 'initAttributes',
-            'createPanel', 'sendData'],
-          Model: ['checksIncomingData', 'sendDataFromModel',
-            'updatePluginOptionsAndSendData', 'calculationDefaultPosition',
-            'calculationValue', 'moveHandleOnClick',
-            'createArrayOfPosition', 'searchPositionWhenMoving'],
+          ViewSlider: [
+            'initSlider',
+            'updateViewSlider',
+          ],
+          ViewPanel: [
+            'updateViewPanel',
+          ],
+          Model: [
+            'updateViews',
+            'updateState',
+            'updateValuesWhenClick',
+            'updateValuesWhenMoving',
+          ],
         }],
       },
     ];

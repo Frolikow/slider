@@ -1,4 +1,3 @@
-// import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewPanel extends EventEmitter {
@@ -16,7 +15,7 @@ class ViewPanel extends EventEmitter {
   updateViewPanel(dataViewPanel) {
     if (this.visibilityConfigPanel) {
       this.slider.find('.slider__configuration').remove();
-      this.createPanel(this.slider);
+      this._createPanel(this.slider);
 
       const $switchVisibilityTooltips = this.slider.find('.configuration__show-handle-value');
       const $orientationSwitch = this.slider.find('.configuration__orientation');
@@ -42,20 +41,20 @@ class ViewPanel extends EventEmitter {
         $maximumValue,
         $stepSizeValue,
       };
-      this.eventListeners(kitElements, dataViewPanel);
-      this.initAttributes(kitElements, dataViewPanel);
+      this._eventListeners(kitElements, dataViewPanel);
+      this._initAttributes(kitElements, dataViewPanel);
     }
   }
-  eventListeners(kitElements, dataViewPanel) {
+  _eventListeners(kitElements, dataViewPanel) {
     const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle,
       $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = kitElements;
     $switchVisibilityTooltips.on('change', () => {
       this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $orientationSwitch.on('change', () => {
       this.verticalOrientation = $orientationSwitch.prop('checked');
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $rangeSwitch.on('change', () => {
       this.rangeStatus = $rangeSwitch.prop('checked');
@@ -66,36 +65,35 @@ class ViewPanel extends EventEmitter {
         $currentValueSecondHandle.removeClass('configuration__current-value_visible');
         $currentValueSecondHandle.addClass('configuration__current-value_hidden');
       }
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
 
     $currentValueFirstHandle.on('focusout', () => {
       dataViewPanel.value = +$currentValueFirstHandle.val();
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $currentValueSecondHandle.on('focusout', () => {
       dataViewPanel.valueRange = +$currentValueSecondHandle.val();
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $minimumValue.on('focusout', () => {
       dataViewPanel.minimum = +$minimumValue.val();
       dataViewPanel.value = dataViewPanel.value < dataViewPanel.minimum ? dataViewPanel.minimum : dataViewPanel.value;
       dataViewPanel.valueRange = dataViewPanel.valueRange <= dataViewPanel.minimum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $maximumValue.on('focusout', () => {
       dataViewPanel.maximum = +$maximumValue.val();
       dataViewPanel.valueRange = dataViewPanel.valueRange > dataViewPanel.maximum ? dataViewPanel.maximum : dataViewPanel.valueRange;
       dataViewPanel.value = dataViewPanel.value >= dataViewPanel.maximum ? dataViewPanel.minimum : dataViewPanel.value;
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
     $stepSizeValue.on('focusout', () => {
       dataViewPanel.step = +$stepSizeValue.val();
-      this.sendData(dataViewPanel);
+      this._sendData(dataViewPanel);
     });
   }
-
-  initAttributes(kitElements, dataForInitAttributes) {
+  _initAttributes(kitElements, dataForInitAttributes) {
     kitElements.$switchVisibilityTooltips.attr({
       checked: this.visibilityTooltips ? 'checked' : null,
     });
@@ -133,15 +131,13 @@ class ViewPanel extends EventEmitter {
       value: dataForInitAttributes.step,
     });
   }
-
-  sendData(dataForUpdatePlugin) {
+  _sendData(dataForUpdatePlugin) {
     dataForUpdatePlugin.rangeStatus = this.rangeStatus;
     dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
     dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;
-    this.notify('updatePluginOptions', dataForUpdatePlugin);
+    this.notify('updateState', dataForUpdatePlugin);
   }
-
-  createPanel(sliderBlock) {
+  _createPanel(sliderBlock) {
     this.bookListingTemplate = require('./panelTemplate.handlebars');
     const configurationPanel = document.createElement('div');
     configurationPanel.className = 'slider__configuration';

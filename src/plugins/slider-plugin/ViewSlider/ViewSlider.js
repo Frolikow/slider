@@ -11,164 +11,125 @@ class ViewSlider extends EventEmitter {
     this.verticalOrientation = viewOptions.verticalOrientation;
     this.rangeStatus = viewOptions.rangeStatus;
   }
-  updateViewSlider(dataViewSlider) {
-    this.updateSlider(dataViewSlider);
-    this.eventListener(dataViewSlider);
-  }
-  eventListener(dataViewSlider) {
-    const sliderWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth(); // убрать в свойства класса!!!
-
-    this.$sliderScale.click((event) => {
-      let clickCoordinatesInsideTheHandle;
-      const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
-      if (this.verticalOrientation) {
-        clickCoordinatesInsideTheHandle = (event.pageY - sliderCoords.top - (this.$firstHandle.outerHeight() / 2));
-      } else {
-        clickCoordinatesInsideTheHandle = (event.pageX - sliderCoords.left - (this.$firstHandle.outerWidth() / 2));
-      }
-
-      const positionFirstHandle = parseInt(this.$firstHandle.css('left'));
-      const positionSecondHandle = parseInt(this.$secondHandle.css('left'));
-
-      const dataForMoveHandleOnClick = dataViewSlider;
-
-      dataForMoveHandleOnClick.sliderWidth = sliderWidth;
-      dataForMoveHandleOnClick.clickCoordinatesInsideTheHandle = clickCoordinatesInsideTheHandle; // переименовать
-      dataForMoveHandleOnClick.positionFirstHandle = positionFirstHandle;
-      dataForMoveHandleOnClick.positionSecondHandle = positionSecondHandle;
-
-      this.notify('clickTheSlider', dataForMoveHandleOnClick);
-    });
-
-    this.$firstHandle.mousedown((event) => {
-      this.moveHandle({ event, currentItem: this.$firstHandle, dataViewSlider, sliderWidth });
-    });
-    this.$secondHandle.mousedown((event) => {
-      this.moveHandle({ event, currentItem: this.$secondHandle, dataViewSlider, sliderWidth });
-    });
-  }
-  // публичные методы = инициализация, обновление, и движение ползунков!!!!!!!!!!!!!!!
-  // для событий сделать общий метод!!!!!
-  updateSlider(dataViewSlider) { // переделать чтоб работало только для инициализации!!! (только для обновления, инициализация отдельно)
-    this.slider.find('.slider__element').remove();
-    this.createSlider();
-
+  initSlider() {
+    this._createSlider();
     this.$sliderScale = this.slider.find('.slider__element');
     this.$firstHandle = this.slider.find('.slider__handle_left');
     this.$firstTooltip = this.slider.find('.slider__value_left');
     this.$secondHandle = this.slider.find('.slider__handle_right');
     this.$secondTooltip = this.slider.find('.slider__value_right');
 
+    this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
+    this.notify('calculateIndexOfRelativeCoordinates', this.scaleWidth);
+    this._listeners();
+  }
+  updateViewSlider(dataViewSlider) {
+    // dataViewSlider = { value,valueRange,rangeStatus,firstPosition,secondPosition };
     if (dataViewSlider.rangeStatus === undefined) {
       dataViewSlider.rangeStatus = this.rangeStatus;
-    } else {
-      dataViewSlider.rangeStatus = dataViewSlider.rangeStatus;
     }
 
     if (dataViewSlider.visibilityTooltips === undefined) {
       dataViewSlider.visibilityTooltips = this.visibilityTooltips;
-    } else {
-      dataViewSlider.visibilityTooltips = dataViewSlider.visibilityTooltips;
     }
 
     if (dataViewSlider.verticalOrientation === undefined) {
       dataViewSlider.verticalOrientation = this.verticalOrientation;
-    } else {
-      dataViewSlider.verticalOrientation = dataViewSlider.verticalOrientation;
     }
     this.visibilityTooltips = dataViewSlider.visibilityTooltips;
     this.verticalOrientation = dataViewSlider.verticalOrientation;
     this.rangeStatus = dataViewSlider.rangeStatus;
 
-    this.visibilityTooltips ? this.enableVisibilityTooltips(true) : this.enableVisibilityTooltips(false);
-    this.verticalOrientation ? this.orientationChange(true) : this.orientationChange(false);
-    this.rangeStatus ? this.enableRangeSelection(true) : this.enableRangeSelection(false);
+    this.visibilityTooltips ? this._enableVisibilityTooltips(true) : this._enableVisibilityTooltips(false);
+    this.verticalOrientation ? this._orientationChange(true) : this._orientationChange(false);
+    this.rangeStatus ? this._enableRangeSelection(true) : this._enableRangeSelection(false);
 
-    this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.value, 'first', dataViewSlider.step);
-    if (this.rangeStatus) {
-      this.defaultPosition(dataViewSlider.minimum, dataViewSlider.maximum, dataViewSlider.valueRange, 'second', dataViewSlider.step);
-    }
-    this.renderValueInTooltip(dataViewSlider.value, dataViewSlider.valueRange);
-  }
-  getCoords(element) { // получение координат курсора внутри элемента
-    const box = element.get(0).getBoundingClientRect();
-    return {
-      top: box.top + window.pageYOffset,
-      left: box.left + window.pageXOffset,
+    const dataForSetPositionHandle = {
+      value: dataViewSlider.value,
+      valueRange: dataViewSlider.valueRange,
+      coordinatesFirstHandle: dataViewSlider.firstPosition,
+      coordinatesSecondHandle: dataViewSlider.secondPosition,
+      elementType: 'first',
     };
+    this._setPositionHandle(dataForSetPositionHandle);
+    if (this.rangeStatus) {
+      dataForSetPositionHandle.elementType = 'second';
+      this._setPositionHandle(dataForSetPositionHandle);
+    }
   }
-
-  moveHandle({ event, currentItem, dataViewSlider, sliderWidth }) { // событие нажатой ЛКМ
-    const sliderCoords = this.getCoords(this.$sliderScale); // внутренние координаты слайдера
-    const handleCoords = this.getCoords(currentItem); // внутренние координаты ползунка
+  _moveHandle({ event, $currentItem }) { // событие нажатой ЛКМ
+    const sliderCoords = this._getCoords(this.$sliderScale); // внутренние координаты слайдера
+    const handleCoords = this._getCoords($currentItem); // внутренние координаты ползунка
     let clickCoordinatesInsideTheHandle; // координаты клика внутри ползунка
     if (this.verticalOrientation === true) {
       clickCoordinatesInsideTheHandle = event.pageY - handleCoords.top;
     } else {
       clickCoordinatesInsideTheHandle = event.pageX - handleCoords.left;
     }
-
     // движение нажатой ЛКМ
     $(document).on('mousemove', (event) => {
       let coordinatesInsideTheSlider; // позиция курсора внутри слайдера
-
       if (this.verticalOrientation) {
-        coordinatesInsideTheSlider = (event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top) / dataViewSlider.step;
+        coordinatesInsideTheSlider = event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top;
       } else {
-        coordinatesInsideTheSlider = (event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left) / dataViewSlider.step;
+        coordinatesInsideTheSlider = event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left;
       }
-
-      let elementName;
-      if (currentItem === this.$firstHandle) {
-        elementName = 'first';
-      } else if (currentItem === this.$secondHandle) {
-        elementName = 'second';
+      let elementType;
+      if ($currentItem === this.$firstHandle) {
+        elementType = 'first';
+      } else if ($currentItem === this.$secondHandle) {
+        elementType = 'second';
       }
-      const dataForSearchPosition = dataViewSlider;
-      dataForSearchPosition.coordinatesInsideTheSlider = coordinatesInsideTheSlider;
-      dataForSearchPosition.sliderWidth = sliderWidth;
-      dataForSearchPosition.elementName = elementName; // переименовать везде на type !!!!!!!!!!!1
-      dataForSearchPosition.rangeStatus = this.rangeStatus;
-      this.notify('searchPositionWhenMoving', dataForSearchPosition);
+      const dataForSearchPosition = { coordinates: coordinatesInsideTheSlider, elementType, rangeStatus: this.rangeStatus };
+      this.notify('sendCoordinatesWhenMoving', dataForSearchPosition);
     });
 
     $(document).mouseup(() => { // событие ОТжатой ЛКМ, отмена "mousemove"
       $(document).off('mousemove');
     });
   }
-  setPosition(dataWhenMoving) {
-    if (dataWhenMoving.elementName === 'first') {
-      const positionBeforeMoving = parseInt(this.$firstHandle.css('left'));
-      const positionAfterMoving = (dataWhenMoving.currentPositionHandle ^ 0);
-      if (positionBeforeMoving !== positionAfterMoving) {
-        this.$firstHandle.css('left', `${dataWhenMoving.currentPositionHandle}px`);
-        this.$firstTooltip.html(dataWhenMoving.valueTip);
+  _listeners() {
+    this.$sliderScale.click((event) => {
+      let coordsClick;
+      const sliderCoords = this._getCoords(this.$sliderScale); // внутренние координаты слайдера
+      if (this.verticalOrientation) {
+        coordsClick = parseInt(event.pageY - sliderCoords.top - (this.$firstHandle.outerHeight() / 2));
+      } else {
+        coordsClick = parseInt(event.pageX - sliderCoords.left - (this.$firstHandle.outerWidth() / 2));
       }
-    }
-    if (dataWhenMoving.elementName === 'second') {
-      const positionBeforeMoving = parseInt(this.$secondHandle.css('left'));
-      const positionAfterMoving = (dataWhenMoving.currentPositionHandle ^ 0);
-      if (positionBeforeMoving !== positionAfterMoving) {
-        this.$secondHandle.css('left', `${dataWhenMoving.currentPositionHandle}px`);
-        this.$secondTooltip.html(dataWhenMoving.valueTip);
-      }
-    }
-  }
-  defaultPosition(minimum, maximum, valueCurrentHandle, elementName, step) {
-    const scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
+      this.notify('sendCoordinatesWhenClick', coordsClick);
+    });
 
-    const dataForRequestDefaultPosition = { minimum, maximum, valueCurrentHandle, elementName, step, scaleWidth };
-    this.notify('requestDefaultPosition', dataForRequestDefaultPosition);
+    this.$firstHandle.mousedown((event) => {
+      this._moveHandle({ event, $currentItem: this.$firstHandle });
+    });
+
+    this.$secondHandle.mousedown((event) => {
+      this._moveHandle({ event, $currentItem: this.$secondHandle });
+    });
   }
-  getDefaultPosition(dataForReturnDefaultPosition) {
-    if (dataForReturnDefaultPosition.elementName === 'first') {
-      this.$firstHandle.css('left', dataForReturnDefaultPosition.defaultPosition);
+  _setPositionHandle(dataForSetPositionHandle) {
+    // dataForSetPositionHandle = { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType }
+    const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType } = dataForSetPositionHandle;
+    if (elementType === 'first') {
+      this.$firstHandle.css('left', `${coordinatesFirstHandle}px`);
+      this.$firstTooltip.html(value);
     }
-    if (dataForReturnDefaultPosition.elementName === 'second') {
-      this.$secondHandle.css('left', dataForReturnDefaultPosition.defaultPosition);
+    if (elementType === 'second') {
+      this.$secondHandle.css('left', `${coordinatesSecondHandle}px`);
+      this.$secondTooltip.html(valueRange);
     }
   }
-  enableVisibilityTooltips(isEnabled) {
+
+  // приватные методы которые можно не трогать
+  _getCoords(element) { // получение координат курсора внутри элемента
+    const box = element.get(0).getBoundingClientRect();
+    return {
+      top: box.top + window.pageYOffset,
+      left: box.left + window.pageXOffset,
+    };
+  }
+  _enableVisibilityTooltips(isEnabled) {
     if (isEnabled) {
       this.$firstTooltip.removeClass('slider__value_hidden');
       this.$secondTooltip.removeClass('slider__value_hidden');
@@ -181,7 +142,7 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.addClass('slider__value_hidden');
     }
   }
-  orientationChange(isEnabled) {
+  _orientationChange(isEnabled) {
     if (isEnabled) {
       this.$sliderScale.addClass('slider__element_vertical');
       this.$firstHandle.addClass('slider__handle_vertical');
@@ -196,7 +157,7 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.removeClass('slider__value_vertical');
     }
   }
-  enableRangeSelection(isEnabled) {
+  _enableRangeSelection(isEnabled) {
     if (isEnabled) {
       this.$secondHandle.addClass('slider__handle_visible');
       this.$secondHandle.removeClass('slider__handle_hidden');
@@ -205,20 +166,15 @@ class ViewSlider extends EventEmitter {
       this.$secondHandle.addClass('slider__handle_hidden');
     }
   }
-  renderValueInTooltip(firstValue, secondValue) {
-    this.$firstTooltip.text(firstValue);
-    this.$secondTooltip.text(secondValue);
-  }
-  // sendData(dataToSend) {
-  //   this.notify('updatePluginOptions', dataToSend);
-  // }
-
-  createSlider() {
-    this.bookListingTemplate = require('./sliderTemplate.handlebars');
+  _createSlider() {
+    if (this.slider.find('.slider__element')) {
+      this.slider.find('.slider__element').remove();
+    }
+    const bookListingTemplate = require('./sliderTemplate.handlebars');
     const sliderElement = document.createElement('div');
     sliderElement.className = 'slider__element';
 
-    sliderElement.innerHTML = this.bookListingTemplate({
+    sliderElement.innerHTML = bookListingTemplate({
       handles: [{
         className: 'slider__handle slider__handle_left',
         tooltip: [{
