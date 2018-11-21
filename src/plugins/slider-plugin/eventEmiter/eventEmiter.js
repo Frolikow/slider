@@ -11,7 +11,7 @@ class EventEmitter extends Checkers {
     this.observers.push(instance);
   }
 
-  unSubscribe(instance) {
+  unsubscribe(instance) {
     this.observers.splice(this.observers.indexOf(instance), 1);
   }
   addEmitter(constructorName) {

@@ -19,9 +19,87 @@ class Model extends EventEmitter {
 
     this._checksIncomingData();
   }
-  // checkTest(a, b) {
-  //   return a + b;
-  // }
+
+  updateState(newData) {
+    this.modelData.minimum = (newData.minimum === undefined) ? this.modelData.minimum : newData.minimum;
+    this.modelData.maximum = (newData.maximum === undefined) ? this.modelData.maximum : newData.maximum;
+    this.modelData.value = (newData.value === undefined) ? this.modelData.value : newData.value;
+    this.modelData.valueRange = (newData.valueRange === undefined) ? this.modelData.valueRange : newData.valueRange;
+    this.modelData.step = (newData.step === undefined) ? this.modelData.step : newData.step;
+    this.modelData.rangeStatus = (newData.rangeStatus === undefined) ? this.modelData.rangeStatus : newData.rangeStatus;
+    this.modelData.visibilityTooltips = (newData.visibilityTooltips === undefined) ? this.modelData.visibilityTooltips : newData.visibilityTooltips;
+    this.modelData.verticalOrientation = (newData.verticalOrientation === undefined) ? this.modelData.verticalOrientation : newData.verticalOrientation;
+    this._checksIncomingData();
+    this.updateViews();
+  }
+  updateViews() {
+    const dataViewSlider = {
+      value: this.modelData.value,
+      valueRange: this.modelData.valueRange,
+      firstRelativePosition: this._calculationRelativePosition(this.modelData.value),
+      secondRelativePosition: this._calculationRelativePosition(this.modelData.valueRange),
+      rangeStatus: this.modelData.rangeStatus,
+      visibilityTooltips: this.modelData.visibilityTooltips,
+      verticalOrientation: this.modelData.verticalOrientation,
+    };
+    const dataViewPanel = {
+      value: this.modelData.value,
+      valueRange: this.modelData.valueRange,
+      minimum: this.modelData.minimum,
+      maximum: this.modelData.maximum,
+      step: this.modelData.step,
+    };
+    this.notify('updateViewSlider', dataViewSlider);
+    this.notify('updateViewPanel', dataViewPanel);
+  }
+  updateValuesWhenClick(relativeCoordinates) { // обработка клика по шкале слайдера
+    const calculatedValue = this._calculationValue(relativeCoordinates);
+    this.firstRelativePosition = this._calculationRelativePosition(this.modelData.value);
+    this.secondRelativePosition = this._calculationRelativePosition(this.modelData.valueRange);
+
+    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
+      if (relativeCoordinates < this.firstRelativePosition) { // если новая позиция < позиции первого элемента
+        this.modelData.value = parseInt(calculatedValue);
+      } else if (relativeCoordinates > this.secondRelativePosition) { // если новая позиция > позиции второго элемента
+        if (calculatedValue > this.modelData.maximum) {
+          this.modelData.valueRange = parseInt(this.modelData.maximum);
+        } else {
+          this.modelData.valueRange = parseInt(calculatedValue);
+        }
+      } else { // если новая позиция между элементами
+        const clickedCloserToTheSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
+        const clickedCloserToTheFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
+        if (clickedCloserToTheSecondElement) { // если клик между элементами ближе ко второму элементу
+          this.modelData.valueRange = parseInt(calculatedValue);
+        } else if (clickedCloserToTheFirstElement) { // если клик между элементами ближе к первому элементу
+          this.modelData.value = parseInt(calculatedValue);
+        }
+      }
+    } else { // если интервал ВЫКЛючен
+      this.modelData.value = parseInt(calculatedValue);
+    }
+    this.updateViews();
+  }
+  updateValuesWhenMoving(dataForSearchPosition) {
+    const calculatedValue = this._calculationValue(dataForSearchPosition.relativeCoordinates);
+    this.firstRelativePosition = this._calculationRelativePosition(this.modelData.value + this.modelData.step);
+    this.secondRelativePosition = this._calculationRelativePosition(this.modelData.valueRange - this.modelData.step);
+
+    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
+      if (dataForSearchPosition.elementType === 'first') {
+        if (dataForSearchPosition.relativeCoordinates <= this.secondRelativePosition) {
+          this.modelData.value = parseInt(calculatedValue);
+        }
+      } else if (dataForSearchPosition.elementType === 'second') {
+        if (dataForSearchPosition.relativeCoordinates >= this.firstRelativePosition) {
+          this.modelData.valueRange = parseInt(calculatedValue);
+        }
+      }
+    } else { // если интервал ВЫКЛючен
+      this.modelData.value = parseInt(calculatedValue);
+    }
+    this.updateViews();
+  }
   _checksIncomingData() {
     this.modelData.minimum = (this.modelData.minimum === undefined) ? 1 : this.modelData.minimum;
     this.modelData.maximum = (this.modelData.maximum === undefined) ? 10 : this.modelData.maximum;
@@ -59,94 +137,6 @@ class Model extends EventEmitter {
       }
     }
   }
-
-  updateState(newData) {
-    this.modelData.minimum = (newData.minimum === undefined) ? this.modelData.minimum : newData.minimum;
-    this.modelData.maximum = (newData.maximum === undefined) ? this.modelData.maximum : newData.maximum;
-    this.modelData.value = (newData.value === undefined) ? this.modelData.value : newData.value;
-    this.modelData.valueRange = (newData.valueRange === undefined) ? this.modelData.valueRange : newData.valueRange;
-    this.modelData.step = (newData.step === undefined) ? this.modelData.step : newData.step;
-    this.modelData.rangeStatus = (newData.rangeStatus === undefined) ? this.modelData.rangeStatus : newData.rangeStatus;
-    this.modelData.visibilityTooltips = (newData.visibilityTooltips === undefined) ? this.modelData.visibilityTooltips : newData.visibilityTooltips;
-    this.modelData.verticalOrientation = (newData.verticalOrientation === undefined) ? this.modelData.verticalOrientation : newData.verticalOrientation;
-    this._checksIncomingData();
-    this.updateViews();
-  }
-  updateViews() {
-    const firstRelativePosition = this._calculationRelativePosition(this.modelData.value);
-    const secondRelativePosition = this._calculationRelativePosition(this.modelData.valueRange);
-    const firstValue = this._calculationValue(firstRelativePosition);
-    const secondValue = this._calculationValue(secondRelativePosition);
-
-    const dataViewSlider = {
-      value: firstValue,
-      valueRange: secondValue,
-      firstRelativePosition,
-      secondRelativePosition,
-      rangeStatus: this.modelData.rangeStatus,
-      visibilityTooltips: this.modelData.visibilityTooltips,
-      verticalOrientation: this.modelData.verticalOrientation,
-    };
-    const dataViewPanel = {
-      value: firstValue,
-      valueRange: secondValue,
-      minimum: this.modelData.minimum,
-      maximum: this.modelData.maximum,
-      step: this.modelData.step,
-    };
-    this.notify('updateViewSlider', dataViewSlider);
-    this.notify('updateViewPanel', dataViewPanel);
-  }
-
-  updateValuesWhenClick(relativeCoordinates) { // обработка клика по шкале слайдера
-    const calculatedValue = this._calculationValue(relativeCoordinates);
-    const firstPosition = this._calculationRelativePosition(this.modelData.value);
-    const secondPosition = this._calculationRelativePosition(this.modelData.valueRange);
-
-    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
-      if (relativeCoordinates < firstPosition) { // если новая позиция < позиции первого элемента
-        this.modelData.value = parseInt(calculatedValue);
-      } else if (relativeCoordinates > secondPosition) { // если новая позиция > позиции второго элемента
-        if (calculatedValue > this.modelData.maximum) {
-          this.modelData.valueRange = parseInt(this.modelData.maximum);
-        } else {
-          this.modelData.valueRange = parseInt(calculatedValue);
-        }
-      } else { // если новая позиция между элементами
-        const clickedCloserToTheSecondElement = (relativeCoordinates - firstPosition) > (secondPosition - relativeCoordinates);
-        const clickedCloserToTheFirstElement = (relativeCoordinates - firstPosition) < (secondPosition - relativeCoordinates);
-        if (clickedCloserToTheSecondElement) { // если клик между элементами ближе ко второму элементу
-          this.modelData.valueRange = parseInt(calculatedValue);
-        } else if (clickedCloserToTheFirstElement) { // если клик между элементами ближе к первому элементу
-          this.modelData.value = parseInt(calculatedValue);
-        }
-      }
-    } else { // если интервал ВЫКЛючен
-      this.modelData.value = parseInt(calculatedValue);
-    }
-    this.updateViews();
-  }
-  updateValuesWhenMoving(dataForSearchPosition) {
-    const calculatedValue = this._calculationValue(dataForSearchPosition.relativeCoordinates);
-    const firstPosition = this._calculationRelativePosition(this.modelData.value + this.modelData.step);
-    const secondPosition = this._calculationRelativePosition(this.modelData.valueRange - this.modelData.step);
-
-    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
-      if (dataForSearchPosition.elementType === 'first') {
-        if (dataForSearchPosition.relativeCoordinates <= secondPosition) {
-          this.modelData.value = parseInt(calculatedValue);
-        }
-      } else if (dataForSearchPosition.elementType === 'second') {
-        if (dataForSearchPosition.relativeCoordinates >= firstPosition) {
-          this.modelData.valueRange = parseInt(calculatedValue);
-        }
-      }
-    } else { // если интервал ВЫКЛючен
-      this.modelData.value = parseInt(calculatedValue);
-    }
-    this.updateViews();
-  }
-
   _calculationRelativePosition(value) {
     const arrayOfValues = this._createArray(null);
 

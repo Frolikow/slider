@@ -38,6 +38,7 @@ class Controller extends EventEmitter {
   calculateIndexOfRelativeCoordinates(sliderWidth) {
     this.indexOfRelativeValues = sliderWidth / 1000;
   }
+
   _convertValuesForViews(data) {
     data *= this.indexOfRelativeValues;
     return data;

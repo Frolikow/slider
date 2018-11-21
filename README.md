@@ -19,5 +19,13 @@ jQuery плагин - слайдер.
   >> gh-pages -d public/UIkit  
   >>> Публикация проекта на GitHub Pages(выполнять после скрипта "build")  
 
+  > test  
+  >> ./node_modules/.bin/jest  
+  >>> Запуск тестов
+
+  > test-coverage  
+  >> ./node_modules/.bin/jest --coverage  
+  >>> Запуск тестов (с показом покрытия кода тестами)
+
 * Использовать скрипты в командной строке проекта командой:  
   `npm run [Название скрипта]`  

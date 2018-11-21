@@ -11,7 +11,6 @@ class ViewPanel extends EventEmitter {
     this.verticalOrientation = viewOptions.verticalOrientation;
     this.rangeStatus = viewOptions.rangeStatus;
   }
-
   updateViewPanel(dataViewPanel) {
     if (this.visibilityConfigPanel) {
       this.slider.find('.slider__configuration').remove();
@@ -138,7 +137,7 @@ class ViewPanel extends EventEmitter {
     this.notify('updateState', dataForUpdatePlugin);
   }
   _createPanel(sliderBlock) {
-    this.bookListingTemplate = require('./panelTemplate.handlebars');
+    this.bookListingTemplate = require('./panelTemplate.hbs');
     const configurationPanel = document.createElement('div');
     configurationPanel.className = 'slider__configuration';
 

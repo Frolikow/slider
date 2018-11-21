@@ -121,7 +121,6 @@ class ViewSlider extends EventEmitter {
     }
   }
 
-  // приватные методы которые можно не трогать
   _getCoords(element) { // получение координат курсора внутри элемента
     const box = element.get(0).getBoundingClientRect();
     return {
@@ -170,7 +169,7 @@ class ViewSlider extends EventEmitter {
     if (this.slider.find('.slider__element')) {
       this.slider.find('.slider__element').remove();
     }
-    const bookListingTemplate = require('./sliderTemplate.handlebars');
+    const bookListingTemplate = require('./sliderTemplate.hbs');
     const sliderElement = document.createElement('div');
     sliderElement.className = 'slider__element';
 

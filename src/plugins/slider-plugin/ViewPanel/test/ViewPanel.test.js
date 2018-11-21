@@ -1,26 +1,45 @@
-
 import ViewPanel from '../ViewPanel';
 
-// const mockOptions = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
-// const assert = require('assert');
-const viewPanel = new ViewPanel();
-const testFunc = viewPanel.checkTest;
+document.body.innerHTML = '<div class="slider"></div>'
+const $ = require('jquery');
 
-describe('math', () => {
+const mockOptions = {}
+mockOptions.slider = $('.slider');
 
-  function makeKitTest(a, b) {
-    let value = a + b;
-    it(`${a} + ${b} = ${value}`, () => {
-      assert.equal(testFunc(a, b), value);
-    });
-  }
-  describe('secondTest', () => {
-    let x = 0, y = 0, i = 1;
-    while (i < 10) {
-      i += 1;
-      x += 9;
-      y += 9;
-      makeKitTest(x, y);
-    }
+const viewPanel = new ViewPanel(mockOptions);
+
+const createPanel = jest.spyOn(ViewPanel.prototype, '_createPanel');
+const eventListeners = jest.spyOn(ViewPanel.prototype, '_eventListeners');
+const initAttributes = jest.spyOn(ViewPanel.prototype, '_initAttributes');
+
+describe('Тестирование методов viewPanel', () => {
+  describe('Тестирование метода updateViewPanel', () => {
+    describe('Метод, в зависимости от полученного значения "visibilityConfigPanel", создает панель или нет.', () => {
+      const mockData = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
+      test('При "visibilityConfigPanel === true" вызвает приватные методы по 1 разу и отрисовывает панель', () => {
+        viewPanel.visibilityConfigPanel = true;
+
+        viewPanel.updateViewPanel(mockData);
+
+        expect(createPanel).toHaveBeenCalledTimes(1);
+        expect(eventListeners).toHaveBeenCalledTimes(1);
+        expect(initAttributes).toHaveBeenCalledTimes(1);
+      })
+
+      afterEach(() => {
+        createPanel.mockRestore();
+        eventListeners.mockRestore();
+        initAttributes.mockRestore();
+      })
+      test('При "visibilityConfigPanel === false" не вызвает приватные методы ни разу и не отрисовывает панель', () => {
+        viewPanel.visibilityConfigPanel = true;
+
+        viewPanel.updateViewPanel(mockData);
+
+        expect(createPanel).not.toBeCalled();
+        expect(eventListeners).not.toBeCalled();
+        expect(initAttributes).not.toBeCalled();
+      });
+    })
   });
 });

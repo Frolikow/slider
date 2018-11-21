@@ -7,8 +7,14 @@ import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const { slider, visibilityTooltips, verticalOrientation, rangeStatus, value, valueRange } = options;
-    const viewSliderOptions = { slider, visibilityTooltips, verticalOrientation, rangeStatus, value, valueRange };
+    const viewSliderOptions = {
+      slider: options.slider,
+      value: options.value,
+      valueRange: options.valueRange,
+      rangeStatus: options.rangeStatus,
+      visibilityTooltips: options.visibilityTooltips,
+      verticalOrientation: options.verticalOrientation,
+    };
 
     const viewPanelOptions = options;
 

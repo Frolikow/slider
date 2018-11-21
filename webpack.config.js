@@ -25,6 +25,13 @@ const common = {
     rules:
       [
         {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
+        },
+        {
           test: /\.styl$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
@@ -37,7 +44,7 @@ const common = {
             pretty: true
           }
         }, {
-          test: /\.handlebars$/,
+          test: /\.hbs$/,
           loader: "handlebars-loader"
         }, {
           test: /\.test.js$/,
