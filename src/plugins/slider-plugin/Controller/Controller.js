@@ -7,7 +7,11 @@ class Controller extends EventEmitter {
   }
   initPlugin() {
     this.notify('initSlider');
-    this.notify('updateViews');
+    this.notify('sendNewDataFromModel');
+  }
+  sendNewDataFromModel({ dataForSlider, dataForPanel }) {
+    this.updateViewSlider(dataForSlider);
+    this.updateViewPanel(dataForPanel);
   }
   updateViewSlider(dataViewSlider) {
     dataViewSlider.firstPosition = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
@@ -26,13 +30,13 @@ class Controller extends EventEmitter {
 
   sendCoordinatesWhenClick(coordinates) {
     const relativeCoordinates = this._convertValuesForModel(coordinates);
-    this.notify('updateValuesWhenClick', relativeCoordinates);
+    this.notify('updateValuesAtStaticCoordinates', relativeCoordinates);
   }
 
   sendCoordinatesWhenMoving(dataForSearchPosition) {
     dataForSearchPosition.relativeCoordinates = this._convertValuesForModel(dataForSearchPosition.coordinates);
     delete dataForSearchPosition.coordinates;
-    this.notify('updateValuesWhenMoving', dataForSearchPosition);
+    this.notify('updateValuesAtDynamicCoordinates', dataForSearchPosition);
   }
 
   calculateIndexOfRelativeCoordinates(sliderWidth) {

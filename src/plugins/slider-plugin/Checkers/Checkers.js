@@ -18,6 +18,7 @@ class Checkers {
           Controller: [
             'updateViewSlider',
             'updateViewPanel',
+            'sendNewDataFromModel',
           ],
         }],
         Controller: [{
@@ -29,10 +30,10 @@ class Checkers {
             'updateViewPanel',
           ],
           Model: [
-            'updateViews',
+            'sendNewDataFromModel',
             'updateState',
-            'updateValuesWhenClick',
-            'updateValuesWhenMoving',
+            'updateValuesAtStaticCoordinates',
+            'updateValuesAtDynamicCoordinates',
           ],
         }],
       },
