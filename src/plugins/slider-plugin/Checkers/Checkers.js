@@ -32,8 +32,8 @@ class Checkers {
           Model: [
             'sendNewDataFromModel',
             'updateState',
-            'updateValuesAtStaticCoordinates',
-            'updateValuesAtDynamicCoordinates',
+            'updateValuesForStaticCoordinates',
+            'updateValuesForDynamicCoordinates',
           ],
         }],
       },

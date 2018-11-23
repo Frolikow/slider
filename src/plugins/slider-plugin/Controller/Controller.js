@@ -30,19 +30,17 @@ class Controller extends EventEmitter {
 
   sendCoordinatesWhenClick(coordinates) {
     const relativeCoordinates = this._convertValuesForModel(coordinates);
-    this.notify('updateValuesAtStaticCoordinates', relativeCoordinates);
+    this.notify('updateValuesForStaticCoordinates', relativeCoordinates);
   }
-
   sendCoordinatesWhenMoving(dataForSearchPosition) {
     dataForSearchPosition.relativeCoordinates = this._convertValuesForModel(dataForSearchPosition.coordinates);
     delete dataForSearchPosition.coordinates;
-    this.notify('updateValuesAtDynamicCoordinates', dataForSearchPosition);
+    this.notify('updateValuesForDynamicCoordinates', dataForSearchPosition);
   }
 
   calculateIndexOfRelativeCoordinates(sliderWidth) {
     this.indexOfRelativeValues = sliderWidth / 1000;
   }
-
   _convertValuesForViews(data) {
     data *= this.indexOfRelativeValues;
     return data;

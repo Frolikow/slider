@@ -17,34 +17,39 @@ class Model extends EventEmitter {
     };
     this.relativeSliderWidth = 1000;
 
-    this._checksIncomingData();
+    this._checkIncomingData();
   }
 
-  updateState(newData) {
-    this.modelData.minimum = (newData.minimum === undefined) ? this.modelData.minimum : newData.minimum;
-    this.modelData.maximum = (newData.maximum === undefined) ? this.modelData.maximum : newData.maximum;
-    this.modelData.value = (newData.value === undefined) ? this.modelData.value : newData.value;
-    this.modelData.valueRange = (newData.valueRange === undefined) ? this.modelData.valueRange : newData.valueRange;
-    this.modelData.step = (newData.step === undefined) ? this.modelData.step : newData.step;
-    this.modelData.rangeStatus = (newData.rangeStatus === undefined) ? this.modelData.rangeStatus : newData.rangeStatus;
-    this.modelData.visibilityTooltips = (newData.visibilityTooltips === undefined) ? this.modelData.visibilityTooltips : newData.visibilityTooltips;
-    this.modelData.verticalOrientation = (newData.verticalOrientation === undefined) ? this.modelData.verticalOrientation : newData.verticalOrientation;
-    this._checksIncomingData();
+  updateState(newDataToUpdateTheState) {
+    this.modelData.minimum = (newDataToUpdateTheState.minimum === undefined) ? this.modelData.minimum : newDataToUpdateTheState.minimum;
+    this.modelData.maximum = (newDataToUpdateTheState.maximum === undefined) ? this.modelData.maximum : newDataToUpdateTheState.maximum;
+    this.modelData.value = (newDataToUpdateTheState.value === undefined) ? this.modelData.value : newDataToUpdateTheState.value;
+    this.modelData.valueRange = (newDataToUpdateTheState.valueRange === undefined) ? this.modelData.valueRange : newDataToUpdateTheState.valueRange;
+    this.modelData.step = (newDataToUpdateTheState.step === undefined) ? this.modelData.step : newDataToUpdateTheState.step;
+    this.modelData.rangeStatus = (newDataToUpdateTheState.rangeStatus === undefined) ? this.modelData.rangeStatus : newDataToUpdateTheState.rangeStatus;
+    this.modelData.visibilityTooltips = (newDataToUpdateTheState.visibilityTooltips === undefined) ? this.modelData.visibilityTooltips : newDataToUpdateTheState.visibilityTooltips;
+    this.modelData.verticalOrientation = (newDataToUpdateTheState.verticalOrientation === undefined) ? this.modelData.verticalOrientation : newDataToUpdateTheState.verticalOrientation;
+    this._checkIncomingData();
     this.sendNewDataFromModel();
   }
   sendNewDataFromModel() {
+    const firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
+    const secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
+    const firstValue = this._calculateTheValueForTheHandle(firstRelativePosition);
+    const secondValue = this._calculateTheValueForTheHandle(secondRelativePosition);
+
     const dataForSlider = {
-      value: this.modelData.value,
-      valueRange: this.modelData.valueRange,
-      firstRelativePosition: this._calculationRelativePosition(this.modelData.value),
-      secondRelativePosition: this._calculationRelativePosition(this.modelData.valueRange),
+      value: firstValue,
+      valueRange: secondValue,
+      firstRelativePosition,
+      secondRelativePosition,
       rangeStatus: this.modelData.rangeStatus,
       visibilityTooltips: this.modelData.visibilityTooltips,
       verticalOrientation: this.modelData.verticalOrientation,
     };
     const dataForPanel = {
-      value: this.modelData.value,
-      valueRange: this.modelData.valueRange,
+      value: firstValue,
+      valueRange: secondValue,
       minimum: this.modelData.minimum,
       maximum: this.modelData.maximum,
       step: this.modelData.step,
@@ -52,10 +57,10 @@ class Model extends EventEmitter {
     this.notify('sendNewDataFromModel', { dataForSlider, dataForPanel });
   }
 
-  updateValuesAtStaticCoordinates(relativeCoordinates) { // обработка клика по шкале слайдера
-    const calculatedValue = this._calculationValue(relativeCoordinates);
-    this.firstRelativePosition = this._calculationRelativePosition(this.modelData.value);
-    this.secondRelativePosition = this._calculationRelativePosition(this.modelData.valueRange);
+  updateValuesForStaticCoordinates(relativeCoordinates) { // обработка клика по шкале слайдера
+    const calculatedValue = this._calculateTheValueForTheHandle(relativeCoordinates);
+    this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
+    this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
 
     if (this.modelData.rangeStatus) { // если интервал ВКЛючен
       if (relativeCoordinates < this.firstRelativePosition) { // если новая позиция < позиции первого элемента
@@ -81,10 +86,10 @@ class Model extends EventEmitter {
     this.sendNewDataFromModel();
   }
 
-  updateValuesAtDynamicCoordinates(dataForSearchPosition) {
-    const calculatedValue = this._calculationValue(dataForSearchPosition.relativeCoordinates);
-    this.firstRelativePosition = this._calculationRelativePosition(this.modelData.value + this.modelData.step);
-    this.secondRelativePosition = this._calculationRelativePosition(this.modelData.valueRange - this.modelData.step);
+  updateValuesForDynamicCoordinates(dataForSearchPosition) {
+    const calculatedValue = this._calculateTheValueForTheHandle(dataForSearchPosition.relativeCoordinates);
+    this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
+    this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange - this.modelData.step);
 
     if (this.modelData.rangeStatus) { // если интервал ВКЛючен
       if (dataForSearchPosition.elementType === 'first') {
@@ -101,7 +106,7 @@ class Model extends EventEmitter {
     }
     this.sendNewDataFromModel();
   }
-  _checksIncomingData() {
+  _checkIncomingData() {
     this.modelData.minimum = (this.modelData.minimum === undefined) ? 1 : this.modelData.minimum;
     this.modelData.maximum = (this.modelData.maximum === undefined) ? 10 : this.modelData.maximum;
     this.modelData.value = (this.modelData.value === undefined) ? this.modelData.minimum : this.modelData.value;
@@ -113,20 +118,20 @@ class Model extends EventEmitter {
       this.modelData.maximum = 10;
       console.log('Неккоректные значения minimum, maximum \nОбязательное условие: minimum < maximum \nИзменено на minimum = 1, maximum = 10.');
     }
-    const checkingStepValue = (this.modelData.step < 1 || this.modelData.step > (this.modelData.maximum - this.modelData.minimum));
-    if (checkingStepValue) {
+    const isValueOfStepWithinTheAllowedInterval = (this.modelData.step < 1 || this.modelData.step > (this.modelData.maximum - this.modelData.minimum));
+    if (isValueOfStepWithinTheAllowedInterval) {
       this.modelData.step = 1;
       console.log('Неккоректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
     }
-    const checkingValue = this.modelData.value > this.modelData.maximum || this.modelData.value < this.modelData.minimum;
-    if (checkingValue) {
+    const isValuesWithinTheAllowedInterval = this.modelData.value > this.modelData.maximum || this.modelData.value < this.modelData.minimum;
+    if (isValuesWithinTheAllowedInterval) {
       this.modelData.value = this.modelData.minimum;
       this.modelData.valueRange = this.modelData.maximum;
       console.log('Неккоректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
     }
     if (this.modelData.rangeStatus) {
-      const checkingValueRange = this.modelData.valueRange > this.modelData.maximum;
-      if (checkingValueRange) {
+      const isValueOfTheSecondElementIsLargerThanTheMaximum = this.modelData.valueRange > this.modelData.maximum;
+      if (isValueOfTheSecondElementIsLargerThanTheMaximum) {
         this.modelData.value = this.modelData.minimum;
         this.modelData.valueRange = this.modelData.maximum;
         console.log('Неккоректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
@@ -138,70 +143,66 @@ class Model extends EventEmitter {
       }
     }
   }
-  _calculationRelativePosition(value) {
-    const arrayOfValues = this._createArray(null);
+  _calculateRelativePosition(elementValueForPositionCalculation) {
+    const arrayOfValuesForTheHandle = this._createAnArrayOfValidValues();
 
-    const stepWidth = this.relativeSliderWidth / (arrayOfValues.length - 1);
-    let position = stepWidth * (arrayOfValues.indexOf(value));
+    this.relativeStepWidth = this.relativeSliderWidth / (arrayOfValuesForTheHandle.length - 1);
+    let relativePosition = this.relativeStepWidth * (arrayOfValuesForTheHandle.indexOf(elementValueForPositionCalculation));
 
-    if (position <= 0) {
-      position = 0;
-    } else if (position >= this.relativeSliderWidth) {
-      position = this.relativeSliderWidth;
+    if (relativePosition <= 0) {
+      relativePosition = 0;
+    } else if (relativePosition >= this.relativeSliderWidth) {
+      relativePosition = this.relativeSliderWidth;
     }
-    if (value === this.modelData.value) {
-      if (arrayOfValues.includes(value) === false) {
-        position = 0;
+    if (elementValueForPositionCalculation === this.modelData.value) {
+      if (arrayOfValuesForTheHandle.includes(elementValueForPositionCalculation) === false) {
+        relativePosition = 0;
       }
-    } else if (value === this.modelData.valueRange) {
-      if (arrayOfValues.includes(value) === false) {
-        position = this.relativeSliderWidth;
+    } else if (elementValueForPositionCalculation === this.modelData.valueRange) {
+      if (arrayOfValuesForTheHandle.includes(elementValueForPositionCalculation) === false) {
+        relativePosition = this.relativeSliderWidth;
       }
     }
-    return position;
+    return relativePosition;
   }
-  _calculationValue(relativeCoordinates) { // расчет значения над ползунком
-    const arrayOfValues = this._createArray(null);
+  _calculateTheValueForTheHandle(relativeCoordinates) { // расчет значения над ползунком
+    const arrayOfValuesForTheHandle = this._createAnArrayOfValidValues();
     if (relativeCoordinates <= 0) {
       relativeCoordinates = 0;
     } else if (relativeCoordinates >= this.relativeSliderWidth) {
       relativeCoordinates = this.relativeSliderWidth;
     }
 
-    const valueStep = this.relativeSliderWidth / ((arrayOfValues[arrayOfValues.length - 1] - arrayOfValues[0]) / this.modelData.step);
-    const indexNumberValue = (((relativeCoordinates) + (valueStep / 2)) / valueStep) ^ 0;
+    const indexOfValueRelativeToCoordinates = (((relativeCoordinates) + (this.relativeStepWidth / 2)) / this.relativeStepWidth) ^ 0;
 
-    const checkingForAMaximumOfTheFirstElement = this.modelData.rangeStatus && (indexNumberValue >= arrayOfValues.indexOf(this.modelData.valueRange - this.modelData.step)); // проверка значения при движении левого ползунка
+    const isFirstElementPeaked = this.modelData.rangeStatus && (indexOfValueRelativeToCoordinates >= arrayOfValuesForTheHandle.indexOf(this.modelData.valueRange - this.modelData.step)); // проверка значения при движении левого ползунка
     let newValue;
     if (this.modelData.rangeStatus) {
-      newValue = (arrayOfValues[indexNumberValue] === undefined) ? arrayOfValues[arrayOfValues.length - 1] : arrayOfValues[indexNumberValue];
+      newValue = (arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForTheHandle[arrayOfValuesForTheHandle.length - 1] : arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates];
     } else {
-      if (checkingForAMaximumOfTheFirstElement) {
+      if (isFirstElementPeaked) {
         newValue = (this.modelData.valueRange - this.modelData.step);
       } else {
-        newValue = (arrayOfValues[indexNumberValue] === undefined) ? arrayOfValues[arrayOfValues.length - 1] : arrayOfValues[indexNumberValue];
+        newValue = (arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForTheHandle[arrayOfValuesForTheHandle.length - 1] : arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates];
       }
     }
     return newValue;
   }
-  _createArray(elementType) {
+  _createAnArrayOfValidValues() {
     let currentValue = 0;
-    let arrMin = this.modelData.minimum;
-    let arrMax = this.modelData.maximum;
-    const arrayOfValues = [];
-    if (elementType && elementType === 'first') {
-      arrMax = this.modelData.valueRange - this.modelData.step;
-    }
-    while (currentValue < arrMax) {
-      if (arrMin > arrMax) {
+    let theBeginning = this.modelData.minimum;
+    const theFinish = this.modelData.maximum;
+    const arrayOfValuesForTheHandle = [];
+    while (currentValue < theFinish) {
+      if (theBeginning > theFinish) {
         break;
       } else {
-        currentValue = arrMin;
-        arrMin += this.modelData.step;
-        arrayOfValues.push(currentValue);
+        currentValue = theBeginning;
+        theBeginning += this.modelData.step;
+        arrayOfValuesForTheHandle.push(currentValue);
       }
     }
-    return arrayOfValues;
+    return arrayOfValuesForTheHandle;
   }
 }
 

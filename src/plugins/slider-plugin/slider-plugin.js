@@ -7,7 +7,7 @@ import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const viewSliderOptions = {
+    const sliderOptionsView = {
       slider: options.slider,
       value: options.value,
       valueRange: options.valueRange,
@@ -16,7 +16,7 @@ import Controller from './Controller/Controller';
       verticalOrientation: options.verticalOrientation,
     };
 
-    const viewPanelOptions = options;
+    const panelOptionsView = options;
 
     const stateOptions = {
       minimum: options.minimum,
@@ -30,8 +30,8 @@ import Controller from './Controller/Controller';
     };
 
     const model = new Model(stateOptions);
-    const viewSlider = new ViewSlider(viewSliderOptions);
-    const viewPanel = new ViewPanel(viewPanelOptions);
+    const viewSlider = new ViewSlider(sliderOptionsView);
+    const viewPanel = new ViewPanel(panelOptionsView);
     const controller = new Controller();
 
     model.subscribe(controller);

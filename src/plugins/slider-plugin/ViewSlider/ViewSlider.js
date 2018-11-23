@@ -12,7 +12,7 @@ class ViewSlider extends EventEmitter {
     this.rangeStatus = viewOptions.rangeStatus;
   }
   initSlider() {
-    this._createSlider();
+    this._createSliderElement();
     this.$sliderScale = this.slider.find('.slider__element');
     this.$firstHandle = this.slider.find('.slider__handle_left');
     this.$firstTooltip = this.slider.find('.slider__value_left');
@@ -21,7 +21,7 @@ class ViewSlider extends EventEmitter {
 
     this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
     this.notify('calculateIndexOfRelativeCoordinates', this.scaleWidth);
-    this._listeners();
+    this._eventHandlers();
   }
   updateViewSlider(dataViewSlider) {
     // dataViewSlider = { value,valueRange,rangeStatus,firstPosition,secondPosition };
@@ -44,35 +44,58 @@ class ViewSlider extends EventEmitter {
     this.verticalOrientation ? this._orientationChange(true) : this._orientationChange(false);
     this.rangeStatus ? this._enableRangeSelection(true) : this._enableRangeSelection(false);
 
-    const dataForSetPositionHandle = {
+    const dataForSetHandlePositionAndHandleValue = {
       value: dataViewSlider.value,
       valueRange: dataViewSlider.valueRange,
       coordinatesFirstHandle: dataViewSlider.firstPosition,
       coordinatesSecondHandle: dataViewSlider.secondPosition,
       elementType: 'first',
     };
-    this._setPositionHandle(dataForSetPositionHandle);
+    this._setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue);
     if (this.rangeStatus) {
-      dataForSetPositionHandle.elementType = 'second';
-      this._setPositionHandle(dataForSetPositionHandle);
+      dataForSetHandlePositionAndHandleValue.elementType = 'second';
+      this._setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue);
     }
   }
-  _moveHandle({ event, $currentItem }) { // событие нажатой ЛКМ
-    const sliderCoords = this._getCoords(this.$sliderScale); // внутренние координаты слайдера
-    const handleCoords = this._getCoords($currentItem); // внутренние координаты ползунка
-    let clickCoordinatesInsideTheHandle; // координаты клика внутри ползунка
-    if (this.verticalOrientation === true) {
-      clickCoordinatesInsideTheHandle = event.pageY - handleCoords.top;
-    } else {
-      clickCoordinatesInsideTheHandle = event.pageX - handleCoords.left;
-    }
-    // движение нажатой ЛКМ
-    $(document).on('mousemove', (event) => {
-      let coordinatesInsideTheSlider; // позиция курсора внутри слайдера
+  _eventHandlers() {
+    this.$sliderScale.click((event) => {
+      let theCoordinatesOfTheClick;
+      const sliderCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow(this.$sliderScale); // внутренние координаты слайдера
+
       if (this.verticalOrientation) {
-        coordinatesInsideTheSlider = event.pageY - clickCoordinatesInsideTheHandle - sliderCoords.top;
+        theCoordinatesOfTheClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
       } else {
-        coordinatesInsideTheSlider = event.pageX - clickCoordinatesInsideTheHandle - sliderCoords.left;
+        theCoordinatesOfTheClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+      }
+      this.notify('sendCoordinatesWhenClick', theCoordinatesOfTheClick);
+    });
+
+    this.$firstHandle.mousedown((event) => {
+      this._moveTheHandleWhenDragging({ event, $currentItem: this.$firstHandle });
+    });
+
+    this.$secondHandle.mousedown((event) => {
+      this._moveTheHandleWhenDragging({ event, $currentItem: this.$secondHandle });
+    });
+  }
+
+  _moveTheHandleWhenDragging({ event, $currentItem }) { // событие нажатой ЛКМ
+    const sliderCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow(this.$sliderScale); // координаты слайдера относительно окна
+    const handleCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow($currentItem); // координаты ползунка относительно окна
+
+    let cursorPositionInsideTheHandle; // координаты клика внутри ползунка
+    if (this.verticalOrientation === true) {
+      cursorPositionInsideTheHandle = event.pageY - handleCoordinates.top;
+    } else {
+      cursorPositionInsideTheHandle = event.pageX - handleCoordinates.left;
+    }
+
+    $(document).on('mousemove', (event) => {
+      let theCoordinatesOfTheClickInTheSlider; // позиция курсора внутри слайдера
+      if (this.verticalOrientation) {
+        theCoordinatesOfTheClickInTheSlider = event.pageY - cursorPositionInsideTheHandle - sliderCoordinates.top;
+      } else {
+        theCoordinatesOfTheClickInTheSlider = event.pageX - cursorPositionInsideTheHandle - sliderCoordinates.left;
       }
       let elementType;
       if ($currentItem === this.$firstHandle) {
@@ -80,37 +103,17 @@ class ViewSlider extends EventEmitter {
       } else if ($currentItem === this.$secondHandle) {
         elementType = 'second';
       }
-      const dataForSearchPosition = { coordinates: coordinatesInsideTheSlider, elementType, rangeStatus: this.rangeStatus };
-      this.notify('sendCoordinatesWhenMoving', dataForSearchPosition);
+      const dataForPositionSearch = { coordinates: theCoordinatesOfTheClickInTheSlider, elementType, rangeStatus: this.rangeStatus };
+      this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
     });
 
     $(document).mouseup(() => { // событие ОТжатой ЛКМ, отмена "mousemove"
       $(document).off('mousemove');
     });
   }
-  _listeners() {
-    this.$sliderScale.click((event) => {
-      let coordsClick;
-      const sliderCoords = this._getCoords(this.$sliderScale); // внутренние координаты слайдера
-      if (this.verticalOrientation) {
-        coordsClick = parseInt(event.pageY - sliderCoords.top - (this.$firstHandle.outerHeight() / 2));
-      } else {
-        coordsClick = parseInt(event.pageX - sliderCoords.left - (this.$firstHandle.outerWidth() / 2));
-      }
-      this.notify('sendCoordinatesWhenClick', coordsClick);
-    });
-
-    this.$firstHandle.mousedown((event) => {
-      this._moveHandle({ event, $currentItem: this.$firstHandle });
-    });
-
-    this.$secondHandle.mousedown((event) => {
-      this._moveHandle({ event, $currentItem: this.$secondHandle });
-    });
-  }
-  _setPositionHandle(dataForSetPositionHandle) {
-    // dataForSetPositionHandle = { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType }
-    const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType } = dataForSetPositionHandle;
+  _setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue) {
+    // dataForSetHandlePositionAndHandleValue = { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType }
+    const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType } = dataForSetHandlePositionAndHandleValue;
     if (elementType === 'first') {
       this.$firstHandle.css('left', `${coordinatesFirstHandle}px`);
       this.$firstTooltip.html(value);
@@ -120,8 +123,7 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.html(valueRange);
     }
   }
-
-  _getCoords(element) { // получение координат курсора внутри элемента
+  _getTheCoordinatesOfTheElementInsideTheWindow(element) { // получение координат курсора внутри элемента
     const box = element.get(0).getBoundingClientRect();
     return {
       top: box.top + window.pageYOffset,
@@ -165,7 +167,7 @@ class ViewSlider extends EventEmitter {
       this.$secondHandle.addClass('slider__handle_hidden');
     }
   }
-  _createSlider() {
+  _createSliderElement() {
     if (this.slider.find('.slider__element')) {
       this.slider.find('.slider__element').remove();
     }
