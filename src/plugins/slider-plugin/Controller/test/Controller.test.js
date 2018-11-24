@@ -22,7 +22,7 @@ describe('Тестирование методов controller', () => {
       controller.initPlugin();
 
       expect(notify).toBeCalledWith('initSlider')
-      expect(notify).toBeCalledWith('updateViews')
+      expect(notify).toBeCalledWith('sendNewDataFromModel')
       expect(notify).toHaveBeenCalledTimes(2);
     })
   });
@@ -101,7 +101,7 @@ describe('Тестирование методов controller', () => {
       controller.sendCoordinatesWhenClick(mockCoordinates)
 
       expect(mockRelativeCoordinates).toEqual(mockCoordinates / controller.indexOfRelativeValues);
-      expect(notify).toBeCalledWith('updateValuesWhenClick', mockRelativeCoordinates)
+      expect(notify).toBeCalledWith('updateValuesForStaticCoordinates', mockRelativeCoordinates)
       expect(notify).toHaveBeenCalledTimes(1);
     })
   });
@@ -122,7 +122,7 @@ describe('Тестирование методов controller', () => {
       controller.sendCoordinatesWhenMoving(mockData);
 
       expect(mockData).toEqual(mockDataAfterConvert);
-      expect(notify).toBeCalledWith('updateValuesWhenMoving', mockData)
+      expect(notify).toBeCalledWith('updateValuesForDynamicCoordinates', mockData)
       expect(notify).toHaveBeenCalledTimes(1);
     })
   });

@@ -14,10 +14,10 @@ const mockOptions = {
 const model = new Model(mockOptions);
 
 const notify = jest.spyOn(EventEmmiter.prototype, 'notify');
-const checksIncomingData = jest.spyOn(Model.prototype, '_checksIncomingData');
-const calculationRelativePosition = jest.spyOn(Model.prototype, '_calculationRelativePosition');
-const calculationValue = jest.spyOn(Model.prototype, '_calculationValue');
-const updateViews = jest.spyOn(Model.prototype, 'updateViews');
+const checkIncomingData = jest.spyOn(Model.prototype, '_checkIncomingData');
+const calculateRelativePosition = jest.spyOn(Model.prototype, '_calculateRelativePosition');
+const calculateTheValueForTheHandle = jest.spyOn(Model.prototype, '_calculateTheValueForTheHandle');
+const sendNewDataFromModel = jest.spyOn(Model.prototype, 'sendNewDataFromModel');
 
 describe('Тестирование методов Model', () => {
   describe('Тестирование метода updateState', () => {
@@ -26,13 +26,13 @@ describe('Тестирование методов Model', () => {
 
       model.updateState(mockNewData);
 
-      expect(checksIncomingData).toHaveBeenCalledTimes(1);
-      expect(updateViews).toHaveBeenCalledTimes(1);
+      expect(checkIncomingData).toHaveBeenCalledTimes(1);
+      expect(sendNewDataFromModel).toHaveBeenCalledTimes(1);
     })
   });
-  describe('Тестирование метода updateViews', () => {
-    const firstRelativePosition = model._calculationRelativePosition(model.modelData.value);
-    const secondRelativePosition = model._calculationRelativePosition(model.modelData.valueRange);
+  describe('Тестирование метода sendNewDataFromModel', () => {
+    const firstRelativePosition = model._calculateRelativePosition(model.modelData.value);
+    const secondRelativePosition = model._calculateRelativePosition(model.modelData.valueRange);
     test('Метод считает новые (относительные) координаты ползунков и значения слайдера, формирует объекты для представлений и отправляет посредством метода notify', () => {
       const mockDataViewSlider = {
         value: model.modelData.value,
@@ -50,40 +50,39 @@ describe('Тестирование методов Model', () => {
         maximum: model.modelData.maximum,
         step: model.modelData.step,
       };
-      model.updateViews();
+      model.sendNewDataFromModel();
 
-      expect(calculationRelativePosition).toHaveBeenCalledTimes(2);
-      expect(notify).toHaveBeenCalledTimes(2);
-      expect(notify).toHaveBeenNthCalledWith(1, 'updateViewSlider', mockDataViewSlider);
-      expect(notify).toHaveBeenNthCalledWith(2, 'updateViewPanel', mockDataViewPanel);
+      expect(calculateRelativePosition).toHaveBeenCalledTimes(2);
+      expect(notify).toHaveBeenCalledTimes(1);
+      expect(notify).toHaveBeenCalledWith('sendNewDataFromModel', { dataForSlider: mockDataViewSlider, dataForPanel: mockDataViewPanel });
     })
   });
-  describe('Тестирование метода updateValuesWhenClick', () => {
-    test('Метод производит расчеты новых значений при клике по слайдеру и вызывает метод updateViews, для отправки новых значений', () => {
+  describe('Тестирование метода updateValuesForStaticCoordinates', () => {
+    test('Метод производит расчеты новых значений при клике по слайдеру и вызывает метод sendNewDataFromModel, для отправки новых значений', () => {
       const mockRelativeCoordinates = 500;
-      model.updateViews = jest.fn();
+      model.sendNewDataFromModel = jest.fn();
 
-      model.updateValuesWhenClick(mockRelativeCoordinates);
+      model.updateValuesForStaticCoordinates(mockRelativeCoordinates);
 
       expect(typeof model.firstRelativePosition).toBe('number')
       expect(typeof model.secondRelativePosition).toBe('number')
-      expect(calculationValue).toHaveBeenCalledTimes(1);
-      expect(calculationRelativePosition).toHaveBeenCalledTimes(2);
-      expect(updateViews).not.toBeCalled();
+      expect(calculateTheValueForTheHandle).toHaveBeenCalledTimes(1);
+      expect(calculateRelativePosition).toHaveBeenCalledTimes(2);
+      expect(sendNewDataFromModel).not.toBeCalled();
     })
   });
-  describe('Тестирование метода updateValuesWhenMoving', () => {
-    test('Метод производит расчеты новых значений при перетаскивании ползунка и вызывает метод updateViews, для отправки новых значений', () => {
+  describe('Тестирование метода updateValuesForDynamicCoordinates', () => {
+    test('Метод производит расчеты новых значений при перетаскивании ползунка и вызывает метод sendNewDataFromModel, для отправки новых значений', () => {
       const mockRelativeCoordinates = 500;
-      model.updateViews = jest.fn();
+      model.sendNewDataFromModel = jest.fn();
 
-      model.updateValuesWhenMoving(mockRelativeCoordinates);
+      model.updateValuesForDynamicCoordinates(mockRelativeCoordinates);
 
       expect(typeof model.firstRelativePosition).toBe('number')
       expect(typeof model.secondRelativePosition).toBe('number')
-      expect(calculationValue).toHaveBeenCalledTimes(1);
-      expect(calculationRelativePosition).toHaveBeenCalledTimes(2);
-      expect(updateViews).not.toBeCalled();
+      expect(calculateTheValueForTheHandle).toHaveBeenCalledTimes(1);
+      expect(calculateRelativePosition).toHaveBeenCalledTimes(2);
+      expect(sendNewDataFromModel).not.toBeCalled();
     })
   });
 });

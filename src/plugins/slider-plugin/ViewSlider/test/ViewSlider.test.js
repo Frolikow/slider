@@ -8,13 +8,13 @@ document.body.innerHTML = '<div class="slider"></div>'
 const $ = require('jquery');
 
 const notify = jest.spyOn(EventEmmiter.prototype, 'notify');
-const createSlider = jest.spyOn(ViewSlider.prototype, '_createSlider');
-const listeners = jest.spyOn(ViewSlider.prototype, '_listeners');
+const createSliderElement = jest.spyOn(ViewSlider.prototype, '_createSliderElement');
+const eventHandlers = jest.spyOn(ViewSlider.prototype, '_eventHandlers');
 
 const enableVisibilityTooltips = jest.spyOn(ViewSlider.prototype, '_enableVisibilityTooltips');
 const orientationChange = jest.spyOn(ViewSlider.prototype, '_orientationChange');
 const enableRangeSelection = jest.spyOn(ViewSlider.prototype, '_enableRangeSelection');
-const setPositionHandle = jest.spyOn(ViewSlider.prototype, '_setPositionHandle');
+const setHandlePositionAndHandleValue = jest.spyOn(ViewSlider.prototype, '_setHandlePositionAndHandleValue');
 
 describe('Тестирование методов viewSlider', () => {
   describe('Тестирование метода initSlider', () => {
@@ -23,11 +23,11 @@ describe('Тестирование методов viewSlider', () => {
 
       viewSlider.initSlider()
 
-      expect(createSlider).toHaveBeenCalledTimes(1);
+      expect(createSliderElement).toHaveBeenCalledTimes(1);
       expect(viewSlider.scaleWidth).not.toBeUndefined();
       expect(notify).toHaveBeenCalledTimes(1);
       expect(notify).toHaveBeenCalledWith('calculateIndexOfRelativeCoordinates', viewSlider.scaleWidth)
-      expect(listeners).toHaveBeenCalledTimes(1);
+      expect(eventHandlers).toHaveBeenCalledTimes(1);
     })
   });
 
@@ -67,7 +67,7 @@ describe('Тестирование методов viewSlider', () => {
       };
 
       beforeEach(() => {
-        setPositionHandle.mockClear();
+        setHandlePositionAndHandleValue.mockClear();
       });
 
       test('Проверка при отключенном интервале', () => {
@@ -75,8 +75,8 @@ describe('Тестирование методов viewSlider', () => {
         
         viewSlider.updateViewSlider(mockDataForUpdateSlider);
         
-        expect(setPositionHandle).toHaveBeenCalledTimes(1);
-        expect(setPositionHandle).toHaveBeenCalledWith(mockDataForSetPositionHandle);
+        expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(1);
+        expect(setHandlePositionAndHandleValue).toHaveBeenCalledWith(mockDataForSetPositionHandle);
       });
       
       test('Проверка при включенном интервале', () => {
@@ -85,8 +85,8 @@ describe('Тестирование методов viewSlider', () => {
         
         viewSlider.updateViewSlider(mockDataForUpdateSlider);
         
-        expect(setPositionHandle).toHaveBeenNthCalledWith(2, mockDataForSetPositionHandle);
-        expect(setPositionHandle).toHaveBeenCalledTimes(2);
+        expect(setHandlePositionAndHandleValue).toHaveBeenNthCalledWith(2, mockDataForSetPositionHandle);
+        expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(2);
       });
     })
   })

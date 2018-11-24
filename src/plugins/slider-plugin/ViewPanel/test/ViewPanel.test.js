@@ -8,9 +8,9 @@ mockOptions.slider = $('.slider');
 
 const viewPanel = new ViewPanel(mockOptions);
 
-const createPanel = jest.spyOn(ViewPanel.prototype, '_createPanel');
-const eventListeners = jest.spyOn(ViewPanel.prototype, '_eventListeners');
-const initAttributes = jest.spyOn(ViewPanel.prototype, '_initAttributes');
+const createPanelElement = jest.spyOn(ViewPanel.prototype, '_createPanelElement');
+const eventHandlers = jest.spyOn(ViewPanel.prototype, '_eventHandlers');
+const initializeElementsAttributes = jest.spyOn(ViewPanel.prototype, '_initializeElementsAttributes');
 
 describe('Тестирование методов viewPanel', () => {
   describe('Тестирование метода updateViewPanel', () => {
@@ -21,24 +21,24 @@ describe('Тестирование методов viewPanel', () => {
 
         viewPanel.updateViewPanel(mockData);
 
-        expect(createPanel).toHaveBeenCalledTimes(1);
-        expect(eventListeners).toHaveBeenCalledTimes(1);
-        expect(initAttributes).toHaveBeenCalledTimes(1);
+        expect(createPanelElement).toHaveBeenCalledTimes(1);
+        expect(eventHandlers).toHaveBeenCalledTimes(1);
+        expect(initializeElementsAttributes).toHaveBeenCalledTimes(1);
       })
 
       afterEach(() => {
-        createPanel.mockRestore();
-        eventListeners.mockRestore();
-        initAttributes.mockRestore();
+        createPanelElement.mockRestore();
+        eventHandlers.mockRestore();
+        initializeElementsAttributes.mockRestore();
       })
       test('При "visibilityConfigPanel === false" не вызвает приватные методы ни разу и не отрисовывает панель', () => {
         viewPanel.visibilityConfigPanel = true;
 
         viewPanel.updateViewPanel(mockData);
 
-        expect(createPanel).not.toBeCalled();
-        expect(eventListeners).not.toBeCalled();
-        expect(initAttributes).not.toBeCalled();
+        expect(createPanelElement).not.toBeCalled();
+        expect(eventHandlers).not.toBeCalled();
+        expect(initializeElementsAttributes).not.toBeCalled();
       });
     })
   });
