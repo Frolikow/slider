@@ -60,7 +60,7 @@ class ViewSlider extends EventEmitter {
   _eventHandlers() {
     this.$sliderScale.click((event) => {
       let theCoordinatesOfTheClick;
-      const sliderCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow(this.$sliderScale); // внутренние координаты слайдера
+      const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
 
       if (this.verticalOrientation) {
         theCoordinatesOfTheClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
@@ -71,19 +71,19 @@ class ViewSlider extends EventEmitter {
     });
 
     this.$firstHandle.mousedown((event) => {
-      this._moveTheHandleWhenDragging({ event, $currentItem: this.$firstHandle });
+      this._moveHandleWhenDragging({ event, $currentItem: this.$firstHandle });
     });
 
     this.$secondHandle.mousedown((event) => {
-      this._moveTheHandleWhenDragging({ event, $currentItem: this.$secondHandle });
+      this._moveHandleWhenDragging({ event, $currentItem: this.$secondHandle });
     });
   }
 
-  _moveTheHandleWhenDragging({ event, $currentItem }) { // событие нажатой ЛКМ
-    const sliderCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow(this.$sliderScale); // координаты слайдера относительно окна
-    const handleCoordinates = this._getTheCoordinatesOfTheElementInsideTheWindow($currentItem); // координаты ползунка относительно окна
+  _moveHandleWhenDragging({ event, $currentItem }) {
+    const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
+    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentItem);
 
-    let cursorPositionInsideTheHandle; // координаты клика внутри ползунка
+    let cursorPositionInsideTheHandle;
     if (this.verticalOrientation === true) {
       cursorPositionInsideTheHandle = event.pageY - handleCoordinates.top;
     } else {
@@ -91,7 +91,7 @@ class ViewSlider extends EventEmitter {
     }
 
     $(document).on('mousemove', (event) => {
-      let theCoordinatesOfTheClickInTheSlider; // позиция курсора внутри слайдера
+      let theCoordinatesOfTheClickInTheSlider;
       if (this.verticalOrientation) {
         theCoordinatesOfTheClickInTheSlider = event.pageY - cursorPositionInsideTheHandle - sliderCoordinates.top;
       } else {
@@ -107,7 +107,7 @@ class ViewSlider extends EventEmitter {
       this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
     });
 
-    $(document).mouseup(() => { // событие ОТжатой ЛКМ, отмена "mousemove"
+    $(document).mouseup(() => {
       $(document).off('mousemove');
     });
   }
@@ -123,7 +123,7 @@ class ViewSlider extends EventEmitter {
       this.$secondTooltip.html(valueRange);
     }
   }
-  _getTheCoordinatesOfTheElementInsideTheWindow(element) { // получение координат курсора внутри элемента
+  _getCoordinatesOfElementInsideWindow(element) {
     const box = element.get(0).getBoundingClientRect();
     return {
       top: box.top + window.pageYOffset,

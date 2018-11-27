@@ -50,11 +50,11 @@ class ViewPanel extends EventEmitter {
       $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = kitElements;
     $switchVisibilityTooltips.on('change', () => {
       this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $orientationSwitch.on('change', () => {
       this.verticalOrientation = $orientationSwitch.prop('checked');
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $rangeSwitch.on('change', () => {
       this.rangeStatus = $rangeSwitch.prop('checked');
@@ -65,32 +65,32 @@ class ViewPanel extends EventEmitter {
         $currentValueSecondHandle.removeClass('configuration__current-value_visible');
         $currentValueSecondHandle.addClass('configuration__current-value_hidden');
       }
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
 
     $currentValueFirstHandle.on('focusout', () => {
       dataViewPanel.value = parseInt($currentValueFirstHandle.val());
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $currentValueSecondHandle.on('focusout', () => {
       dataViewPanel.valueRange = parseInt($currentValueSecondHandle.val());
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $minimumValue.on('focusout', () => {
       dataViewPanel.minimum = parseInt($minimumValue.val());
       dataViewPanel.value = dataViewPanel.value < dataViewPanel.minimum ? dataViewPanel.minimum : dataViewPanel.value;
       dataViewPanel.valueRange = dataViewPanel.valueRange <= dataViewPanel.minimum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $maximumValue.on('focusout', () => {
       dataViewPanel.maximum = parseInt($maximumValue.val());
       dataViewPanel.valueRange = dataViewPanel.valueRange > dataViewPanel.maximum ? dataViewPanel.maximum : dataViewPanel.valueRange;
       dataViewPanel.value = dataViewPanel.value >= dataViewPanel.maximum ? dataViewPanel.minimum : dataViewPanel.value;
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
     $stepSizeValue.on('focusout', () => {
       dataViewPanel.step = parseInt($stepSizeValue.val());
-      this._sendDataToUpdateThePlugin(dataViewPanel);
+      this._sendDataToUpdatePlugin(dataViewPanel);
     });
   }
 
@@ -133,7 +133,7 @@ class ViewPanel extends EventEmitter {
     });
   }
 
-  _sendDataToUpdateThePlugin(dataForUpdatePlugin) {
+  _sendDataToUpdatePlugin(dataForUpdatePlugin) {
     dataForUpdatePlugin.rangeStatus = this.rangeStatus;
     dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
     dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;

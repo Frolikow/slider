@@ -11,20 +11,20 @@ class Controller extends EventEmitter {
   }
   sendNewDataFromModel(newData) {
     const dataForSlider = {
-      value: newData.value,
-      valueRange: newData.valueRange,
       firstRelativePosition: newData.firstRelativePosition,
       secondRelativePosition: newData.secondRelativePosition,
+      value: newData.value,
+      valueRange: newData.valueRange,
       rangeStatus: newData.rangeStatus,
       visibilityTooltips: newData.visibilityTooltips,
       verticalOrientation: newData.verticalOrientation,
     };
     const dataForPanel = {
-      value: newData.value,
-      valueRange: newData.valueRange,
       minimum: newData.minimum,
       maximum: newData.maximum,
       step: newData.step,
+      value: newData.value,
+      valueRange: newData.valueRange,
       rangeStatus: newData.rangeStatus,
       visibilityTooltips: newData.visibilityTooltips,
       verticalOrientation: newData.verticalOrientation,

@@ -35,8 +35,8 @@ class Model extends EventEmitter {
   sendNewDataFromModel() {
     const firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
     const secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
-    const firstValue = this._calculateTheValueForTheHandle(firstRelativePosition);
-    const secondValue = this._calculateTheValueForTheHandle(secondRelativePosition);
+    const firstValue = this._calculateValueForTheHandle(firstRelativePosition);
+    const secondValue = this._calculateValueForTheHandle(secondRelativePosition);
 
     const newData = {
       value: firstValue,
@@ -53,41 +53,31 @@ class Model extends EventEmitter {
     this.notify('sendNewDataFromModel', newData);
   }
 
-  updateValuesForStaticCoordinates(relativeCoordinates) { // обработка клика по шкале слайдера
-    const calculatedValue = this._calculateTheValueForTheHandle(relativeCoordinates);
+  updateValuesForStaticCoordinates(relativeCoordinates) {
+    const calculatedValue = this._calculateValueForTheHandle(relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
 
-    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
-      if (relativeCoordinates < this.firstRelativePosition) { // если новая позиция < позиции первого элемента
+    if (this.modelData.rangeStatus) {
+      const newPositionCloserToTheSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
+      const newPositionCloserToTheFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
+      if (newPositionCloserToTheSecondElement) {
+        this.modelData.valueRange = parseInt(calculatedValue);
+      } else if (newPositionCloserToTheFirstElement) {
         this.modelData.value = parseInt(calculatedValue);
-      } else if (relativeCoordinates > this.secondRelativePosition) { // если новая позиция > позиции второго элемента
-        if (calculatedValue > this.modelData.maximum) {
-          this.modelData.valueRange = parseInt(this.modelData.maximum);
-        } else {
-          this.modelData.valueRange = parseInt(calculatedValue);
-        }
-      } else { // если новая позиция между элементами
-        const clickedCloserToTheSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
-        const clickedCloserToTheFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
-        if (clickedCloserToTheSecondElement) { // если клик между элементами ближе ко второму элементу
-          this.modelData.valueRange = parseInt(calculatedValue);
-        } else if (clickedCloserToTheFirstElement) { // если клик между элементами ближе к первому элементу
-          this.modelData.value = parseInt(calculatedValue);
-        }
       }
-    } else { // если интервал ВЫКЛючен
+    } else {
       this.modelData.value = parseInt(calculatedValue);
     }
     this.sendNewDataFromModel();
   }
 
   updateValuesForDynamicCoordinates(dataForSearchPosition) {
-    const calculatedValue = this._calculateTheValueForTheHandle(dataForSearchPosition.relativeCoordinates);
+    const calculatedValue = this._calculateValueForTheHandle(dataForSearchPosition.relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange - this.modelData.step);
 
-    if (this.modelData.rangeStatus) { // если интервал ВКЛючен
+    if (this.modelData.rangeStatus) {
       if (dataForSearchPosition.elementType === 'first') {
         if (dataForSearchPosition.relativeCoordinates <= this.secondRelativePosition) {
           this.modelData.value = parseInt(calculatedValue);
@@ -97,7 +87,7 @@ class Model extends EventEmitter {
           this.modelData.valueRange = parseInt(calculatedValue);
         }
       }
-    } else { // если интервал ВЫКЛючен
+    } else {
       this.modelData.value = parseInt(calculatedValue);
     }
     this.sendNewDataFromModel();
@@ -161,7 +151,7 @@ class Model extends EventEmitter {
     }
     return relativePosition;
   }
-  _calculateTheValueForTheHandle(relativeCoordinates) { // расчет значения над ползунком
+  _calculateValueForTheHandle(relativeCoordinates) {
     const arrayOfValuesForTheHandle = this._createAnArrayOfValidValues();
     if (relativeCoordinates <= 0) {
       relativeCoordinates = 0;
@@ -171,7 +161,7 @@ class Model extends EventEmitter {
 
     const indexOfValueRelativeToCoordinates = (((relativeCoordinates) + (this.relativeStepWidth / 2)) / this.relativeStepWidth) ^ 0;
 
-    const isFirstElementPeaked = this.modelData.rangeStatus && (indexOfValueRelativeToCoordinates >= arrayOfValuesForTheHandle.indexOf(this.modelData.valueRange - this.modelData.step)); // проверка значения при движении левого ползунка
+    const isFirstElementPeaked = this.modelData.rangeStatus && (indexOfValueRelativeToCoordinates >= arrayOfValuesForTheHandle.indexOf(this.modelData.valueRange - this.modelData.step));
     let newValue;
     if (this.modelData.rangeStatus) {
       newValue = (arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForTheHandle[arrayOfValuesForTheHandle.length - 1] : arrayOfValuesForTheHandle[indexOfValueRelativeToCoordinates];
