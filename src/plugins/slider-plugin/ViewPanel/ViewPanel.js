@@ -7,12 +7,13 @@ class ViewPanel extends EventEmitter {
 
     this.slider = viewOptions.slider;
     this.visibilityConfigPanel = viewOptions.visibilityConfigPanel;
-    this.visibilityTooltips = viewOptions.visibilityTooltips;
-    this.verticalOrientation = viewOptions.verticalOrientation;
-    this.rangeStatus = viewOptions.rangeStatus;
   }
   updateViewPanel(dataViewPanel) {
     if (this.visibilityConfigPanel) {
+      this.visibilityTooltips = dataViewPanel.visibilityTooltips;
+      this.verticalOrientation = dataViewPanel.verticalOrientation;
+      this.rangeStatus = dataViewPanel.rangeStatus;
+
       this.slider.find('.slider__configuration').remove();
       this._createPanelElement(this.slider);
 

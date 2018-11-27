@@ -9,14 +9,12 @@ import Controller from './Controller/Controller';
   $.fn.efSlider = function (options) {
     const sliderOptionsView = {
       slider: options.slider,
-      value: options.value,
-      valueRange: options.valueRange,
-      rangeStatus: options.rangeStatus,
-      visibilityTooltips: options.visibilityTooltips,
-      verticalOrientation: options.verticalOrientation,
     };
 
-    const panelOptionsView = options;
+    const panelOptionsView = {
+      slider: options.slider,
+      visibilityConfigPanel: options.visibilityConfigPanel,
+    };
 
     const stateOptions = {
       minimum: options.minimum,

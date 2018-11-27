@@ -9,7 +9,26 @@ class Controller extends EventEmitter {
     this.notify('initSlider');
     this.notify('sendNewDataFromModel');
   }
-  sendNewDataFromModel({ dataForSlider, dataForPanel }) {
+  sendNewDataFromModel(newData) {
+    const dataForSlider = {
+      value: newData.value,
+      valueRange: newData.valueRange,
+      firstRelativePosition: newData.firstRelativePosition,
+      secondRelativePosition: newData.secondRelativePosition,
+      rangeStatus: newData.rangeStatus,
+      visibilityTooltips: newData.visibilityTooltips,
+      verticalOrientation: newData.verticalOrientation,
+    };
+    const dataForPanel = {
+      value: newData.value,
+      valueRange: newData.valueRange,
+      minimum: newData.minimum,
+      maximum: newData.maximum,
+      step: newData.step,
+      rangeStatus: newData.rangeStatus,
+      visibilityTooltips: newData.visibilityTooltips,
+      verticalOrientation: newData.verticalOrientation,
+    };
     this.updateViewSlider(dataForSlider);
     this.updateViewPanel(dataForPanel);
   }

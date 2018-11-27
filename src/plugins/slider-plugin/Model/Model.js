@@ -38,23 +38,19 @@ class Model extends EventEmitter {
     const firstValue = this._calculateTheValueForTheHandle(firstRelativePosition);
     const secondValue = this._calculateTheValueForTheHandle(secondRelativePosition);
 
-    const dataForSlider = {
+    const newData = {
       value: firstValue,
       valueRange: secondValue,
       firstRelativePosition,
       secondRelativePosition,
+      minimum: this.modelData.minimum,
+      maximum: this.modelData.maximum,
+      step: this.modelData.step,
       rangeStatus: this.modelData.rangeStatus,
       visibilityTooltips: this.modelData.visibilityTooltips,
       verticalOrientation: this.modelData.verticalOrientation,
     };
-    const dataForPanel = {
-      value: firstValue,
-      valueRange: secondValue,
-      minimum: this.modelData.minimum,
-      maximum: this.modelData.maximum,
-      step: this.modelData.step,
-    };
-    this.notify('sendNewDataFromModel', { dataForSlider, dataForPanel });
+    this.notify('sendNewDataFromModel', newData);
   }
 
   updateValuesForStaticCoordinates(relativeCoordinates) { // обработка клика по шкале слайдера
