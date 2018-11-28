@@ -16,16 +16,8 @@ import Controller from './Controller/Controller';
       visibilityConfigPanel: options.visibilityConfigPanel,
     };
 
-    const stateOptions = {
-      minimum: options.minimum,
-      maximum: options.maximum,
-      value: options.value,
-      valueRange: options.valueRange,
-      step: options.step,
-      rangeStatus: options.rangeStatus,
-      visibilityTooltips: options.visibilityTooltips,
-      verticalOrientation: options.verticalOrientation,
-    };
+    const stateOptions = { ...options };
+    delete stateOptions.slider;
 
     const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(sliderOptionsView);

@@ -10,31 +10,21 @@ class Controller extends EventEmitter {
     this.notify('sendNewDataFromModel');
   }
   sendNewDataFromModel(newData) {
-    const dataForSlider = {
-      firstRelativePosition: newData.firstRelativePosition,
-      secondRelativePosition: newData.secondRelativePosition,
-      value: newData.value,
-      valueRange: newData.valueRange,
-      rangeStatus: newData.rangeStatus,
-      visibilityTooltips: newData.visibilityTooltips,
-      verticalOrientation: newData.verticalOrientation,
-    };
-    const dataForPanel = {
-      minimum: newData.minimum,
-      maximum: newData.maximum,
-      step: newData.step,
-      value: newData.value,
-      valueRange: newData.valueRange,
-      rangeStatus: newData.rangeStatus,
-      visibilityTooltips: newData.visibilityTooltips,
-      verticalOrientation: newData.verticalOrientation,
-    };
+    const dataForSlider = { ...newData };
+    delete dataForSlider.minimum;
+    delete dataForSlider.maximum;
+    delete dataForSlider.step;
+
+    const dataForPanel = { ...newData };
+    delete dataForPanel.firstRelativePosition;
+    delete dataForPanel.secondRelativePosition;
+
     this.updateViewSlider(dataForSlider);
     this.updateViewPanel(dataForPanel);
   }
   updateViewSlider(dataViewSlider) {
-    dataViewSlider.firstPosition = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
-    dataViewSlider.secondPosition = this._convertValuesForViews(dataViewSlider.secondRelativePosition);
+    dataViewSlider.coordinatesFirstHandle = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
+    dataViewSlider.coordinatesSecondHandle = this._convertValuesForViews(dataViewSlider.secondRelativePosition);
     delete dataViewSlider.firstRelativePosition;
     delete dataViewSlider.secondRelativePosition;
     this.notify('updateViewSlider', dataViewSlider);

@@ -7,9 +7,6 @@ class ViewSlider extends EventEmitter {
     super.addEmitter(this.constructor.name);
 
     this.slider = viewOptions.slider;
-    this.visibilityTooltips = viewOptions.visibilityTooltips;
-    this.verticalOrientation = viewOptions.verticalOrientation;
-    this.rangeStatus = viewOptions.rangeStatus;
   }
   initSlider() {
     this._createSliderElement();
@@ -24,7 +21,7 @@ class ViewSlider extends EventEmitter {
     this._eventHandlers();
   }
   updateViewSlider(dataViewSlider) {
-    // dataViewSlider = { value,valueRange,rangeStatus,firstPosition,secondPosition };
+    // dataViewSlider = { value, valueRange, firstPosition, secondPosition, rangeStatus, verticalOrientation, visibilityTooltips };
     if (dataViewSlider.rangeStatus === undefined) {
       dataViewSlider.rangeStatus = this.rangeStatus;
     }
@@ -44,13 +41,11 @@ class ViewSlider extends EventEmitter {
     this.verticalOrientation ? this._orientationChange(true) : this._orientationChange(false);
     this.rangeStatus ? this._enableRangeSelection(true) : this._enableRangeSelection(false);
 
-    const dataForSetHandlePositionAndHandleValue = {
-      value: dataViewSlider.value,
-      valueRange: dataViewSlider.valueRange,
-      coordinatesFirstHandle: dataViewSlider.firstPosition,
-      coordinatesSecondHandle: dataViewSlider.secondPosition,
-      elementType: 'first',
-    };
+    const dataForSetHandlePositionAndHandleValue = { ...dataViewSlider, elementType: 'first' };
+    delete dataForSetHandlePositionAndHandleValue.rangeStatus;
+    delete dataForSetHandlePositionAndHandleValue.verticalOrientation;
+    delete dataForSetHandlePositionAndHandleValue.visibilityTooltips;
+
     this._setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue);
     if (this.rangeStatus) {
       dataForSetHandlePositionAndHandleValue.elementType = 'second';
@@ -59,15 +54,15 @@ class ViewSlider extends EventEmitter {
   }
   _eventHandlers() {
     this.$sliderScale.click((event) => {
-      let theCoordinatesOfTheClick;
+      let coordinatesOfClick;
       const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
 
       if (this.verticalOrientation) {
-        theCoordinatesOfTheClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
+        coordinatesOfClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
       } else {
-        theCoordinatesOfTheClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+        coordinatesOfClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
       }
-      this.notify('sendCoordinatesWhenClick', theCoordinatesOfTheClick);
+      this.notify('sendCoordinatesWhenClick', coordinatesOfClick);
     });
 
     this.$firstHandle.mousedown((event) => {
@@ -83,19 +78,19 @@ class ViewSlider extends EventEmitter {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
     const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentItem);
 
-    let cursorPositionInsideTheHandle;
+    let cursorPositionInsideHandle;
     if (this.verticalOrientation === true) {
-      cursorPositionInsideTheHandle = event.pageY - handleCoordinates.top;
+      cursorPositionInsideHandle = event.pageY - handleCoordinates.top;
     } else {
-      cursorPositionInsideTheHandle = event.pageX - handleCoordinates.left;
+      cursorPositionInsideHandle = event.pageX - handleCoordinates.left;
     }
 
     $(document).on('mousemove', (event) => {
-      let theCoordinatesOfTheClickInTheSlider;
+      let coordinatesOfClickInTlider;
       if (this.verticalOrientation) {
-        theCoordinatesOfTheClickInTheSlider = event.pageY - cursorPositionInsideTheHandle - sliderCoordinates.top;
+        coordinatesOfClickInTlider = event.pageY - cursorPositionInsideHandle - sliderCoordinates.top;
       } else {
-        theCoordinatesOfTheClickInTheSlider = event.pageX - cursorPositionInsideTheHandle - sliderCoordinates.left;
+        coordinatesOfClickInTlider = event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
       }
       let elementType;
       if ($currentItem === this.$firstHandle) {
@@ -103,7 +98,7 @@ class ViewSlider extends EventEmitter {
       } else if ($currentItem === this.$secondHandle) {
         elementType = 'second';
       }
-      const dataForPositionSearch = { coordinates: theCoordinatesOfTheClickInTheSlider, elementType, rangeStatus: this.rangeStatus };
+      const dataForPositionSearch = { coordinates: coordinatesOfClickInTlider, elementType, rangeStatus: this.rangeStatus };
       this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
     });
 
