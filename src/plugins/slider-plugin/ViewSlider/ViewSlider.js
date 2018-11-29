@@ -52,31 +52,16 @@ class ViewSlider extends EventEmitter {
       this._setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue);
     }
   }
+
   _eventHandlers() {
-    this.$sliderScale.click((event) => {
-      let coordinatesOfClick;
-      const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-
-      if (this.verticalOrientation) {
-        coordinatesOfClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
-      } else {
-        coordinatesOfClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
-      }
-      this.notify('sendCoordinatesWhenClick', coordinatesOfClick);
-    });
-
-    this.$firstHandle.mousedown((event) => {
-      this._moveHandleWhenDragging({ event, $currentItem: this.$firstHandle });
-    });
-
-    this.$secondHandle.mousedown((event) => {
-      this._moveHandleWhenDragging({ event, $currentItem: this.$secondHandle });
-    });
+    this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
+    this.$firstHandle.mousedown(this._handleMouseDownOnHandle.bind(this, this.$firstHandle));
+    this.$secondHandle.mousedown(this._handleMouseDownOnHandle.bind(this, this.$secondHandle));
   }
 
-  _moveHandleWhenDragging({ event, $currentItem }) {
+  _handleMouseDownOnHandle($currentHandle) {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentItem);
+    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentHandle);
 
     let cursorPositionInsideHandle;
     if (this.verticalOrientation === true) {
@@ -84,28 +69,37 @@ class ViewSlider extends EventEmitter {
     } else {
       cursorPositionInsideHandle = event.pageX - handleCoordinates.left;
     }
-
-    $(document).on('mousemove', (event) => {
-      let coordinatesOfClickInTlider;
-      if (this.verticalOrientation) {
-        coordinatesOfClickInTlider = event.pageY - cursorPositionInsideHandle - sliderCoordinates.top;
-      } else {
-        coordinatesOfClickInTlider = event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
-      }
-      let elementType;
-      if ($currentItem === this.$firstHandle) {
-        elementType = 'first';
-      } else if ($currentItem === this.$secondHandle) {
-        elementType = 'second';
-      }
-      const dataForPositionSearch = { coordinates: coordinatesOfClickInTlider, elementType, rangeStatus: this.rangeStatus };
-      this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
-    });
-
-    $(document).mouseup(() => {
-      $(document).off('mousemove');
-    });
+    $(document).mousemove(this._handleMouseMoveOnHandle.bind(this, $currentHandle, sliderCoordinates, cursorPositionInsideHandle));
+    $(document).mouseup(() => { $(document).off('mousemove'); });
   }
+  _handleMouseMoveOnHandle($currentHandle, sliderCoordinates, cursorPositionInsideHandle) {
+    let coordinatesOfClickInSlider;
+    if (this.verticalOrientation) {
+      coordinatesOfClickInSlider = event.pageY - cursorPositionInsideHandle - sliderCoordinates.top;
+    } else {
+      coordinatesOfClickInSlider = event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
+    }
+    let elementType;
+    if ($currentHandle === this.$firstHandle) {
+      elementType = 'first';
+    } else if ($currentHandle === this.$secondHandle) {
+      elementType = 'second';
+    }
+    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, rangeStatus: this.rangeStatus };
+    this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
+  }
+
+  _handleSliderScaleClick() {
+    let coordinatesOfClick;
+    const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
+    if (this.verticalOrientation) {
+      coordinatesOfClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
+    } else {
+      coordinatesOfClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+    }
+    this.notify('sendCoordinatesWhenClick', coordinatesOfClick);
+  }
+
   _setHandlePositionAndHandleValue(dataForSetHandlePositionAndHandleValue) {
     // dataForSetHandlePositionAndHandleValue = { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType }
     const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType } = dataForSetHandlePositionAndHandleValue;
