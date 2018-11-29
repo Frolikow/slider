@@ -1,28 +1,19 @@
 import EventEmitter from '../eventEmiter/eventEmiter';
+import { checkDataForInitialization, checkDataForUpdate } from './modelDataValidators';
 
 class Model extends EventEmitter {
   constructor(options) {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.modelData = { ...options };
+    this.modelData = checkDataForInitialization(options);
 
-    // value: options.value,
-    // valueRange: options.valueRange,
-    // minimum: options.minimum,
-    // maximum: options.maximum,
-    // step: options.step,
-    // rangeStatus: options.rangeStatus,
-    // visibilityTooltips: options.visibilityTooltips,
-    // verticalOrientation: options.verticalOrientation,
     this.relativeSliderWidth = 1000;
-
-    this._checkIncomingData();
   }
 
   updateState(newDataToUpdateState) {
-    this.modelData = { ...this.modelData, ...newDataToUpdateState };
-    this._checkIncomingData();
+    const verifiedData = checkDataForUpdate(newDataToUpdateState);
+    this.modelData = { ...verifiedData };
     this.sendNewDataFromModel();
   }
   sendNewDataFromModel() {
@@ -40,7 +31,6 @@ class Model extends EventEmitter {
     };
     this.notify('sendNewDataFromModel', newData);
   }
-
   updateValuesForStaticCoordinates(relativeCoordinates) {
     const calculatedValue = this._calculateValueForHandle(relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
@@ -59,7 +49,6 @@ class Model extends EventEmitter {
     }
     this.sendNewDataFromModel();
   }
-
   updateValuesForDynamicCoordinates(dataForSearchPosition) {
     const calculatedValue = this._calculateValueForHandle(dataForSearchPosition.relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
@@ -80,43 +69,7 @@ class Model extends EventEmitter {
     }
     this.sendNewDataFromModel();
   }
-  _checkIncomingData() {
-    this.modelData.minimum = (this.modelData.minimum === undefined) ? 1 : this.modelData.minimum;
-    this.modelData.maximum = (this.modelData.maximum === undefined) ? 10 : this.modelData.maximum;
-    this.modelData.value = (this.modelData.value === undefined) ? this.modelData.minimum : this.modelData.value;
-    this.modelData.valueRange = (this.modelData.valueRange === undefined) ? this.modelData.maximum : this.modelData.valueRange;
-    this.modelData.step = (this.modelData.step === undefined) ? 1 : this.modelData.step;
 
-    if (this.modelData.minimum >= this.modelData.maximum) {
-      this.modelData.minimum = 1;
-      this.modelData.maximum = 10;
-      console.log('Неккоректные значения minimum, maximum \nОбязательное условие: minimum < maximum \nИзменено на minimum = 1, maximum = 10.');
-    }
-    const isValueOfStepWithinAllowedInterval = (this.modelData.step < 1 || this.modelData.step > (this.modelData.maximum - this.modelData.minimum));
-    if (isValueOfStepWithinAllowedInterval) {
-      this.modelData.step = 1;
-      console.log('Неккоректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
-    }
-    const isValuesWithinAllowedInterval = this.modelData.value > this.modelData.maximum || this.modelData.value < this.modelData.minimum;
-    if (isValuesWithinAllowedInterval) {
-      this.modelData.value = this.modelData.minimum;
-      this.modelData.valueRange = this.modelData.maximum;
-      console.log('Неккоректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
-    }
-    if (this.modelData.rangeStatus) {
-      const isValueOfSecondElementIsLargerThanMaximum = this.modelData.valueRange > this.modelData.maximum;
-      if (isValueOfSecondElementIsLargerThanMaximum) {
-        this.modelData.value = this.modelData.minimum;
-        this.modelData.valueRange = this.modelData.maximum;
-        console.log('Неккоректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
-      }
-      if (this.modelData.value >= this.modelData.valueRange) {
-        this.modelData.valueRange = this.modelData.value;
-        this.modelData.value -= this.modelData.step;
-        console.log('Неккоректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
-      }
-    }
-  }
   _calculateRelativePosition(elementValueForPositionCalculation) {
     const arrayOfValuesForHandle = this._createAnArrayOfValidValues();
 
