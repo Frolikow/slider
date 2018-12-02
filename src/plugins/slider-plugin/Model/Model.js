@@ -36,12 +36,12 @@ class Model extends EventEmitter {
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
 
-    if (this.modelData.rangeStatus) {
-      const newPositionCloserToSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
-      const newPositionCloserToFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
-      if (newPositionCloserToSecondElement) {
+    if (this.modelData.isIntervalSelection) {
+      const isNewPositionCloserToSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
+      const isNewPositionCloserToFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
+      if (isNewPositionCloserToSecondElement) {
         this.modelData.valueRange = parseInt(calculatedValue);
-      } else if (newPositionCloserToFirstElement) {
+      } else if (isNewPositionCloserToFirstElement) {
         this.modelData.value = parseInt(calculatedValue);
       }
     } else {
@@ -54,7 +54,7 @@ class Model extends EventEmitter {
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange - this.modelData.step);
 
-    if (this.modelData.rangeStatus) {
+    if (this.modelData.isIntervalSelection) {
       if (dataForSearchPosition.elementType === 'first') {
         if (dataForSearchPosition.relativeCoordinates <= this.secondRelativePosition) {
           this.modelData.value = parseInt(calculatedValue);
@@ -102,9 +102,9 @@ class Model extends EventEmitter {
 
     const indexOfValueRelativeToCoordinates = (((relativeCoordinates) + (this.relativeStepWidth / 2)) / this.relativeStepWidth) ^ 0;
 
-    const isFirstElementPeaked = this.modelData.rangeStatus && (indexOfValueRelativeToCoordinates >= arrayOfValuesForHandle.indexOf(this.modelData.valueRange - this.modelData.step));
+    const isFirstElementPeaked = this.modelData.isIntervalSelection && (indexOfValueRelativeToCoordinates >= arrayOfValuesForHandle.indexOf(this.modelData.valueRange - this.modelData.step));
     let newValue;
-    if (this.modelData.rangeStatus) {
+    if (this.modelData.isIntervalSelection) {
       newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
     } else {
       if (isFirstElementPeaked) {

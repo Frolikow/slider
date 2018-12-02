@@ -8,16 +8,13 @@ import Controller from './Controller/Controller';
 (function ($) {
   $.fn.efSlider = function (options) {
     const sliderOptionsView = {
-      slider: options.slider,
+      $slider: options.$slider,
     };
 
-    const panelOptionsView = {
-      slider: options.slider,
-      visibilityConfigPanel: options.visibilityConfigPanel,
-    };
+    const panelOptionsView = { ...options };
 
     const stateOptions = { ...options };
-    delete stateOptions.slider;
+    delete stateOptions.$slider;
 
     const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(sliderOptionsView);

@@ -16,18 +16,19 @@ class Checkers {
         }],
         Model: [{
           Controller: [
-            'updateViewSlider',
-            'updateViewPanel',
+            'updateSlider',
+            'updatePanel',
             'sendNewDataFromModel',
           ],
         }],
         Controller: [{
           ViewSlider: [
             'initSlider',
-            'updateViewSlider',
+            'updateSlider',
           ],
           ViewPanel: [
-            'updateViewPanel',
+            'initPanel',
+            'updatePanel',
           ],
           Model: [
             'sendNewDataFromModel',

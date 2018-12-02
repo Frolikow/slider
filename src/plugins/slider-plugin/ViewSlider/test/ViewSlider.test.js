@@ -31,14 +31,14 @@ describe('Тестирование методов viewSlider', () => {
     })
   });
 
-  describe('Тестирование метода updateViewSlider', () => {
+  describe('Тестирование метода updateSlider', () => {
     viewSlider.visibilityTooltips = false;
     viewSlider.verticalOrientation = false;
     viewSlider.rangeStatus = false;
     test('Метод должен вызвать три приватных метода(с глобальными свойствами) для отрисовки слайдера, при передаче пустого объекта', () => {
       const mockDataForUpdateSlider = {};
 
-      viewSlider.updateViewSlider(mockDataForUpdateSlider);
+      viewSlider.updateSlider(mockDataForUpdateSlider);
 
       expect(enableVisibilityTooltips).toHaveBeenCalledTimes(1);
       expect(enableVisibilityTooltips).toHaveBeenCalledWith(viewSlider.visibilityTooltips);
@@ -73,7 +73,7 @@ describe('Тестирование методов viewSlider', () => {
       test('Проверка при отключенном интервале', () => {
         mockDataForUpdateSlider.rangeStatus = false;
         
-        viewSlider.updateViewSlider(mockDataForUpdateSlider);
+        viewSlider.updateSlider(mockDataForUpdateSlider);
         
         expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(1);
         expect(setHandlePositionAndHandleValue).toHaveBeenCalledWith(mockDataForSetPositionHandle);
@@ -83,7 +83,7 @@ describe('Тестирование методов viewSlider', () => {
         mockDataForUpdateSlider.rangeStatus = true;
         mockDataForSetPositionHandle.elementType = 'second';
         
-        viewSlider.updateViewSlider(mockDataForUpdateSlider);
+        viewSlider.updateSlider(mockDataForUpdateSlider);
         
         expect(setHandlePositionAndHandleValue).toHaveBeenNthCalledWith(2, mockDataForSetPositionHandle);
         expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(2);

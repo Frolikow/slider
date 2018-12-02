@@ -27,7 +27,7 @@ describe('Тестирование методов controller', () => {
     })
   });
 
-  describe('Тестирование метода updateViewSlider', () => {
+  describe('Тестирование метода updateSlider', () => {
     test('Метод перерасчитывает значения и отправляет данные в вид слайдера через notify', () => {
       const mockData = {
         value: 2,
@@ -48,15 +48,15 @@ describe('Тестирование методов controller', () => {
         verticalOrientation: mockData.verticalOrientation,
       };
 
-      controller.updateViewSlider(mockData);
+      controller.updateSlider(mockData);
 
       expect(mockData).toEqual(mockDataAfterConvert);
-      expect(notify).toBeCalledWith('updateViewSlider', mockData)
+      expect(notify).toBeCalledWith('updateSlider', mockData)
       expect(notify).toHaveBeenCalledTimes(1);
     })
   });
 
-  describe('Тестирование метода updateViewPanel', () => {
+  describe('Тестирование метода updatePanel', () => {
     test('Метод отправляет данные в вид панели через notify', () => {
       const mockData = {
         value: 2,
@@ -66,9 +66,9 @@ describe('Тестирование методов controller', () => {
         step: 1,
       }
 
-      controller.updateViewPanel(mockData);
+      controller.updatePanel(mockData);
 
-      expect(notify).toBeCalledWith('updateViewPanel', mockData)
+      expect(notify).toBeCalledWith('updatePanel', mockData)
       expect(notify).toHaveBeenCalledTimes(1);
     })
   });

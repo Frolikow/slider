@@ -7,6 +7,7 @@ class Controller extends EventEmitter {
   }
   initPlugin() {
     this.notify('initSlider');
+    this.notify('initPanel');
     this.notify('sendNewDataFromModel');
   }
   sendNewDataFromModel(newData) {
@@ -19,23 +20,29 @@ class Controller extends EventEmitter {
     delete dataForPanel.firstRelativePosition;
     delete dataForPanel.secondRelativePosition;
 
-    this.updateViewSlider(dataForSlider);
-    this.updateViewPanel(dataForPanel);
+    this.updateSlider(dataForSlider);
+    this.updatePanel(dataForPanel);
   }
-  updateViewSlider(dataViewSlider) {
+  updateSlider(dataViewSlider) {
     dataViewSlider.coordinatesFirstHandle = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
     dataViewSlider.coordinatesSecondHandle = this._convertValuesForViews(dataViewSlider.secondRelativePosition);
     delete dataViewSlider.firstRelativePosition;
     delete dataViewSlider.secondRelativePosition;
-    this.notify('updateViewSlider', dataViewSlider);
+    this.notify('updateSlider', dataViewSlider);
   }
-  updateViewPanel(dataViewPanel) {
-    this.notify('updateViewPanel', dataViewPanel);
+  updatePanel(dataViewPanel) {
+    this.notify('updatePanel', dataViewPanel);
   }
 
   updateState(dataForUpdatePlugin) {
     this.notify('updateState', dataForUpdatePlugin);
   }
+
+  // ////////////////////
+  // ////////////////////
+  // ////////////////////
+  // ////////////////////
+  // ////////////////////
 
   sendCoordinatesWhenClick(coordinates) {
     const relativeCoordinates = this._convertValuesForModel(coordinates);
@@ -61,3 +68,7 @@ class Controller extends EventEmitter {
 }
 
 export default Controller;
+
+
+// перенести методы для расчета значений сюда. а методы расчета позиции во вьюху при чем переделать без массива, индекс можно получать
+// вычитая из минимума значение. в процессе продумать как обрабатывать исключения типа макс для first и мин для second при вкл интервале

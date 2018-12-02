@@ -5,33 +5,22 @@ class ViewPanel extends EventEmitter {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.slider = viewOptions.slider;
-    this.visibilityConfigPanel = viewOptions.visibilityConfigPanel;
+    this.panelData = viewOptions;
   }
-  updateViewPanel(dataViewPanel) {
-    if (this.visibilityConfigPanel) {
-      this.visibilityTooltips = dataViewPanel.visibilityTooltips;
-      this.verticalOrientation = dataViewPanel.verticalOrientation;
-      this.rangeStatus = dataViewPanel.rangeStatus;
+  initPanel() {
+    if (this.panelData.isVisibilityConfigPanel) {
+      this._createPanelElement(this.panelData.$slider);
 
-      this.slider.find('.slider__configuration').remove();
-      this._createPanelElement(this.slider);
+      const $switchVisibilityTooltips = this.panelData.$slider.find('.configuration__show-handle-value');
+      const $orientationSwitch = this.panelData.$slider.find('.configuration__orientation');
+      const $rangeSwitch = this.panelData.$slider.find('.configuration__range');
+      const $currentValueFirstHandle = this.panelData.$slider.find('.configuration__current-value_first');
+      const $currentValueSecondHandle = this.panelData.$slider.find('.configuration__current-value_second');
+      const $minimumValue = this.panelData.$slider.find('.configuration__minimum-value');
+      const $maximumValue = this.panelData.$slider.find('.configuration__maximum-value');
+      const $stepSizeValue = this.panelData.$slider.find('.configuration__size-of-step');
 
-      const $switchVisibilityTooltips = this.slider.find('.configuration__show-handle-value');
-      const $orientationSwitch = this.slider.find('.configuration__orientation');
-      const $rangeSwitch = this.slider.find('.configuration__range');
-      const $currentValueFirstHandle = this.slider.find('.configuration__current-value_first');
-      const $currentValueSecondHandle = this.slider.find('.configuration__current-value_second');
-      const $minimumValue = this.slider.find('.configuration__minimum-value');
-      const $maximumValue = this.slider.find('.configuration__maximum-value');
-      const $stepSizeValue = this.slider.find('.configuration__size-of-step');
-
-      if (!this.rangeStatus) {
-        $currentValueSecondHandle.removeClass('configuration__current-value_visible');
-        $currentValueSecondHandle.addClass('configuration__current-value_hidden');
-      }
-
-      const kitElements = {
+      this.kitElements = {
         $switchVisibilityTooltips,
         $orientationSwitch,
         $rangeSwitch,
@@ -41,55 +30,66 @@ class ViewPanel extends EventEmitter {
         $maximumValue,
         $stepSizeValue,
       };
-      this._eventHandlers(kitElements, dataViewPanel);
-      this._initializeElementsAttributes(kitElements, dataViewPanel);
+      this._createEventHandlers();
+    }
+  }
+  updatePanel(panelData) {
+    if (this.panelData.isVisibilityConfigPanel) {
+      this.panelData = panelData;
+
+      this.panelData.isVisibilityTooltips = panelData.isVisibilityTooltips;
+      this.panelData.isVerticalOrientation = panelData.isVerticalOrientation;
+      this.panelData.isIntervalSelection = panelData.isIntervalSelection;
+
+      if (!this.panelData.isIntervalSelection) {
+        this.kitElements.$currentValueSecondHandle.removeClass('configuration__current-value_visible');
+        this.kitElements.$currentValueSecondHandle.addClass('configuration__current-value_hidden');
+      }
+      this._initializeElementsAttributes(this.kitElements);
     }
   }
 
-  _initializeElementsAttributes(kitElements, dataForAttributeInitialization) {
+  _initializeElementsAttributes(kitElements) {
     kitElements.$switchVisibilityTooltips.attr({
-      checked: this.visibilityTooltips ? 'checked' : null,
+      checked: this.panelData.isVisibilityTooltips ? 'checked' : null,
     });
     kitElements.$orientationSwitch.attr({
-      checked: this.verticalOrientation ? 'checked' : null,
+      checked: this.panelData.isVerticalOrientation ? 'checked' : null,
     });
     kitElements.$rangeSwitch.attr({
-      checked: this.rangeStatus ? 'checked' : null,
+      checked: this.panelData.isIntervalSelection ? 'checked' : null,
     });
     kitElements.$currentValueFirstHandle.attr({
-      step: dataForAttributeInitialization.step,
-      min: dataForAttributeInitialization.minimum,
-      max: this.rangeStatus ? dataForAttributeInitialization.valueRange - dataForAttributeInitialization.step : dataForAttributeInitialization.maximum,
-      value: dataForAttributeInitialization.value,
+      step: this.panelData.step,
+      min: this.panelData.minimum,
+      max: this.panelData.isIntervalSelection ? this.panelData.valueRange - this.panelData.step : this.panelData.maximum,
+      value: this.panelData.value,
     });
     kitElements.$currentValueSecondHandle.attr({
-      step: dataForAttributeInitialization.step,
-      min: dataForAttributeInitialization.value + dataForAttributeInitialization.step,
-      max: dataForAttributeInitialization.maximum,
-      value: dataForAttributeInitialization.valueRange,
+      step: this.panelData.step,
+      min: this.panelData.value + this.panelData.step,
+      max: this.panelData.maximum,
+      value: this.panelData.valueRange,
     });
     kitElements.$minimumValue.attr({
-      step: dataForAttributeInitialization.step,
-      max: dataForAttributeInitialization.maximum - dataForAttributeInitialization.step,
-      value: dataForAttributeInitialization.minimum,
+      step: this.panelData.step,
+      max: this.panelData.maximum - this.panelData.step,
+      value: this.panelData.minimum,
     });
     kitElements.$maximumValue.attr({
-      step: dataForAttributeInitialization.step,
-      min: dataForAttributeInitialization.minimum + dataForAttributeInitialization.step,
-      value: dataForAttributeInitialization.maximum,
+      step: this.panelData.step,
+      min: this.panelData.minimum + this.panelData.step,
+      value: this.panelData.maximum,
     });
     kitElements.$stepSizeValue.attr({
       min: 1,
-      max: dataForAttributeInitialization.maximum - dataForAttributeInitialization.minimum,
-      value: dataForAttributeInitialization.step,
+      max: this.panelData.maximum - this.panelData.minimum,
+      value: this.panelData.step,
     });
   }
 
-  _sendDataToUpdatePlugin(dataForUpdatePlugin) {
-    dataForUpdatePlugin.rangeStatus = this.rangeStatus;
-    dataForUpdatePlugin.visibilityTooltips = this.visibilityTooltips;
-    dataForUpdatePlugin.verticalOrientation = this.verticalOrientation;
-    this.notify('updateState', dataForUpdatePlugin);
+  _sendDataToUpdatePlugin() {
+    this.notify('updateState', this.panelData);
   }
   _createPanelElement(sliderBlock) {
     this.bookListingTemplate = require('./panelTemplate.hbs');
@@ -147,62 +147,62 @@ class ViewPanel extends EventEmitter {
     });
     sliderBlock.append(configurationPanel);
   }
-  _eventHandlers(kitElements, dataViewPanel) {
+  _createEventHandlers() {
     const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle,
-      $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = kitElements;
+      $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = this.kitElements;
 
-    $switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsOnChange.bind(this, dataViewPanel, $switchVisibilityTooltips));
-    $orientationSwitch.change(this._handleOrientationSwitchOnChange.bind(this, dataViewPanel, $orientationSwitch));
-    $rangeSwitch.change(this._handleRangeSwitchOnChange.bind(this, dataViewPanel, $rangeSwitch, $currentValueSecondHandle));
+    $switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsOnChange.bind(this, $switchVisibilityTooltips));
+    $orientationSwitch.change(this._handleOrientationSwitchOnChange.bind(this, $orientationSwitch));
+    $rangeSwitch.change(this._handleRangeSwitchOnChange.bind(this, $rangeSwitch, $currentValueSecondHandle));
 
-    $currentValueFirstHandle.focusout(this._handleCurrentValueFirstHandleFocusOut.bind(this, dataViewPanel, $currentValueFirstHandle));
-    $currentValueSecondHandle.focusout(this._handleCurrentValueSecondHandleFocusOut.bind(this, dataViewPanel, $currentValueSecondHandle));
-    $minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this, dataViewPanel, $minimumValue));
-    $maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this, dataViewPanel, $maximumValue));
-    $stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this, dataViewPanel, $stepSizeValue));
+    $currentValueFirstHandle.focusout(this._handleCurrentValueFirstHandleFocusOut.bind(this, $currentValueFirstHandle));
+    $currentValueSecondHandle.focusout(this._handleCurrentValueSecondHandleFocusOut.bind(this, $currentValueSecondHandle));
+    $minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this, $minimumValue));
+    $maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this, $maximumValue));
+    $stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this, $stepSizeValue));
   }
-  _handleSwitchVisibilityTooltipsOnChange(dataViewPanel, $switchVisibilityTooltips) {
-    this.visibilityTooltips = $switchVisibilityTooltips.prop('checked');
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleSwitchVisibilityTooltipsOnChange($switchVisibilityTooltips) {
+    this.panelData.isVisibilityTooltips = $switchVisibilityTooltips.prop('checked');
+    this._sendDataToUpdatePlugin();
   }
-  _handleOrientationSwitchOnChange(dataViewPanel, $orientationSwitch) {
-    this.verticalOrientation = $orientationSwitch.prop('checked');
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleOrientationSwitchOnChange($orientationSwitch) {
+    this.panelData.isVerticalOrientation = $orientationSwitch.prop('checked');
+    this._sendDataToUpdatePlugin();
   }
-  _handleRangeSwitchOnChange(dataViewPanel, $rangeSwitch, $currentValueSecondHandle) {
-    this.rangeStatus = $rangeSwitch.prop('checked');
-    if (this.rangeStatus) {
+  _handleRangeSwitchOnChange($rangeSwitch, $currentValueSecondHandle) {
+    this.panelData.isIntervalSelection = $rangeSwitch.prop('checked');
+    if (this.panelData.isIntervalSelection) {
       $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
       $currentValueSecondHandle.addClass('configuration__current-value_visible');
     } else {
       $currentValueSecondHandle.removeClass('configuration__current-value_visible');
       $currentValueSecondHandle.addClass('configuration__current-value_hidden');
     }
-    this._sendDataToUpdatePlugin(dataViewPanel);
+    this._sendDataToUpdatePlugin();
   }
-  _handleCurrentValueFirstHandleFocusOut(dataViewPanel, $currentValueFirstHandle) {
-    dataViewPanel.value = parseInt($currentValueFirstHandle.val());
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleCurrentValueFirstHandleFocusOut($currentValueFirstHandle) {
+    this.panelData.value = parseInt($currentValueFirstHandle.val());
+    this._sendDataToUpdatePlugin();
   }
-  _handleCurrentValueSecondHandleFocusOut(dataViewPanel, $currentValueSecondHandle) {
-    dataViewPanel.valueRange = parseInt($currentValueSecondHandle.val());
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleCurrentValueSecondHandleFocusOut($currentValueSecondHandle) {
+    this.panelData.valueRange = parseInt($currentValueSecondHandle.val());
+    this._sendDataToUpdatePlugin();
   }
-  _handleMinimumValueFocusOut(dataViewPanel, $minimumValue) {
-    dataViewPanel.minimum = parseInt($minimumValue.val());
-    dataViewPanel.value = dataViewPanel.value < dataViewPanel.minimum ? dataViewPanel.minimum : dataViewPanel.value;
-    dataViewPanel.valueRange = dataViewPanel.valueRange <= dataViewPanel.minimum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleMinimumValueFocusOut($minimumValue) {
+    this.panelData.minimum = parseInt($minimumValue.val());
+    this.panelData.value = this.panelData.value < this.panelData.minimum ? this.panelData.minimum : this.panelData.value;
+    this.panelData.valueRange = this.panelData.valueRange <= this.panelData.minimum ? this.panelData.maximum : this.panelData.valueRange;
+    this._sendDataToUpdatePlugin();
   }
-  _handleMaximumValueFocusOut(dataViewPanel, $maximumValue) {
-    dataViewPanel.maximum = parseInt($maximumValue.val());
-    dataViewPanel.valueRange = dataViewPanel.valueRange > dataViewPanel.maximum ? dataViewPanel.maximum : dataViewPanel.valueRange;
-    dataViewPanel.value = dataViewPanel.value >= dataViewPanel.maximum ? dataViewPanel.minimum : dataViewPanel.value;
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleMaximumValueFocusOut($maximumValue) {
+    this.panelData.maximum = parseInt($maximumValue.val());
+    this.panelData.valueRange = this.panelData.valueRange > this.panelData.maximum ? this.panelData.maximum : this.panelData.valueRange;
+    this.panelData.value = this.panelData.value >= this.panelData.maximum ? this.panelData.minimum : this.panelData.value;
+    this._sendDataToUpdatePlugin();
   }
-  _handleStepSizeValueFocusOut(dataViewPanel, $stepSizeValue) {
-    dataViewPanel.step = parseInt($stepSizeValue.val());
-    this._sendDataToUpdatePlugin(dataViewPanel);
+  _handleStepSizeValueFocusOut($stepSizeValue) {
+    this.panelData.step = parseInt($stepSizeValue.val());
+    this._sendDataToUpdatePlugin();
   }
 }
 
