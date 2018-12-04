@@ -28,10 +28,13 @@ class ViewSlider extends EventEmitter {
     this.sliderData.isVerticalOrientation ? this._changeOrientation(true) : this._changeOrientation(false);
     this.sliderData.isIntervalSelection ? this._changeIntervalSelection(true) : this._changeIntervalSelection(false);
 
-    const dataForSetHandlePosition = { ...this.sliderData, elementType: 'first' };
-    delete dataForSetHandlePosition.isIntervalSelection;
-    delete dataForSetHandlePosition.isVerticalOrientation;
-    delete dataForSetHandlePosition.isVisibilityTooltips;
+    const dataForSetHandlePosition = {
+      value: this.sliderData.value,
+      valueRange: this.sliderData.valueRange,
+      coordinatesFirstHandle: this.sliderData.coordinatesFirstHandle,
+      coordinatesSecondHandle: this.sliderData.coordinatesSecondHandle,
+      elementType: 'first',
+    };
 
     this._setHandlePosition(dataForSetHandlePosition);
     if (this.sliderData.isIntervalSelection) {
@@ -72,7 +75,7 @@ class ViewSlider extends EventEmitter {
     } else if ($currentHandle === this.$secondHandle) {
       elementType = 'second';
     }
-    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, isIntervalSelection: this.isIntervalSelection };
+    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, isIntervalSelection: this.sliderData.isIntervalSelection };
     this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
   }
 

@@ -11,24 +11,35 @@ class Controller extends EventEmitter {
     this.notify('sendNewDataFromModel');
   }
   sendNewDataFromModel(newData) {
-    const dataForSlider = { ...newData };
-    delete dataForSlider.minimum;
-    delete dataForSlider.maximum;
-    delete dataForSlider.step;
+    const dataForSlider = {
+      coordinatesFirstHandle: newData.firstRelativePosition,
+      coordinatesSecondHandle: newData.secondRelativePosition,
+      value: newData.value,
+      valueRange: newData.valueRange,
+      isIntervalSelection: newData.isIntervalSelection,
+      isVerticalOrientation: newData.isVerticalOrientation,
+      isVisibilityTooltips: newData.isVisibilityTooltips,
+    };
 
-    const dataForPanel = { ...newData };
-    delete dataForPanel.firstRelativePosition;
-    delete dataForPanel.secondRelativePosition;
-
+    const dataForPanel = {
+      isIntervalSelection: newData.isIntervalSelection,
+      isVerticalOrientation: newData.isVerticalOrientation,
+      isVisibilityConfigPanel: newData.isVisibilityConfigPanel,
+      isVisibilityTooltips: newData.isVisibilityTooltips,
+      value: newData.value,
+      valueRange: newData.valueRange,
+      step: newData.step,
+      maximum: newData.maximum,
+      minimum: newData.minimum,
+    };
     this.updateSlider(dataForSlider);
     this.updatePanel(dataForPanel);
   }
-  updateSlider(dataViewSlider) {
-    dataViewSlider.coordinatesFirstHandle = this._convertValuesForViews(dataViewSlider.firstRelativePosition);
-    dataViewSlider.coordinatesSecondHandle = this._convertValuesForViews(dataViewSlider.secondRelativePosition);
-    delete dataViewSlider.firstRelativePosition;
-    delete dataViewSlider.secondRelativePosition;
-    this.notify('updateSlider', dataViewSlider);
+
+  updateSlider(dataSlider) {
+    dataSlider.coordinatesFirstHandle = this._convertValuesForViews(dataSlider.coordinatesFirstHandle);
+    dataSlider.coordinatesSecondHandle = this._convertValuesForViews(dataSlider.coordinatesSecondHandle);
+    this.notify('updateSlider', dataSlider);
   }
   updatePanel(dataViewPanel) {
     this.notify('updatePanel', dataViewPanel);
@@ -38,20 +49,18 @@ class Controller extends EventEmitter {
     this.notify('updateState', dataForUpdatePlugin);
   }
 
-  // ////////////////////
-  // ////////////////////
-  // ////////////////////
-  // ////////////////////
-  // ////////////////////
 
   sendCoordinatesWhenClick(coordinates) {
     const relativeCoordinates = this._convertValuesForModel(coordinates);
     this.notify('updateValuesForStaticCoordinates', relativeCoordinates);
   }
   sendCoordinatesWhenMoving(dataForSearchPosition) {
-    dataForSearchPosition.relativeCoordinates = this._convertValuesForModel(dataForSearchPosition.coordinates);
-    delete dataForSearchPosition.coordinates;
-    this.notify('updateValuesForDynamicCoordinates', dataForSearchPosition);
+    const dataForCalculatePosition = {
+      elementType: dataForSearchPosition.elementType,
+      isIntervalSelection: dataForSearchPosition.isIntervalSelection,
+      relativeCoordinates: this._convertValuesForModel(dataForSearchPosition.coordinates),
+    };
+    this.notify('updateValuesForDynamicCoordinates', dataForCalculatePosition);
   }
 
   calculateIndexOfRelativeCoordinates(sliderWidth) {

@@ -13,8 +13,17 @@ import Controller from './Controller/Controller';
 
     const panelOptionsView = { ...options };
 
-    const stateOptions = { ...options };
-    delete stateOptions.$slider;
+    const stateOptions = {
+      isVisibilityConfigPanel: options.isVisibilityConfigPanel,
+      minimum: options.minimum,
+      maximum: options.maximum,
+      value: options.value,
+      valueRange: options.valueRange,
+      step: options.step,
+      isVisibilityTooltips: options.isVisibilityTooltips,
+      isVerticalOrientation: options.isVerticalOrientation,
+      isIntervalSelection: options.isIntervalSelection,
+    };
 
     const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(sliderOptionsView);
