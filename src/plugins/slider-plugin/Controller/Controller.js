@@ -11,27 +11,23 @@ class Controller extends EventEmitter {
     this.notify('sendNewDataFromModel');
   }
   sendNewDataFromModel(newData) {
-    const dataForSlider = {
-      coordinatesFirstHandle: newData.firstRelativePosition,
-      coordinatesSecondHandle: newData.secondRelativePosition,
-      value: newData.value,
-      valueRange: newData.valueRange,
-      isIntervalSelection: newData.isIntervalSelection,
-      isVerticalOrientation: newData.isVerticalOrientation,
-      isVisibilityTooltips: newData.isVisibilityTooltips,
-    };
+    const {
+      value,
+      valueRange,
+      minimum,
+      maximum,
+      step,
+      isVisibilityConfigPanel,
+      isIntervalSelection,
+      isVerticalOrientation,
+      isVisibilityTooltips,
+      firstRelativePosition,
+      secondRelativePosition,
+    } = newData;
 
-    const dataForPanel = {
-      isIntervalSelection: newData.isIntervalSelection,
-      isVerticalOrientation: newData.isVerticalOrientation,
-      isVisibilityConfigPanel: newData.isVisibilityConfigPanel,
-      isVisibilityTooltips: newData.isVisibilityTooltips,
-      value: newData.value,
-      valueRange: newData.valueRange,
-      step: newData.step,
-      maximum: newData.maximum,
-      minimum: newData.minimum,
-    };
+    const dataForSlider = { coordinatesFirstHandle: firstRelativePosition, coordinatesSecondHandle: secondRelativePosition, value, valueRange, isIntervalSelection, isVerticalOrientation, isVisibilityTooltips };
+    const dataForPanel = { value, valueRange, minimum, maximum, step, isIntervalSelection, isVerticalOrientation, isVisibilityConfigPanel, isVisibilityTooltips };
+
     this.updateSlider(dataForSlider);
     this.updatePanel(dataForPanel);
   }
