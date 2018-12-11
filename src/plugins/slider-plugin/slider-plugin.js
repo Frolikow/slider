@@ -7,10 +7,6 @@ import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const sliderOptionsView = {
-      $slider: options.$slider,
-    };
-
     const panelOptionsView = { ...options };
 
     const stateOptions = {
@@ -26,7 +22,7 @@ import Controller from './Controller/Controller';
     };
 
     const model = new Model(stateOptions);
-    const viewSlider = new ViewSlider(sliderOptionsView);
+    const viewSlider = new ViewSlider(options.$slider);
     const viewPanel = new ViewPanel(panelOptionsView);
     const controller = new Controller();
 

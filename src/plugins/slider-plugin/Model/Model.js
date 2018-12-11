@@ -13,8 +13,10 @@ class Model extends EventEmitter {
 
   updateState(newDataToUpdateState) {
     this.modelData = validateIncomingData(newDataToUpdateState);
+
     this.sendNewDataFromModel();
   }
+
   sendNewDataFromModel() {
     const firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
     const secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
@@ -28,8 +30,10 @@ class Model extends EventEmitter {
       firstRelativePosition,
       secondRelativePosition,
     };
+
     this.notify('sendNewDataFromModel', newData);
   }
+
   updateValuesForStaticCoordinates(relativeCoordinates) {
     const calculatedValue = this._calculateValueForHandle(relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
@@ -46,8 +50,10 @@ class Model extends EventEmitter {
     } else {
       this.modelData.value = parseInt(calculatedValue);
     }
+
     this.sendNewDataFromModel();
   }
+
   updateValuesForDynamicCoordinates(dataForSearchPosition) {
     const calculatedValue = this._calculateValueForHandle(dataForSearchPosition.relativeCoordinates);
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
@@ -66,12 +72,12 @@ class Model extends EventEmitter {
     } else {
       this.modelData.value = parseInt(calculatedValue);
     }
+
     this.sendNewDataFromModel();
   }
 
   _calculateRelativePosition(elementValueForPositionCalculation) {
     const arrayOfValuesForHandle = this._createAnArrayOfValidValues();
-
     this.relativeStepWidth = this.relativeSliderWidth / (arrayOfValuesForHandle.length - 1);
     let relativePosition = this.relativeStepWidth * (arrayOfValuesForHandle.indexOf(elementValueForPositionCalculation));
 
@@ -80,6 +86,7 @@ class Model extends EventEmitter {
     } else if (relativePosition >= this.relativeSliderWidth) {
       relativePosition = this.relativeSliderWidth;
     }
+
     if (elementValueForPositionCalculation === this.modelData.value) {
       if (arrayOfValuesForHandle.includes(elementValueForPositionCalculation) === false) {
         relativePosition = 0;
@@ -89,10 +96,13 @@ class Model extends EventEmitter {
         relativePosition = this.relativeSliderWidth;
       }
     }
+
     return relativePosition;
   }
+
   _calculateValueForHandle(relativeCoordinates) {
     const arrayOfValuesForHandle = this._createAnArrayOfValidValues();
+
     if (relativeCoordinates <= 0) {
       relativeCoordinates = 0;
     } else if (relativeCoordinates >= this.relativeSliderWidth) {
@@ -100,8 +110,8 @@ class Model extends EventEmitter {
     }
 
     const indexOfValueRelativeToCoordinates = (((relativeCoordinates) + (this.relativeStepWidth / 2)) / this.relativeStepWidth) ^ 0;
-
     const isFirstElementPeaked = this.modelData.isIntervalSelection && (indexOfValueRelativeToCoordinates >= arrayOfValuesForHandle.indexOf(this.modelData.valueRange - this.modelData.step));
+
     let newValue;
     if (this.modelData.isIntervalSelection) {
       newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
@@ -112,13 +122,16 @@ class Model extends EventEmitter {
         newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
       }
     }
+
     return newValue;
   }
+
   _createAnArrayOfValidValues() {
     let currentValue = 0;
     let beginning = this.modelData.minimum;
     const finish = this.modelData.maximum;
     const arrayOfValuesForHandle = [];
+
     while (currentValue < finish) {
       if (beginning > finish) {
         break;
@@ -128,6 +141,7 @@ class Model extends EventEmitter {
         arrayOfValuesForHandle.push(currentValue);
       }
     }
+
     return arrayOfValuesForHandle;
   }
 }

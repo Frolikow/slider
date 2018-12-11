@@ -12,9 +12,10 @@
   &__range
     margin-bottom 0.9375rem
 
-  &__current-value
+  &__current-values
     display flex
 
+  &__current-value
     &_second
       margin-left 0.9375rem
 
@@ -57,7 +58,11 @@
     &_hidden
       display none
 
-  &__value
+    &_second
+      position relative
+      top -1.6875rem
+
+  &__tooltip
     width 2.1875rem
     height 1.5625rem
     border-radius 0.1875rem
@@ -98,7 +103,3 @@
         left -0.3125rem
         bottom 1.1875rem
         transform rotate(135deg)
-
-  &__handle_right
-    position relative
-    top -1.6875rem

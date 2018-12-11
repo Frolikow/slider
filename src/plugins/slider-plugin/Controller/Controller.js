@@ -5,11 +5,13 @@ class Controller extends EventEmitter {
     super();
     super.addEmitter(this.constructor.name);
   }
+
   initPlugin() {
     this.notify('initSlider');
     this.notify('initPanel');
     this.notify('sendNewDataFromModel');
   }
+
   sendNewDataFromModel(newData) {
     const {
       value,
@@ -35,8 +37,10 @@ class Controller extends EventEmitter {
   updateSlider(dataSlider) {
     dataSlider.coordinatesFirstHandle = this._convertValuesForViews(dataSlider.coordinatesFirstHandle);
     dataSlider.coordinatesSecondHandle = this._convertValuesForViews(dataSlider.coordinatesSecondHandle);
+
     this.notify('updateSlider', dataSlider);
   }
+
   updatePanel(dataViewPanel) {
     this.notify('updatePanel', dataViewPanel);
   }
@@ -48,24 +52,29 @@ class Controller extends EventEmitter {
 
   sendCoordinatesWhenClick(coordinates) {
     const relativeCoordinates = this._convertValuesForModel(coordinates);
+
     this.notify('updateValuesForStaticCoordinates', relativeCoordinates);
   }
+
   sendCoordinatesWhenMoving(dataForSearchPosition) {
     const dataForCalculatePosition = {
       elementType: dataForSearchPosition.elementType,
       isIntervalSelection: dataForSearchPosition.isIntervalSelection,
       relativeCoordinates: this._convertValuesForModel(dataForSearchPosition.coordinates),
     };
+
     this.notify('updateValuesForDynamicCoordinates', dataForCalculatePosition);
   }
 
   calculateIndexOfRelativeCoordinates(sliderWidth) {
     this.indexOfRelativeValues = sliderWidth / 1000;
   }
+
   _convertValuesForViews(data) {
     data *= this.indexOfRelativeValues;
     return data;
   }
+
   _convertValuesForModel(data) {
     data /= this.indexOfRelativeValues;
     return data;

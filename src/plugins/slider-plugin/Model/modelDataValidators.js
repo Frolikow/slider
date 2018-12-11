@@ -43,17 +43,20 @@ function validateIncomingData(incomingData) {
     maximum = 10;
     console.log('Некорректные значения minimum, maximum \nОбязательное условие: minimum < maximum \nИзменено на minimum = 1, maximum = 10.');
   }
+
   const isStepValueWithinAllowedInterval = (step < 1 || step > (maximum - minimum));
   if (isStepValueWithinAllowedInterval) {
     step = 1;
     console.log('Некорректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
   }
+
   const isValueWithinAllowedInterval = value > maximum || value < minimum;
   if (isValueWithinAllowedInterval) {
     value = minimum;
     valueRange = maximum;
     console.log('Некорректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
   }
+
   if (isIntervalSelection) {
     const isSecondElementValueIsLargerThanMaximum = valueRange > maximum;
     if (isSecondElementValueIsLargerThanMaximum) {
@@ -67,6 +70,7 @@ function validateIncomingData(incomingData) {
       console.log('Некорректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
     }
   }
+
   const dataForUpdate = { ...incomingData, minimum, maximum, value, valueRange, step, isIntervalSelection };
   return dataForUpdate;
 }
