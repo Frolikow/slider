@@ -45,34 +45,34 @@ class ViewSlider extends EventEmitter {
 
   _createEventHandlers() {
     this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
-    this.$firstHandle.mousedown(this._handleMouseDownOnHandle.bind(this, this.$firstHandle));
-    this.$secondHandle.mousedown(this._handleMouseDownOnHandle.bind(this, this.$secondHandle));
+    this.$firstHandle.mousedown(this._handleMouseDownOnHandle.bind(this));
+    this.$secondHandle.mousedown(this._handleMouseDownOnHandle.bind(this));
   }
 
-  _handleMouseDownOnHandle($currentHandle) {
+  _handleMouseDownOnHandle() {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentHandle);
+    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(event.currentTarget));
 
     let cursorPositionInsideHandle;
-    if (this.isVerticalOrientation === true) {
+    if (this.sliderData.isVerticalOrientation === true) {
       cursorPositionInsideHandle = event.pageY - handleCoordinates.top;
     } else {
       cursorPositionInsideHandle = event.pageX - handleCoordinates.left;
     }
-    $(document).mousemove(this._handleMouseMoveOnHandle.bind(this, $currentHandle, sliderCoordinates, cursorPositionInsideHandle));
+    $(document).mousemove(this._handleMouseMoveOnHandle.bind(this, $(event.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
     $(document).mouseup(() => { $(document).off('mousemove'); });
   }
   _handleMouseMoveOnHandle($currentHandle, sliderCoordinates, cursorPositionInsideHandle) {
     let coordinatesOfClickInSlider;
-    if (this.isVerticalOrientation) {
+    if (this.sliderData.isVerticalOrientation) {
       coordinatesOfClickInSlider = event.pageY - cursorPositionInsideHandle - sliderCoordinates.top;
     } else {
       coordinatesOfClickInSlider = event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
     }
     let elementType;
-    if ($currentHandle === this.$firstHandle) {
+    if ($($currentHandle).hasClass('slider__handle_left')) {
       elementType = 'first';
-    } else if ($currentHandle === this.$secondHandle) {
+    } else if ($($currentHandle).hasClass('slider__handle_right')) {
       elementType = 'second';
     }
     const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, isIntervalSelection: this.sliderData.isIntervalSelection };
@@ -82,7 +82,7 @@ class ViewSlider extends EventEmitter {
   _handleSliderScaleClick() {
     let coordinatesOfClick;
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    if (this.isVerticalOrientation) {
+    if (this.sliderData.isVerticalOrientation) {
       coordinatesOfClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
     } else {
       coordinatesOfClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
@@ -91,7 +91,6 @@ class ViewSlider extends EventEmitter {
   }
 
   _setHandlePosition(dataForSetHandlePosition) {
-    // dataForSetHandlePosition = { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType }
     const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, elementType } = dataForSetHandlePosition;
     if (elementType === 'first') {
       this._setFirstSliderPosition(value, coordinatesFirstHandle);

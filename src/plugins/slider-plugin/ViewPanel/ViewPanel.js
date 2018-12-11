@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewPanel extends EventEmitter {
@@ -151,26 +152,27 @@ class ViewPanel extends EventEmitter {
     const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirstHandle,
       $currentValueSecondHandle, $minimumValue, $maximumValue, $stepSizeValue } = this.kitElements;
 
-    $switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsOnChange.bind(this, $switchVisibilityTooltips));
-    $orientationSwitch.change(this._handleOrientationSwitchOnChange.bind(this, $orientationSwitch));
-    $rangeSwitch.change(this._handleRangeSwitchOnChange.bind(this, $rangeSwitch, $currentValueSecondHandle));
+    $switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsOnChange.bind(this));
 
-    $currentValueFirstHandle.focusout(this._handleCurrentValueFirstHandleFocusOut.bind(this, $currentValueFirstHandle));
-    $currentValueSecondHandle.focusout(this._handleCurrentValueSecondHandleFocusOut.bind(this, $currentValueSecondHandle));
-    $minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this, $minimumValue));
-    $maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this, $maximumValue));
-    $stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this, $stepSizeValue));
+    $orientationSwitch.change(this._handleOrientationSwitchOnChange.bind(this));
+    $rangeSwitch.change(this._handleRangeSwitchOnChange.bind(this, $currentValueSecondHandle));
+
+    $currentValueFirstHandle.focusout(this._handleCurrentValueFirstHandleFocusOut.bind(this));
+    $currentValueSecondHandle.focusout(this._handleCurrentValueSecondHandleFocusOut.bind(this));
+    $minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this));
+    $maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this));
+    $stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this));
   }
-  _handleSwitchVisibilityTooltipsOnChange($switchVisibilityTooltips) {
-    this.panelData.isVisibilityTooltips = $switchVisibilityTooltips.prop('checked');
+  _handleSwitchVisibilityTooltipsOnChange() {
+    this.panelData.isVisibilityTooltips = $(event.target).prop('checked');
     this._sendDataToUpdatePlugin();
   }
-  _handleOrientationSwitchOnChange($orientationSwitch) {
-    this.panelData.isVerticalOrientation = $orientationSwitch.prop('checked');
+  _handleOrientationSwitchOnChange() {
+    this.panelData.isVerticalOrientation = $(event.target).prop('checked');
     this._sendDataToUpdatePlugin();
   }
-  _handleRangeSwitchOnChange($rangeSwitch, $currentValueSecondHandle) {
-    this.panelData.isIntervalSelection = $rangeSwitch.prop('checked');
+  _handleRangeSwitchOnChange($currentValueSecondHandle) {
+    this.panelData.isIntervalSelection = $(event.target).prop('checked');
     if (this.panelData.isIntervalSelection) {
       $currentValueSecondHandle.removeClass('configuration__current-value_hidden');
       $currentValueSecondHandle.addClass('configuration__current-value_visible');
@@ -180,28 +182,28 @@ class ViewPanel extends EventEmitter {
     }
     this._sendDataToUpdatePlugin();
   }
-  _handleCurrentValueFirstHandleFocusOut($currentValueFirstHandle) {
-    this.panelData.value = parseInt($currentValueFirstHandle.val());
+  _handleCurrentValueFirstHandleFocusOut() {
+    this.panelData.value = parseInt($(event.target).val());
     this._sendDataToUpdatePlugin();
   }
-  _handleCurrentValueSecondHandleFocusOut($currentValueSecondHandle) {
-    this.panelData.valueRange = parseInt($currentValueSecondHandle.val());
+  _handleCurrentValueSecondHandleFocusOut() {
+    this.panelData.valueRange = parseInt($(event.target).val());
     this._sendDataToUpdatePlugin();
   }
-  _handleMinimumValueFocusOut($minimumValue) {
-    this.panelData.minimum = parseInt($minimumValue.val());
+  _handleMinimumValueFocusOut() {
+    this.panelData.minimum = parseInt($(event.target).val());
     this.panelData.value = this.panelData.value < this.panelData.minimum ? this.panelData.minimum : this.panelData.value;
     this.panelData.valueRange = this.panelData.valueRange <= this.panelData.minimum ? this.panelData.maximum : this.panelData.valueRange;
     this._sendDataToUpdatePlugin();
   }
-  _handleMaximumValueFocusOut($maximumValue) {
-    this.panelData.maximum = parseInt($maximumValue.val());
+  _handleMaximumValueFocusOut() {
+    this.panelData.maximum = parseInt($(event.target).val());
     this.panelData.valueRange = this.panelData.valueRange > this.panelData.maximum ? this.panelData.maximum : this.panelData.valueRange;
     this.panelData.value = this.panelData.value >= this.panelData.maximum ? this.panelData.minimum : this.panelData.value;
     this._sendDataToUpdatePlugin();
   }
-  _handleStepSizeValueFocusOut($stepSizeValue) {
-    this.panelData.step = parseInt($stepSizeValue.val());
+  _handleStepSizeValueFocusOut() {
+    this.panelData.step = parseInt($(event.target).val());
     this._sendDataToUpdatePlugin();
   }
 }
