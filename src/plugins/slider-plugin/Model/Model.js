@@ -1,19 +1,18 @@
 import EventEmitter from '../eventEmiter/eventEmiter';
-import { checkDataForInitialization, checkDataForUpdate } from './modelDataValidators';
+import { validateInitialData, validateIncomingData } from './modelDataValidators';
 
 class Model extends EventEmitter {
   constructor(options) {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.modelData = checkDataForInitialization(options);
+    this.modelData = validateInitialData(options);
 
     this.relativeSliderWidth = 1000;
   }
 
   updateState(newDataToUpdateState) {
-    const verifiedData = checkDataForUpdate(newDataToUpdateState);
-    this.modelData = { ...verifiedData };
+    this.modelData = validateIncomingData(newDataToUpdateState);
     this.sendNewDataFromModel();
   }
   sendNewDataFromModel() {

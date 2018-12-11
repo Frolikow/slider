@@ -1,59 +1,74 @@
+/* eslint-disable prefer-destructuring */
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function checkDataForInitialization(incomingData) {
-  const dataForInitialization = { ...incomingData };
+const defaultInitialData = {
+  minimum: 1,
+  maximum: 10,
+  step: 1,
+};
+defaultInitialData.value = defaultInitialData.minimum;
+defaultInitialData.valueRange = defaultInitialData.maximum;
 
-  dataForInitialization.minimum = (dataForInitialization.minimum === undefined) ? 1 : dataForInitialization.minimum;
-  dataForInitialization.maximum = (dataForInitialization.maximum === undefined) ? 10 : dataForInitialization.maximum;
-  dataForInitialization.value = (dataForInitialization.value === undefined) ? dataForInitialization.minimum : dataForInitialization.value;
-  dataForInitialization.valueRange = (dataForInitialization.valueRange === undefined) ? dataForInitialization.maximum : dataForInitialization.valueRange;
-  dataForInitialization.step = (dataForInitialization.step === undefined) ? 1 : dataForInitialization.step;
+function validateInitialData(incomingData) {
+  const dataForInitialization = { ...defaultInitialData, ...incomingData };
 
-  checkDataForUpdate(dataForInitialization);
-  return dataForInitialization;
+  const verifiedData = validateIncomingData(dataForInitialization);
+  return verifiedData;
 }
 
-function checkDataForUpdate(incomingData) {
-  const dataForUpdate = { ...incomingData };
+function validateIncomingData(incomingData) {
+  // eslint-disable-next-line prefer-const
+  let { minimum, maximum, value, valueRange, step, isIntervalSelection } = incomingData;
 
-  dataForUpdate.minimum = isNumeric(dataForUpdate.minimum) ? dataForUpdate.minimum : 1;
-  dataForUpdate.maximum = isNumeric(dataForUpdate.maximum) ? dataForUpdate.maximum : 10;
-  dataForUpdate.value = isNumeric(dataForUpdate.value) ? dataForUpdate.value : dataForUpdate.minimum;
-  dataForUpdate.valueRange = isNumeric(dataForUpdate.valueRange) ? dataForUpdate.valueRange : dataForUpdate.maximum;
-  dataForUpdate.step = isNumeric(dataForUpdate.step) ? dataForUpdate.step : 1;
+  if (!isNumeric(minimum)) {
+    minimum = defaultInitialData.minimum;
+  }
+  if (!isNumeric(maximum)) {
+    maximum = defaultInitialData.maximum;
+  }
+  if (!isNumeric(value)) {
+    value = defaultInitialData.value;
+  }
+  if (!isNumeric(valueRange)) {
+    valueRange = defaultInitialData.valueRange;
+  }
+  if (!isNumeric(step)) {
+    step = defaultInitialData.step;
+  }
 
-  if (dataForUpdate.minimum >= dataForUpdate.maximum) {
-    dataForUpdate.minimum = 1;
-    dataForUpdate.maximum = 10;
+  if (minimum >= maximum) {
+    minimum = 1;
+    maximum = 10;
     console.log('Некорректные значения minimum, maximum \nОбязательное условие: minimum < maximum \nИзменено на minimum = 1, maximum = 10.');
   }
-  const isValueOfStepWithinAllowedInterval = (dataForUpdate.step < 1 || dataForUpdate.step > (dataForUpdate.maximum - dataForUpdate.minimum));
-  if (isValueOfStepWithinAllowedInterval) {
-    dataForUpdate.step = 1;
+  const isStepValueWithinAllowedInterval = (step < 1 || step > (maximum - minimum));
+  if (isStepValueWithinAllowedInterval) {
+    step = 1;
     console.log('Некорректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
   }
-  const isValuesWithinAllowedInterval = dataForUpdate.value > dataForUpdate.maximum || dataForUpdate.value < dataForUpdate.minimum;
-  if (isValuesWithinAllowedInterval) {
-    dataForUpdate.value = dataForUpdate.minimum;
-    dataForUpdate.valueRange = dataForUpdate.maximum;
+  const isValueWithinAllowedInterval = value > maximum || value < minimum;
+  if (isValueWithinAllowedInterval) {
+    value = minimum;
+    valueRange = maximum;
     console.log('Некорректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
   }
-  if (dataForUpdate.rangeStatus) {
-    const isValueOfSecondElementIsLargerThanMaximum = dataForUpdate.valueRange > dataForUpdate.maximum;
-    if (isValueOfSecondElementIsLargerThanMaximum) {
-      dataForUpdate.value = dataForUpdate.minimum;
-      dataForUpdate.valueRange = dataForUpdate.maximum;
+  if (isIntervalSelection) {
+    const isSecondElementValueIsLargerThanMaximum = valueRange > maximum;
+    if (isSecondElementValueIsLargerThanMaximum) {
+      value = minimum;
+      valueRange = maximum;
       console.log('Некорректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
     }
-    if (dataForUpdate.value >= dataForUpdate.valueRange) {
-      dataForUpdate.valueRange = dataForUpdate.value;
-      dataForUpdate.value -= dataForUpdate.step;
+    if (value >= valueRange) {
+      valueRange = value;
+      value -= step;
       console.log('Некорректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
     }
   }
+  const dataForUpdate = { ...incomingData, minimum, maximum, value, valueRange, step, isIntervalSelection };
   return dataForUpdate;
 }
 
-export { checkDataForInitialization, checkDataForUpdate };
+export { validateInitialData, validateIncomingData };
