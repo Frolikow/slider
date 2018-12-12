@@ -13,14 +13,14 @@ class ViewPanel extends EventEmitter {
     if (this.panelData.isVisibilityConfigPanel) {
       this._createPanelElement(this.panelData.$slider);
 
-      const $switchVisibilityTooltips = this.panelData.$slider.find('.configuration__visibility-tooltips');
-      const $orientationSwitch = this.panelData.$slider.find('.configuration__orientation');
-      const $rangeSwitch = this.panelData.$slider.find('.configuration__range');
-      const $currentValueFirst = this.panelData.$slider.find('.configuration__current-value_first');
-      const $currentValueSecond = this.panelData.$slider.find('.configuration__current-value_second');
-      const $minimumValue = this.panelData.$slider.find('.configuration__minimum-value');
-      const $maximumValue = this.panelData.$slider.find('.configuration__maximum-value');
-      const $stepSizeValue = this.panelData.$slider.find('.configuration__step-size');
+      const $switchVisibilityTooltips = this.panelData.$slider.find('.js-configuration__visibility-tooltips');
+      const $orientationSwitch = this.panelData.$slider.find('.js-configuration__orientation');
+      const $rangeSwitch = this.panelData.$slider.find('.js-configuration__range');
+      const $currentValueFirst = this.panelData.$slider.find('.js-configuration__current-value_first');
+      const $currentValueSecond = this.panelData.$slider.find('.js-configuration__current-value_second');
+      const $minimumValue = this.panelData.$slider.find('.js-configuration__minimum-value');
+      const $maximumValue = this.panelData.$slider.find('.js-configuration__maximum-value');
+      const $stepSizeValue = this.panelData.$slider.find('.js-configuration__step-size');
 
       this.kitElements = {
         $switchVisibilityTooltips,
@@ -41,11 +41,11 @@ class ViewPanel extends EventEmitter {
     if (this.panelData.isVisibilityConfigPanel) {
       this.panelData = panelData;
 
-      this.panelData.isVisibilityTooltips = panelData.isVisibilityTooltips;
+      this.panelData.areTooltipsVisible = panelData.areTooltipsVisible;
       this.panelData.isVerticalOrientation = panelData.isVerticalOrientation;
-      this.panelData.isIntervalSelection = panelData.isIntervalSelection;
+      this.panelData.hasIntervalSelection = panelData.hasIntervalSelection;
 
-      if (!this.panelData.isIntervalSelection) {
+      if (!this.panelData.hasIntervalSelection) {
         this.kitElements.$currentValueSecond.removeClass('configuration__current-value_visible');
         this.kitElements.$currentValueSecond.addClass('configuration__current-value_hidden');
       }
@@ -56,18 +56,18 @@ class ViewPanel extends EventEmitter {
 
   _initializeElementsAttributes(kitElements) {
     kitElements.$switchVisibilityTooltips.attr({
-      checked: this.panelData.isVisibilityTooltips ? 'checked' : null,
+      checked: this.panelData.areTooltipsVisible ? 'checked' : null,
     });
     kitElements.$orientationSwitch.attr({
       checked: this.panelData.isVerticalOrientation ? 'checked' : null,
     });
     kitElements.$rangeSwitch.attr({
-      checked: this.panelData.isIntervalSelection ? 'checked' : null,
+      checked: this.panelData.hasIntervalSelection ? 'checked' : null,
     });
     kitElements.$currentValueFirst.attr({
       step: this.panelData.step,
       min: this.panelData.minimum,
-      max: this.panelData.isIntervalSelection ? this.panelData.valueRange - this.panelData.step : this.panelData.maximum,
+      max: this.panelData.hasIntervalSelection ? this.panelData.valueRange - this.panelData.step : this.panelData.maximum,
       value: this.panelData.value,
     });
     kitElements.$currentValueSecond.attr({
@@ -100,7 +100,7 @@ class ViewPanel extends EventEmitter {
   _createPanelElement(sliderBlock) {
     this.bookListingTemplate = require('./panelTemplate.hbs');
     const configurationPanel = document.createElement('div');
-    configurationPanel.className = 'slider__configuration';
+    configurationPanel.className = 'js-slider__configuration';
 
     configurationPanel.innerHTML = this.bookListingTemplate({
       elements: [{
@@ -108,15 +108,15 @@ class ViewPanel extends EventEmitter {
         checkboxElements: [{
           title: 'Включить флажки',
           inputType: 'checkbox',
-          className: 'configuration__visibility-tooltips',
+          className: 'configuration__visibility-tooltips js-configuration__visibility-tooltips',
         }, {
           title: 'Включить вертикальное отображение',
           inputType: 'checkbox',
-          className: 'configuration__orientation',
+          className: 'configuration__orientation js-configuration__orientation',
         }, {
           title: 'Включить выбор интервала',
           inputType: 'checkbox',
-          className: 'configuration__range',
+          className: 'configuration__range js-configuration__range',
         }],
         inputElements: [
           {
@@ -124,28 +124,28 @@ class ViewPanel extends EventEmitter {
             className: 'configuration__current-values',
             valuesInput: [{
               inputType: 'number',
-              className: 'configuration__current-value configuration__current-value_first',
+              className: 'configuration__current-value configuration__current-value_first js-configuration__current-value_first',
             }, {
               inputType: 'number',
-              className: 'configuration__current-value configuration__current-value_second',
+              className: 'configuration__current-value configuration__current-value_second js-configuration__current-value_second',
             }],
           }, {
             title: 'Минимальное значение слайдера',
             valuesInput: [{
               inputType: 'number',
-              className: 'configuration__minimum-value',
+              className: 'configuration__minimum-value js-configuration__minimum-value',
             }],
           }, {
             title: 'Максимальное значение слайдера',
             valuesInput: [{
               inputType: 'number',
-              className: 'configuration__maximum-value',
+              className: 'configuration__maximum-value js-configuration__maximum-value',
             }],
           }, {
             title: 'Размер шага слайдера',
             valuesInput: [{
               inputType: 'number',
-              className: 'configuration__step-size',
+              className: 'configuration__step-size js-configuration__step-size',
             }],
           },
         ],
@@ -171,7 +171,7 @@ class ViewPanel extends EventEmitter {
   }
 
   _handleSwitchVisibilityTooltipsChange() {
-    this.panelData.isVisibilityTooltips = $(event.target).prop('checked');
+    this.panelData.areTooltipsVisible = $(event.target).prop('checked');
 
     this._sendDataToUpdatePlugin();
   }
@@ -183,8 +183,8 @@ class ViewPanel extends EventEmitter {
   }
 
   _handleRangeSwitchChange($currentValueSecond) {
-    this.panelData.isIntervalSelection = $(event.target).prop('checked');
-    if (this.panelData.isIntervalSelection) {
+    this.panelData.hasIntervalSelection = $(event.target).prop('checked');
+    if (this.panelData.hasIntervalSelection) {
       $currentValueSecond.removeClass('configuration__current-value_hidden');
       $currentValueSecond.addClass('configuration__current-value_visible');
     } else {

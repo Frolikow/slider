@@ -16,9 +16,9 @@ import Controller from './Controller/Controller';
       value: options.value,
       valueRange: options.valueRange,
       step: options.step,
-      isVisibilityTooltips: options.isVisibilityTooltips,
+      areTooltipsVisible: options.areTooltipsVisible,
       isVerticalOrientation: options.isVerticalOrientation,
-      isIntervalSelection: options.isIntervalSelection,
+      hasIntervalSelection: options.hasIntervalSelection,
     };
 
     const model = new Model(stateOptions);

@@ -2,20 +2,20 @@ import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewSlider extends EventEmitter {
-  constructor(sliderElement) {
+  constructor($sliderElement) {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.$slider = sliderElement;
+    this.$slider = $sliderElement;
   }
 
   initSlider() {
     this._createSliderElement();
-    this.$sliderScale = this.$slider.find('.slider__element');
-    this.$firstHandle = this.$slider.find('.slider__handle_first');
-    this.$firstTooltip = this.$slider.find('.slider__tooltip_first');
-    this.$secondHandle = this.$slider.find('.slider__handle_second');
-    this.$secondTooltip = this.$slider.find('.slider__tooltip_second');
+    this.$sliderScale = this.$slider.find('.js-slider__element');
+    this.$firstHandle = this.$slider.find('.js-slider__handle_first');
+    this.$firstTooltip = this.$slider.find('.js-slider__tooltip_first');
+    this.$secondHandle = this.$slider.find('.js-slider__handle_second');
+    this.$secondTooltip = this.$slider.find('.js-slider__tooltip_second');
 
     this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
 
@@ -24,17 +24,17 @@ class ViewSlider extends EventEmitter {
   }
 
   updateSlider(dataForUpdate) {
-    const { value, valueRange, coordinatesFirstHandle, coordinatesSecondHandle, isIntervalSelection, isVerticalOrientation, isVisibilityTooltips } = dataForUpdate;
+    const { value, valueRange, firstHandleCoordinates, secondHandleCoordinates, hasIntervalSelection, isVerticalOrientation, areTooltipsVisible } = dataForUpdate;
     this.isVerticalOrientation = isVerticalOrientation;
-    this.isIntervalSelection = isIntervalSelection;
+    this.hasIntervalSelection = hasIntervalSelection;
 
-    this._setVisibilityTooltips(isVisibilityTooltips);
+    this._setTooltipsVisibility(areTooltipsVisible);
     this._setOrientation(isVerticalOrientation);
-    this._setIntervalSelection(isIntervalSelection);
+    this._setIntervalSelection(hasIntervalSelection);
 
-    if (isIntervalSelection) {
-      this._setFirstHandlePosition(value, coordinatesFirstHandle);
-      this._setSecondHandlePosition(valueRange, coordinatesSecondHandle);
+    this._setFirstHandlePosition(value, firstHandleCoordinates);
+    if (hasIntervalSelection) {
+      this._setSecondHandlePosition(valueRange, secondHandleCoordinates);
     }
   }
 
@@ -48,45 +48,29 @@ class ViewSlider extends EventEmitter {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
     const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(event.currentTarget));
 
-    let cursorPositionInsideHandle;
-    if (this.isVerticalOrientation === true) {
-      cursorPositionInsideHandle = event.pageY - handleCoordinates.top;
-    } else {
-      cursorPositionInsideHandle = event.pageX - handleCoordinates.left;
-    }
+    const cursorPositionInsideHandle = this.isVerticalOrientation ? event.pageY - handleCoordinates.top : event.pageX - handleCoordinates.left;
 
     $(document).mousemove(this._handleHandleMouseMove.bind(this, $(event.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
     $(document).mouseup(() => { $(document).off('mousemove'); });
   }
 
   _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle) {
-    let coordinatesOfClickInSlider;
-    if (this.isVerticalOrientation) {
-      coordinatesOfClickInSlider = event.pageY - cursorPositionInsideHandle - sliderCoordinates.top;
-    } else {
-      coordinatesOfClickInSlider = event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
-    }
+    const coordinatesOfClickInSlider = this.isVerticalOrientation ? event.pageY - cursorPositionInsideHandle - sliderCoordinates.top : event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
 
     let elementType;
-    if ($($currentHandle).hasClass('slider__handle_first')) {
+    if ($($currentHandle).hasClass('js-slider__handle_first')) {
       elementType = 'first';
-    } else if ($($currentHandle).hasClass('slider__handle_second')) {
+    } else if ($($currentHandle).hasClass('js-slider__handle_second')) {
       elementType = 'second';
     }
 
-    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, isIntervalSelection: this.isIntervalSelection };
+    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType, hasIntervalSelection: this.hasIntervalSelection };
     this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
   }
 
   _handleSliderScaleClick() {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-
-    let coordinatesOfClick;
-    if (this.isVerticalOrientation) {
-      coordinatesOfClick = parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
-    } else {
-      coordinatesOfClick = parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
-    }
+    const coordinatesOfClick = this.isVerticalOrientation ? parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2)) : parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
 
     this.notify('sendCoordinatesWhenClick', coordinatesOfClick);
   }
@@ -109,7 +93,7 @@ class ViewSlider extends EventEmitter {
     };
   }
 
-  _setVisibilityTooltips(switchedOn) {
+  _setTooltipsVisibility(switchedOn) {
     if (switchedOn) {
       this.$firstTooltip.removeClass('slider__tooltip_hidden');
       this.$secondTooltip.removeClass('slider__tooltip_hidden');
@@ -151,24 +135,24 @@ class ViewSlider extends EventEmitter {
 
   _createSliderElement() {
     const bookListingTemplate = require('./sliderTemplate.hbs');
-    const sliderElement = document.createElement('div');
-    sliderElement.className = 'slider__element';
+    const $sliderElement = document.createElement('div');
+    $sliderElement.className = 'slider__element js-slider__element';
 
-    sliderElement.innerHTML = bookListingTemplate({
+    $sliderElement.innerHTML = bookListingTemplate({
       handles: [{
-        className: 'slider__handle slider__handle_first',
+        className: 'slider__handle slider__handle_first js-slider__handle_first',
         tooltip: [{
-          className: 'slider__tooltip slider__tooltip_first',
+          className: 'slider__tooltip slider__tooltip_first js-slider__tooltip_first',
         }],
       }, {
-        className: 'slider__handle slider__handle_second',
+        className: 'slider__handle slider__handle_second js-slider__handle_second',
         tooltip: [{
-          className: 'slider__tooltip slider__tooltip_second',
+          className: 'slider__tooltip slider__tooltip_second js-slider__tooltip_second',
         }],
       }],
     });
 
-    this.$slider.append(sliderElement);
+    this.$slider.append($sliderElement);
   }
 }
 

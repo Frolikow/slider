@@ -61,8 +61,8 @@ describe('Тестирование методов viewSlider', () => {
       const mockDataForSetPositionHandle = {
         value: mockDataForUpdateSlider.value,
         valueRange: mockDataForUpdateSlider.valueRange,
-        coordinatesFirstHandle: mockDataForUpdateSlider.firstPosition,
-        coordinatesSecondHandle: mockDataForUpdateSlider.secondPosition,
+        firstHandleCoordinates: mockDataForUpdateSlider.firstPosition,
+        secondHandleCoordinates: mockDataForUpdateSlider.secondPosition,
         elementType: 'first',
       };
 

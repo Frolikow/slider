@@ -20,7 +20,7 @@ function validateInitialData(incomingData) {
 
 function validateIncomingData(incomingData) {
   // eslint-disable-next-line prefer-const
-  let { minimum, maximum, value, valueRange, step, isIntervalSelection } = incomingData;
+  let { minimum, maximum, value, valueRange, step, hasIntervalSelection } = incomingData;
 
   if (!isNumeric(minimum)) {
     minimum = defaultInitialData.minimum;
@@ -57,7 +57,7 @@ function validateIncomingData(incomingData) {
     console.log('Некорректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
   }
 
-  if (isIntervalSelection) {
+  if (hasIntervalSelection) {
     const isSecondElementValueIsLargerThanMaximum = valueRange > maximum;
     if (isSecondElementValueIsLargerThanMaximum) {
       value = minimum;
@@ -71,7 +71,7 @@ function validateIncomingData(incomingData) {
     }
   }
 
-  const dataForUpdate = { ...incomingData, minimum, maximum, value, valueRange, step, isIntervalSelection };
+  const dataForUpdate = { ...incomingData, minimum, maximum, value, valueRange, step, hasIntervalSelection };
   return dataForUpdate;
 }
 

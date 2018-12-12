@@ -10,9 +10,9 @@ $(document).ready(() => {
       value: 2,
       valueRange: 8,
       step: 1,
-      isVisibilityTooltips: true,
+      areTooltipsVisible: true,
       isVerticalOrientation: false,
-      isIntervalSelection: true,
+      hasIntervalSelection: true,
     });
   });
 });

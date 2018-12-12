@@ -39,7 +39,7 @@ class Model extends EventEmitter {
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange);
 
-    if (this.modelData.isIntervalSelection) {
+    if (this.modelData.hasIntervalSelection) {
       const isNewPositionCloserToSecondElement = (relativeCoordinates - this.firstRelativePosition) > (this.secondRelativePosition - relativeCoordinates);
       const isNewPositionCloserToFirstElement = (relativeCoordinates - this.firstRelativePosition) < (this.secondRelativePosition - relativeCoordinates);
       if (isNewPositionCloserToSecondElement) {
@@ -59,7 +59,7 @@ class Model extends EventEmitter {
     this.firstRelativePosition = this._calculateRelativePosition(this.modelData.value + this.modelData.step);
     this.secondRelativePosition = this._calculateRelativePosition(this.modelData.valueRange - this.modelData.step);
 
-    if (this.modelData.isIntervalSelection) {
+    if (this.modelData.hasIntervalSelection) {
       if (dataForSearchPosition.elementType === 'first') {
         if (dataForSearchPosition.relativeCoordinates <= this.secondRelativePosition) {
           this.modelData.value = parseInt(calculatedValue);
@@ -110,10 +110,10 @@ class Model extends EventEmitter {
     }
 
     const indexOfValueRelativeToCoordinates = (((relativeCoordinates) + (this.relativeStepWidth / 2)) / this.relativeStepWidth) ^ 0;
-    const isFirstElementPeaked = this.modelData.isIntervalSelection && (indexOfValueRelativeToCoordinates >= arrayOfValuesForHandle.indexOf(this.modelData.valueRange - this.modelData.step));
+    const isFirstElementPeaked = this.modelData.hasIntervalSelection && (indexOfValueRelativeToCoordinates >= arrayOfValuesForHandle.indexOf(this.modelData.valueRange - this.modelData.step));
 
     let newValue;
-    if (this.modelData.isIntervalSelection) {
+    if (this.modelData.hasIntervalSelection) {
       newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
     } else {
       if (isFirstElementPeaked) {

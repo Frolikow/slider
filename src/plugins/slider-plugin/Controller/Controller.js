@@ -20,23 +20,23 @@ class Controller extends EventEmitter {
       maximum,
       step,
       isVisibilityConfigPanel,
-      isIntervalSelection,
+      hasIntervalSelection,
       isVerticalOrientation,
-      isVisibilityTooltips,
+      areTooltipsVisible,
       firstRelativePosition,
       secondRelativePosition,
     } = newData;
 
-    const dataForSlider = { coordinatesFirstHandle: firstRelativePosition, coordinatesSecondHandle: secondRelativePosition, value, valueRange, isIntervalSelection, isVerticalOrientation, isVisibilityTooltips };
-    const dataForPanel = { value, valueRange, minimum, maximum, step, isIntervalSelection, isVerticalOrientation, isVisibilityConfigPanel, isVisibilityTooltips };
+    const dataForSlider = { firstHandleCoordinates: firstRelativePosition, secondHandleCoordinates: secondRelativePosition, value, valueRange, hasIntervalSelection, isVerticalOrientation, areTooltipsVisible };
+    const dataForPanel = { value, valueRange, minimum, maximum, step, hasIntervalSelection, isVerticalOrientation, isVisibilityConfigPanel, areTooltipsVisible };
 
     this.updateSlider(dataForSlider);
     this.updatePanel(dataForPanel);
   }
 
   updateSlider(dataSlider) {
-    dataSlider.coordinatesFirstHandle = this._convertValuesForViews(dataSlider.coordinatesFirstHandle);
-    dataSlider.coordinatesSecondHandle = this._convertValuesForViews(dataSlider.coordinatesSecondHandle);
+    dataSlider.firstHandleCoordinates = this._convertValuesForViews(dataSlider.firstHandleCoordinates);
+    dataSlider.secondHandleCoordinates = this._convertValuesForViews(dataSlider.secondHandleCoordinates);
 
     this.notify('updateSlider', dataSlider);
   }
@@ -59,7 +59,7 @@ class Controller extends EventEmitter {
   sendCoordinatesWhenMoving(dataForSearchPosition) {
     const dataForCalculatePosition = {
       elementType: dataForSearchPosition.elementType,
-      isIntervalSelection: dataForSearchPosition.isIntervalSelection,
+      hasIntervalSelection: dataForSearchPosition.hasIntervalSelection,
       relativeCoordinates: this._convertValuesForModel(dataForSearchPosition.coordinates),
     };
 
