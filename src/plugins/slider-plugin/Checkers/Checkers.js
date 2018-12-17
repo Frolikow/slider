@@ -16,8 +16,6 @@ class Checkers {
         }],
         Model: [{
           Controller: [
-            'updateSlider',
-            'updatePanel',
             'sendNewDataFromModel',
           ],
         }],

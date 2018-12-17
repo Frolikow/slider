@@ -30,7 +30,6 @@ class Model extends EventEmitter {
       firstRelativePosition,
       secondRelativePosition,
     };
-
     this.notify('sendNewDataFromModel', newData);
   }
 

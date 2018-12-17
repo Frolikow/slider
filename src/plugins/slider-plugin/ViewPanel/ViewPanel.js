@@ -2,99 +2,95 @@ import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewPanel extends EventEmitter {
-  constructor(viewOptions) {
+  constructor(options) {
     super();
     super.addEmitter(this.constructor.name);
 
-    this.panelData = viewOptions;
+    this.panelState = options;
   }
 
   initPanel() {
-    if (this.panelData.isVisibilityConfigPanel) {
-      this._createPanelElement(this.panelData.$slider);
+    if (this.panelState.isConfigPanelVisible) {
+      this._createPanelElement(this.panelState.$slider);
 
-      const $switchVisibilityTooltips = this.panelData.$slider.find('.js-configuration__visibility-tooltips');
-      const $orientationSwitch = this.panelData.$slider.find('.js-configuration__orientation');
-      const $rangeSwitch = this.panelData.$slider.find('.js-configuration__range');
-      const $currentValueFirst = this.panelData.$slider.find('.js-configuration__current-value_first');
-      const $currentValueSecond = this.panelData.$slider.find('.js-configuration__current-value_second');
-      const $minimumValue = this.panelData.$slider.find('.js-configuration__minimum-value');
-      const $maximumValue = this.panelData.$slider.find('.js-configuration__maximum-value');
-      const $stepSizeValue = this.panelData.$slider.find('.js-configuration__step-size');
-
-      this.kitElements = {
-        $switchVisibilityTooltips,
-        $orientationSwitch,
-        $rangeSwitch,
-        $currentValueFirst,
-        $currentValueSecond,
-        $minimumValue,
-        $maximumValue,
-        $stepSizeValue,
-      };
+      this.$switchVisibilityTooltips = this.panelState.$slider.find('.js-configuration__visibility-tooltips');
+      this.$orientationSwitch = this.panelState.$slider.find('.js-configuration__orientation');
+      this.$rangeSwitch = this.panelState.$slider.find('.js-configuration__range');
+      this.$currentValueFirstHandle = this.panelState.$slider.find('.js-configuration__current-value_first');
+      this.$currentValueSecondHandle = this.panelState.$slider.find('.js-configuration__current-value_second');
+      this.$minimumValue = this.panelState.$slider.find('.js-configuration__minimum-value');
+      this.$maximumValue = this.panelState.$slider.find('.js-configuration__maximum-value');
+      this.$stepSizeValue = this.panelState.$slider.find('.js-configuration__step-size');
 
       this._initEventListeners();
     }
   }
 
-  updatePanel(panelData) {
-    if (this.panelData.isVisibilityConfigPanel) {
-      this.panelData = panelData;
+  updatePanel(panelState) {
+    if (this.panelState.isConfigPanelVisible) {
+      this.panelState = panelState;
 
-      this.panelData.areTooltipsVisible = panelData.areTooltipsVisible;
-      this.panelData.isVerticalOrientation = panelData.isVerticalOrientation;
-      this.panelData.hasIntervalSelection = panelData.hasIntervalSelection;
+      this.panelState.areTooltipsVisible = panelState.areTooltipsVisible;
+      this.panelState.isVerticalOrientation = panelState.isVerticalOrientation;
+      this.panelState.hasIntervalSelection = panelState.hasIntervalSelection;
 
-      if (!this.panelData.hasIntervalSelection) {
-        this.kitElements.$currentValueSecond.removeClass('configuration__current-value_visible');
-        this.kitElements.$currentValueSecond.addClass('configuration__current-value_hidden');
-      }
+      this._visibilitySecondCurrentValue(this.panelState.hasIntervalSelection);
 
-      this._initializeElementsAttributes(this.kitElements);
+      this._updatePanelElements();
     }
   }
 
-  _initializeElementsAttributes(kitElements) {
-    kitElements.$switchVisibilityTooltips.attr({
-      checked: this.panelData.areTooltipsVisible ? 'checked' : null,
+  _visibilitySecondCurrentValue(isVisible) {
+    if (isVisible) {
+      this.$currentValueSecondHandle.removeClass('configuration__current-value_hidden');
+      this.$currentValueSecondHandle.addClass('configuration__current-value_visible');
+    } else {
+      this.$currentValueSecondHandle.removeClass('configuration__current-value_visible');
+      this.$currentValueSecondHandle.addClass('configuration__current-value_hidden');
+    }
+  }
+
+  _updatePanelElements() {
+    this.$switchVisibilityTooltips.attr({
+      checked: this.panelState.areTooltipsVisible ? 'checked' : null,
     });
-    kitElements.$orientationSwitch.attr({
-      checked: this.panelData.isVerticalOrientation ? 'checked' : null,
+    this.$orientationSwitch.attr({
+      checked: this.panelState.isVerticalOrientation ? 'checked' : null,
     });
-    kitElements.$rangeSwitch.attr({
-      checked: this.panelData.hasIntervalSelection ? 'checked' : null,
+    this.$rangeSwitch.attr({
+      checked: this.panelState.hasIntervalSelection ? 'checked' : null,
     });
-    kitElements.$currentValueFirst.attr({
-      step: this.panelData.step,
-      min: this.panelData.minimum,
-      max: this.panelData.hasIntervalSelection ? this.panelData.valueRange - this.panelData.step : this.panelData.maximum,
-      value: this.panelData.value,
+    this.$currentValueFirstHandle.attr({
+      step: this.panelState.step,
+      min: this.panelState.minimum,
+      max: this.panelState.hasIntervalSelection ? this.panelState.valueRange - this.panelState.step : this.panelState.maximum,
+      value: this.panelState.value,
     });
-    kitElements.$currentValueSecond.attr({
-      step: this.panelData.step,
-      min: this.panelData.value + this.panelData.step,
-      max: this.panelData.maximum,
-      value: this.panelData.valueRange,
+    this.$currentValueSecondHandle.attr({
+      step: this.panelState.step,
+      min: this.panelState.value + this.panelState.step,
+      max: this.panelState.maximum,
+      value: this.panelState.valueRange,
     });
-    kitElements.$minimumValue.attr({
-      step: this.panelData.step,
-      max: this.panelData.maximum - this.panelData.step,
-      value: this.panelData.minimum,
+    this.$minimumValue.attr({
+      step: this.panelState.step,
+      max: this.panelState.maximum - this.panelState.step,
+      value: this.panelState.minimum,
     });
-    kitElements.$maximumValue.attr({
-      step: this.panelData.step,
-      min: this.panelData.minimum + this.panelData.step,
-      value: this.panelData.maximum,
+    this.$maximumValue.attr({
+      step: this.panelState.step,
+      min: this.panelState.minimum + this.panelState.step,
+      value: this.panelState.maximum,
     });
-    kitElements.$stepSizeValue.attr({
+    this.$stepSizeValue.attr({
       min: 1,
-      max: this.panelData.maximum - this.panelData.minimum,
-      value: this.panelData.step,
+      max: this.panelState.maximum - this.panelState.minimum,
+      value: this.panelState.step,
     });
   }
 
   _sendDataToUpdatePlugin() {
-    this.notify('updateState', this.panelData);
+    this.notify('updateState', this.panelState);
   }
 
   _createPanelElement(sliderBlock) {
@@ -156,75 +152,67 @@ class ViewPanel extends EventEmitter {
   }
 
   _initEventListeners() {
-    const { $switchVisibilityTooltips, $orientationSwitch, $rangeSwitch, $currentValueFirst,
-      $currentValueSecond, $minimumValue, $maximumValue, $stepSizeValue } = this.kitElements;
+    this.$switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsChange.bind(this));
+    this.$orientationSwitch.change(this._handleOrientationSwitchChange.bind(this));
+    this.$rangeSwitch.change(this._handleRangeSwitchChange.bind(this));
 
-    $switchVisibilityTooltips.change(this._handleSwitchVisibilityTooltipsChange.bind(this));
-    $orientationSwitch.change(this._handleOrientationSwitchChange.bind(this));
-    $rangeSwitch.change(this._handleRangeSwitchChange.bind(this, $currentValueSecond));
-
-    $currentValueFirst.focusout(this._handleCurrentValueFirstFocusOut.bind(this));
-    $currentValueSecond.focusout(this._handleCurrentValueSecondFocusOut.bind(this));
-    $minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this));
-    $maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this));
-    $stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this));
+    this.$currentValueFirstHandle.focusout(this._handleCurrentValueFirstFocusOut.bind(this));
+    this.$currentValueSecondHandle.focusout(this._handleCurrentValueSecondFocusOut.bind(this));
+    this.$minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this));
+    this.$maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this));
+    this.$stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this));
   }
 
-  _handleSwitchVisibilityTooltipsChange() {
-    this.panelData.areTooltipsVisible = $(event.target).prop('checked');
+
+  _handleSwitchVisibilityTooltipsChange(e) {
+    this.panelState.areTooltipsVisible = $(e.target).prop('checked');
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleOrientationSwitchChange() {
-    this.panelData.isVerticalOrientation = $(event.target).prop('checked');
+  _handleOrientationSwitchChange(e) {
+    this.panelState.isVerticalOrientation = $(e.target).prop('checked');
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleRangeSwitchChange($currentValueSecond) {
-    this.panelData.hasIntervalSelection = $(event.target).prop('checked');
-    if (this.panelData.hasIntervalSelection) {
-      $currentValueSecond.removeClass('configuration__current-value_hidden');
-      $currentValueSecond.addClass('configuration__current-value_visible');
-    } else {
-      $currentValueSecond.removeClass('configuration__current-value_visible');
-      $currentValueSecond.addClass('configuration__current-value_hidden');
-    }
+  _handleRangeSwitchChange(e) {
+    this.panelState.hasIntervalSelection = $(e.target).prop('checked');
+    this._visibilitySecondCurrentValue(this.panelState.hasIntervalSelection);
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleCurrentValueFirstFocusOut() {
-    this.panelData.value = parseInt($(event.target).val());
+  _handleCurrentValueFirstFocusOut(e) {
+    this.panelState.value = parseInt($(e.target).val());
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleCurrentValueSecondFocusOut() {
-    this.panelData.valueRange = parseInt($(event.target).val());
+  _handleCurrentValueSecondFocusOut(e) {
+    this.panelState.valueRange = parseInt($(e.target).val());
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleMinimumValueFocusOut() {
-    this.panelData.minimum = parseInt($(event.target).val());
-    this.panelData.value = this.panelData.value < this.panelData.minimum ? this.panelData.minimum : this.panelData.value;
-    this.panelData.valueRange = this.panelData.valueRange <= this.panelData.minimum ? this.panelData.maximum : this.panelData.valueRange;
+  _handleMinimumValueFocusOut(e) {
+    this.panelState.minimum = parseInt($(e.target).val());
+    this.panelState.value = this.panelState.value < this.panelState.minimum ? this.panelState.minimum : this.panelState.value;
+    this.panelState.valueRange = this.panelState.valueRange <= this.panelState.minimum ? this.panelState.maximum : this.panelState.valueRange;
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleMaximumValueFocusOut() {
-    this.panelData.maximum = parseInt($(event.target).val());
-    this.panelData.valueRange = this.panelData.valueRange > this.panelData.maximum ? this.panelData.maximum : this.panelData.valueRange;
-    this.panelData.value = this.panelData.value >= this.panelData.maximum ? this.panelData.minimum : this.panelData.value;
+  _handleMaximumValueFocusOut(e) {
+    this.panelState.maximum = parseInt($(e.target).val());
+    this.panelState.valueRange = this.panelState.valueRange > this.panelState.maximum ? this.panelState.maximum : this.panelState.valueRange;
+    this.panelState.value = this.panelState.value >= this.panelState.maximum ? this.panelState.minimum : this.panelState.value;
 
     this._sendDataToUpdatePlugin();
   }
 
-  _handleStepSizeValueFocusOut() {
-    this.panelData.step = parseInt($(event.target).val());
+  _handleStepSizeValueFocusOut(e) {
+    this.panelState.step = parseInt($(e.target).val());
 
     this._sendDataToUpdatePlugin();
   }

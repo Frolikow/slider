@@ -4,7 +4,7 @@ $(document).ready(() => {
   $('.slider').each(function () {
     $(this).efSlider({
       $slider: $(this),
-      isVisibilityConfigPanel: true,
+      isConfigPanelVisible: true,
       minimum: 1,
       maximum: 10,
       value: 2,

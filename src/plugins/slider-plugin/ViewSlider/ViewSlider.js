@@ -44,18 +44,18 @@ class ViewSlider extends EventEmitter {
     this.$secondHandle.mousedown(this._handleHandleMouseDown.bind(this));
   }
 
-  _handleHandleMouseDown() {
+  _handleHandleMouseDown(e) {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(event.currentTarget));
+    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(e.currentTarget));
 
-    const cursorPositionInsideHandle = this.isVerticalOrientation ? event.pageY - handleCoordinates.top : event.pageX - handleCoordinates.left;
+    const cursorPositionInsideHandle = this.isVerticalOrientation ? e.pageY - handleCoordinates.top : e.pageX - handleCoordinates.left;
 
-    $(document).mousemove(this._handleHandleMouseMove.bind(this, $(event.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
+    $(document).mousemove(this._handleHandleMouseMove.bind(this, $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
     $(document).mouseup(() => { $(document).off('mousemove'); });
   }
 
-  _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle) {
-    const coordinatesOfClickInSlider = this.isVerticalOrientation ? event.pageY - cursorPositionInsideHandle - sliderCoordinates.top : event.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
+  _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle, e) {
+    const coordinatesOfClickInSlider = this.isVerticalOrientation ? e.pageY - cursorPositionInsideHandle - sliderCoordinates.top : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
 
     let elementType;
     if ($($currentHandle).hasClass('js-slider__handle_first')) {
@@ -68,9 +68,9 @@ class ViewSlider extends EventEmitter {
     this.notify('sendCoordinatesWhenMoving', dataForPositionSearch);
   }
 
-  _handleSliderScaleClick() {
+  _handleSliderScaleClick(e) {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    const coordinatesOfClick = this.isVerticalOrientation ? parseInt(event.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2)) : parseInt(event.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+    const coordinatesOfClick = this.isVerticalOrientation ? parseInt(e.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2)) : parseInt(e.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
 
     this.notify('sendCoordinatesWhenClick', coordinatesOfClick);
   }

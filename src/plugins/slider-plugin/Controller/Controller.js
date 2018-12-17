@@ -19,7 +19,7 @@ class Controller extends EventEmitter {
       minimum,
       maximum,
       step,
-      isVisibilityConfigPanel,
+      isConfigPanelVisible,
       hasIntervalSelection,
       isVerticalOrientation,
       areTooltipsVisible,
@@ -28,7 +28,7 @@ class Controller extends EventEmitter {
     } = newData;
 
     const dataForSlider = { firstHandleCoordinates: firstRelativePosition, secondHandleCoordinates: secondRelativePosition, value, valueRange, hasIntervalSelection, isVerticalOrientation, areTooltipsVisible };
-    const dataForPanel = { value, valueRange, minimum, maximum, step, hasIntervalSelection, isVerticalOrientation, isVisibilityConfigPanel, areTooltipsVisible };
+    const dataForPanel = { value, valueRange, minimum, maximum, step, hasIntervalSelection, isVerticalOrientation, isConfigPanelVisible, areTooltipsVisible };
 
     this.updateSlider(dataForSlider);
     this.updatePanel(dataForPanel);

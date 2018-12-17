@@ -7,10 +7,10 @@ import Controller from './Controller/Controller';
 
 (function ($) {
   $.fn.efSlider = function (options) {
-    const panelOptionsView = { ...options };
+    const panelOptions = { ...options };
 
     const stateOptions = {
-      isVisibilityConfigPanel: options.isVisibilityConfigPanel,
+      isConfigPanelVisible: options.isConfigPanelVisible,
       minimum: options.minimum,
       maximum: options.maximum,
       value: options.value,
@@ -23,7 +23,7 @@ import Controller from './Controller/Controller';
 
     const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(options.$slider);
-    const viewPanel = new ViewPanel(panelOptionsView);
+    const viewPanel = new ViewPanel(panelOptions);
     const controller = new Controller();
 
     model.subscribe(controller);
