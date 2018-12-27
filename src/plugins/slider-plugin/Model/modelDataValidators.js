@@ -7,9 +7,9 @@ const defaultInitialData = {
   minimum: 1,
   maximum: 10,
   step: 1,
+  value: 1,
+  valueRange: 10,
 };
-defaultInitialData.value = defaultInitialData.minimum;
-defaultInitialData.valueRange = defaultInitialData.maximum;
 
 function validateInitialData(incomingData) {
   const dataForInitialization = { ...defaultInitialData, ...incomingData };
