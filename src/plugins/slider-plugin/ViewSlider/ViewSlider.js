@@ -42,6 +42,7 @@ class ViewSlider extends EventEmitter {
     this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
     this.$firstHandle.mousedown(this._handleHandleMouseDown.bind(this));
     this.$secondHandle.mousedown(this._handleHandleMouseDown.bind(this));
+    $(document).mouseup(() => { $(document).off('mousemove'); });
   }
 
   _handleHandleMouseDown(e) {
@@ -53,7 +54,6 @@ class ViewSlider extends EventEmitter {
       : e.pageX - handleCoordinates.left;
 
     $(document).mousemove(this._handleHandleMouseMove.bind(this, $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
-    $(document).mouseup(() => { $(document).off('mousemove'); });
   }
 
   _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle, e) {
@@ -62,9 +62,9 @@ class ViewSlider extends EventEmitter {
       : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
 
     let elementType;
-    if ($($currentHandle).hasClass('js-slider__handle_first')) {
+    if ($currentHandle.hasClass('js-slider__handle_first')) {
       elementType = 'first';
-    } else if ($($currentHandle).hasClass('js-slider__handle_second')) {
+    } else if ($currentHandle.hasClass('js-slider__handle_second')) {
       elementType = 'second';
     }
 
