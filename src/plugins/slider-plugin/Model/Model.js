@@ -113,12 +113,16 @@ class Model extends EventEmitter {
 
     let newValue;
     if (this.modelData.hasIntervalSelection) {
-      newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
+      newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined)
+        ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1]
+        : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
     } else {
       if (isFirstElementPeaked) {
         newValue = (this.modelData.valueRange - this.modelData.step);
       } else {
-        newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined) ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1] : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
+        newValue = (arrayOfValuesForHandle[indexOfValueRelativeToCoordinates] === undefined)
+          ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1]
+          : arrayOfValuesForHandle[indexOfValueRelativeToCoordinates];
       }
     }
 

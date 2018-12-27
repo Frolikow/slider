@@ -63,7 +63,9 @@ class ViewPanel extends EventEmitter {
     this.$currentValueFirstHandle.attr({
       step: this.panelState.step,
       min: this.panelState.minimum,
-      max: this.panelState.hasIntervalSelection ? this.panelState.valueRange - this.panelState.step : this.panelState.maximum,
+      max: this.panelState.hasIntervalSelection
+        ? this.panelState.valueRange - this.panelState.step
+        : this.panelState.maximum,
       value: this.panelState.value,
     });
     this.$currentValueSecondHandle.attr({

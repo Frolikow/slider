@@ -48,14 +48,18 @@ class ViewSlider extends EventEmitter {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
     const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(e.currentTarget));
 
-    const cursorPositionInsideHandle = this.isVerticalOrientation ? e.pageY - handleCoordinates.top : e.pageX - handleCoordinates.left;
+    const cursorPositionInsideHandle = this.isVerticalOrientation
+      ? e.pageY - handleCoordinates.top
+      : e.pageX - handleCoordinates.left;
 
     $(document).mousemove(this._handleHandleMouseMove.bind(this, $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
     $(document).mouseup(() => { $(document).off('mousemove'); });
   }
 
   _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle, e) {
-    const coordinatesOfClickInSlider = this.isVerticalOrientation ? e.pageY - cursorPositionInsideHandle - sliderCoordinates.top : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
+    const coordinatesOfClickInSlider = this.isVerticalOrientation
+      ? e.pageY - cursorPositionInsideHandle - sliderCoordinates.top
+      : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
 
     let elementType;
     if ($($currentHandle).hasClass('js-slider__handle_first')) {
