@@ -4,9 +4,7 @@ class Checkers {
       {
         ViewSlider: [{
           Controller: [
-            'sendCoordinatesWhenMoving',
-            'sendCoordinatesWhenClick',
-            'calculateIndexOfRelativeCoordinates',
+            'updateState',
           ],
         }],
         ViewPanel: [{
@@ -29,10 +27,7 @@ class Checkers {
             'updatePanel',
           ],
           Model: [
-            'sendNewDataFromModel',
             'updateState',
-            'updateValuesForStaticCoordinates',
-            'updateValuesForDynamicCoordinates',
           ],
         }],
       },
