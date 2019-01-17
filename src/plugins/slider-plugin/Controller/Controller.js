@@ -6,37 +6,16 @@ class Controller extends EventEmitter {
     super.addEmitter(this.constructor.name);
   }
 
-  initPlugin(dataForRendering) {
-    const dataForSliderRendering = { ...dataForRendering };
-    delete dataForSliderRendering.isConfigPanelVisible;
-    const dataForPanelRendering = { ...dataForRendering };
+  initPlugin(dataForInitState) {
+    this.notify('initSlider');
+    this.notify('initPanel');
 
-    this.notify('initSlider', dataForSliderRendering);
-    this.notify('initPanel', dataForPanelRendering);
-
-    const dataForUpdatePluginState = { ...dataForRendering };
-    delete dataForUpdatePluginState.$slider;
-    this.notify('updateState', dataForUpdatePluginState);
+    this.notify('updateState', dataForInitState);
   }
 
   sendNewDataFromModel(newData) {
-    const {
-      value,
-      valueRange,
-      minimum,
-      maximum,
-      step,
-      isConfigPanelVisible,
-      hasIntervalSelection,
-      isVerticalOrientation,
-      areTooltipsVisible,
-    } = newData;
-
-    const dataForSlider = { value, valueRange, minimum, maximum, step, hasIntervalSelection, isVerticalOrientation, areTooltipsVisible };
-    const dataForPanel = { value, valueRange, minimum, maximum, step, hasIntervalSelection, isVerticalOrientation, isConfigPanelVisible, areTooltipsVisible };
-
-    this.updateSlider(dataForSlider);
-    this.updatePanel(dataForPanel);
+    this.updateSlider(newData);
+    this.updatePanel(newData);
   }
 
   updateSlider(dataSlider) {

@@ -7,8 +7,8 @@ const defaultInitialData = {
   minimum: 1,
   maximum: 10,
   step: 1,
-  value: 1,
-  valueRange: 10,
+  firstValue: 1,
+  secondValue: 10,
 };
 
 function validateInitialData(incomingData) {
@@ -20,7 +20,7 @@ function validateInitialData(incomingData) {
 
 function validateIncomingData(incomingData) {
   // eslint-disable-next-line prefer-const
-  let { minimum, maximum, value, valueRange, step, hasIntervalSelection } = incomingData;
+  let { minimum, maximum, firstValue, secondValue, step, hasIntervalSelection } = incomingData;
 
   if (!isNumeric(minimum)) {
     minimum = defaultInitialData.minimum;
@@ -28,11 +28,11 @@ function validateIncomingData(incomingData) {
   if (!isNumeric(maximum)) {
     maximum = defaultInitialData.maximum;
   }
-  if (!isNumeric(value)) {
-    value = defaultInitialData.value;
+  if (!isNumeric(firstValue)) {
+    firstValue = defaultInitialData.firstValue;
   }
-  if (!isNumeric(valueRange)) {
-    valueRange = defaultInitialData.valueRange;
+  if (!isNumeric(secondValue)) {
+    secondValue = defaultInitialData.secondValue;
   }
   if (!isNumeric(step)) {
     step = defaultInitialData.step;
@@ -50,28 +50,28 @@ function validateIncomingData(incomingData) {
     console.log('Некорректное значение step \nОбязательное условие: \nstep >=1 && step <= (maximum - minimum) \nИзменено на step = 1.');
   }
 
-  const isValueWithinAllowedInterval = value > maximum || value < minimum;
+  const isValueWithinAllowedInterval = firstValue > maximum || firstValue < minimum;
   if (isValueWithinAllowedInterval) {
-    value = minimum;
-    valueRange = maximum;
-    console.log('Некорректные значения value \nОбязательное условие: \nminimum <= value <= maximum \nИзменено на value = minimum, valueRange = maximum.');
+    firstValue = minimum;
+    secondValue = maximum;
+    console.log('Некорректные значения firstValue \nОбязательное условие: \nminimum <= firstValue <= maximum \nИзменено на firstValue = minimum, secondValue = maximum.');
   }
 
   if (hasIntervalSelection) {
-    const isSecondElementValueIsLargerThanMaximum = valueRange > maximum;
+    const isSecondElementValueIsLargerThanMaximum = secondValue > maximum;
     if (isSecondElementValueIsLargerThanMaximum) {
-      value = minimum;
-      valueRange = maximum;
-      console.log('Некорректные значения valueRange \nОбязательное условие: \nvalueRange <= maximum \nИзменено на value = minimum, valueRange = maximum.');
+      firstValue = minimum;
+      secondValue = maximum;
+      console.log('Некорректные значения secondValue \nОбязательное условие: \nvalueRange <= maximum \nИзменено на firstValue = minimum, secondValue = maximum.');
     }
-    if (value >= valueRange) {
-      valueRange = value;
-      value -= step;
-      console.log('Некорректные значения value, valueRange \nОбязательное условие: \nvalue < valueRange \nИзменено на value = value - step, valueRange = value.');
+    if (firstValue >= secondValue) {
+      secondValue = firstValue;
+      firstValue -= step;
+      console.log('Некорректные значения firstValue, secondValue \nОбязательное условие: \nvalue < secondValue \nИзменено на firstValue = firstValue - step, secondValue = firstValue.');
     }
   }
 
-  const dataForUpdate = { ...incomingData, minimum, maximum, value, valueRange, step, hasIntervalSelection };
+  const dataForUpdate = { ...incomingData, minimum, maximum, firstValue, secondValue, step, hasIntervalSelection };
   return dataForUpdate;
 }
 

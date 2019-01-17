@@ -2,15 +2,16 @@ import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewPanel extends EventEmitter {
-  constructor() {
+  constructor($element, isConfigPanelVisible) {
     super();
     super.addEmitter(this.constructor.name);
+
+    this.$slider = $element;
+    this.isConfigPanelVisible = isConfigPanelVisible;
   }
 
-  initPanel(options) {
-    this.$slider = options.$slider;
-
-    if (options.isConfigPanelVisible) {
+  initPanel() {
+    if (this.isConfigPanelVisible) {
       this._createPanelElement(this.$slider);
 
       this.$switchVisibilityTooltips = this.$slider.find('.js-configuration__visibility-tooltips');
@@ -23,37 +24,37 @@ class ViewPanel extends EventEmitter {
       this.$stepSizeValue = this.$slider.find('.js-configuration__step-size');
 
       this._initEventListeners();
-
-      this.updatePanel(options);
     }
   }
 
   updatePanel(dataForUpdatePanelState) {
-    this.panelState = dataForUpdatePanelState;
+    this.firstHandleValue = dataForUpdatePanelState.firstValue;
+    this.secondHandleValue = dataForUpdatePanelState.secondValue;
+    this.minimum = dataForUpdatePanelState.minimum;
+    this.maximum = dataForUpdatePanelState.maximum;
+    this.step = dataForUpdatePanelState.step;
+    this.areTooltipsVisible = dataForUpdatePanelState.areTooltipsVisible;
+    this.isVerticalOrientation = dataForUpdatePanelState.isVerticalOrientation;
+    this.hasIntervalSelection = dataForUpdatePanelState.hasIntervalSelection;
 
-    if (this.panelState.isConfigPanelVisible) {
-      this._visibilitySecondCurrentValue(this.panelState.hasIntervalSelection);
+    this._visibilitySecondCurrentValue(this.hasIntervalSelection);
 
-      this._updatePanelElements();
-    }
+    this._updatePanelElements();
   }
 
-  _createAnArrayOfValidValues() {
-    let currentValue = 0;
-    let beginning = this.panelState.minimum;
-    const finish = this.panelState.maximum;
-    const arrayOfValuesForHandle = [];
+  _createAnArrayOfPossibleHandleValues() {
+    let currentValue = this.minimum;
+    const arrayOfPossibleHandleValues = [];
 
-    while (currentValue < finish) {
-      if (beginning > finish) {
+    while (currentValue <= this.maximum) {
+      arrayOfPossibleHandleValues.push(currentValue);
+      if (currentValue > this.maximum) {
         break;
       } else {
-        currentValue = beginning;
-        beginning += this.panelState.step;
-        arrayOfValuesForHandle.push(currentValue);
+        currentValue += this.step;
       }
     }
-    return arrayOfValuesForHandle;
+    return arrayOfPossibleHandleValues;
   }
 
   _visibilitySecondCurrentValue(isVisible) {
@@ -68,56 +69,73 @@ class ViewPanel extends EventEmitter {
 
   _updatePanelElements() {
     this.$switchVisibilityTooltips.attr({
-      checked: this.panelState.areTooltipsVisible ? 'checked' : null,
+      checked: this.areTooltipsVisible
+        ? 'checked'
+        : null,
     });
 
     this.$orientationSwitch.attr({
-      checked: this.panelState.isVerticalOrientation ? 'checked' : null,
+      checked: this.isVerticalOrientation
+        ? 'checked'
+        : null,
     });
 
     this.$rangeSwitch.attr({
-      checked: this.panelState.hasIntervalSelection ? 'checked' : null,
+      checked: this.hasIntervalSelection
+        ? 'checked'
+        : null,
     });
 
     this.$currentValueFirstHandle.attr({
-      step: this.panelState.step,
-      min: this.panelState.minimum,
-      max: this.panelState.hasIntervalSelection
-        ? this.panelState.valueRange - this.panelState.step
-        : this.panelState.maximum,
-      value: this.panelState.value,
+      step: this.step,
+      min: this.minimum,
+      max: this.hasIntervalSelection
+        ? this.secondHandleValue - this.step
+        : this.maximum,
+      value: this.firstHandleValue,
     });
-    this.$currentValueFirstHandle.val(this.panelState.value);
+    this.$currentValueFirstHandle.val(this.firstHandleValue);
 
     this.$currentValueSecondHandle.attr({
-      step: this.panelState.step,
-      min: this.panelState.value + this.panelState.step,
-      max: this.panelState.maximum,
-      value: this.panelState.valueRange,
+      step: this.step,
+      min: this.firstHandleValue + this.step,
+      max: this.maximum,
+      value: this.secondHandleValue,
     });
-    this.$currentValueSecondHandle.val(this.panelState.valueRange);
+    this.$currentValueSecondHandle.val(this.secondHandleValue);
 
     this.$minimumValue.attr({
-      step: this.panelState.step,
-      max: this.panelState.maximum - this.panelState.step,
-      value: this.panelState.minimum,
+      step: this.step,
+      max: this.maximum - this.step,
+      value: this.minimum,
     });
 
     this.$maximumValue.attr({
-      step: this.panelState.step,
-      min: this.panelState.minimum + this.panelState.step,
-      value: this.panelState.maximum,
+      step: this.step,
+      min: this.minimum + this.step,
+      value: this.maximum,
     });
 
     this.$stepSizeValue.attr({
       min: 1,
-      max: this.panelState.maximum - this.panelState.minimum,
-      value: this.panelState.step,
+      max: this.maximum - this.minimum,
+      value: this.step,
     });
   }
 
-  _sendDataToUpdatePlugin() {
-    this.notify('updateState', this.panelState);
+  _sendDataForUpdateState() {
+    const panelStateForUpdatePlugin = {
+      firstValue: this.firstHandleValue,
+      secondValue: this.secondHandleValue,
+      minimum: this.minimum,
+      maximum: this.maximum,
+      step: this.step,
+      areTooltipsVisible: this.areTooltipsVisible,
+      isVerticalOrientation: this.isVerticalOrientation,
+      hasIntervalSelection: this.hasIntervalSelection,
+    };
+
+    this.notify('updateState', panelStateForUpdatePlugin);
   }
 
   _createPanelElement(sliderBlock) {
@@ -191,60 +209,73 @@ class ViewPanel extends EventEmitter {
   }
 
   _handleSwitchVisibilityTooltipsChange(e) {
-    this.panelState.areTooltipsVisible = $(e.target).prop('checked');
+    this.areTooltipsVisible = $(e.target).prop('checked');
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleOrientationSwitchChange(e) {
-    this.panelState.isVerticalOrientation = $(e.target).prop('checked');
+    this.isVerticalOrientation = $(e.target).prop('checked');
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleRangeSwitchChange(e) {
-    this.panelState.hasIntervalSelection = $(e.target).prop('checked');
-    this._visibilitySecondCurrentValue(this.panelState.hasIntervalSelection);
+    this.hasIntervalSelection = $(e.target).prop('checked');
+    this._visibilitySecondCurrentValue(this.hasIntervalSelection);
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleCurrentValueFirstFocusOut(e) {
-    this.panelState.value = parseInt($(e.target).val());
+    this.firstHandleValue = parseInt($(e.target).val());
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleCurrentValueSecondFocusOut(e) {
-    this.panelState.valueRange = parseInt($(e.target).val());
+    this.secondHandleValue = parseInt($(e.target).val());
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleMinimumValueFocusOut(e) {
-    this.panelState.minimum = parseInt($(e.target).val());
-    this.panelState.value = this.panelState.value < this.panelState.minimum ? this.panelState.minimum : this.panelState.value;
-    this.panelState.valueRange = this.panelState.valueRange <= this.panelState.minimum ? this.panelState.maximum : this.panelState.valueRange;
+    this.minimum = parseInt($(e.target).val());
+    this.firstHandleValue = this.firstHandleValue < this.minimum
+      ? this.minimum
+      : this.firstHandleValue;
+    this.secondHandleValue = this.secondHandleValue <= this.minimum
+      ? this.maximum
+      : this.secondHandleValue;
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleMaximumValueFocusOut(e) {
-    this.panelState.maximum = parseInt($(e.target).val());
-    this.panelState.valueRange = this.panelState.valueRange > this.panelState.maximum ? this.panelState.maximum : this.panelState.valueRange;
-    this.panelState.value = this.panelState.value >= this.panelState.maximum ? this.panelState.minimum : this.panelState.value;
+    this.maximum = parseInt($(e.target).val());
+    this.secondHandleValue = this.secondHandleValue > this.maximum
+      ? this.maximum
+      : this.secondHandleValue;
+    this.firstHandleValue = this.firstHandleValue >= this.maximum
+      ? this.minimum
+      : this.firstHandleValue;
 
-    this._sendDataToUpdatePlugin();
+    this._sendDataForUpdateState();
   }
 
   _handleStepSizeValueFocusOut(e) {
-    this.panelState.step = parseInt($(e.target).val());
-    const arrayOfValidValues = this._createAnArrayOfValidValues();
+    this.step = parseInt($(e.target).val());
+    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
 
-    this.panelState.value = arrayOfValidValues.includes(this.panelState.value) ? this.panelState.value : arrayOfValidValues[0];
-    this.panelState.valueRange = arrayOfValidValues.includes(this.panelState.valueRange) ? this.panelState.valueRange : arrayOfValidValues[arrayOfValidValues.length - 1];
+    this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
+      ? this.firstHandleValue
+      : arrayOfPossibleHandleValues[0];
 
-    this._sendDataToUpdatePlugin();
+    this.secondHandleValue = arrayOfPossibleHandleValues.includes(this.secondHandleValue)
+      ? this.secondHandleValue
+      : arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1];
+
+    this._sendDataForUpdateState();
   }
 }
 

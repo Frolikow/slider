@@ -2,14 +2,15 @@ import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 
 class ViewSlider extends EventEmitter {
-  constructor() {
+  constructor($element) {
     super();
     super.addEmitter(this.constructor.name);
+
+    this.$slider = $element;
+    this.isHandleMovingNow = false;
   }
 
-  initSlider(options) {
-    this.$slider = options.$slider;
-
+  initSlider() {
     this._createSliderElement();
     this.$sliderScale = this.$slider.find('.js-slider__element');
     this.$firstHandle = this.$slider.find('.js-slider__handle_first');
@@ -20,49 +21,43 @@ class ViewSlider extends EventEmitter {
     this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
 
     this._initEventListeners();
-
-    this.updateSlider(options);
   }
 
-  updateSlider(dataForUpdatePanel) {
-    this.sliderState = { ...dataForUpdatePanel };
-    delete this.sliderState.$slider;
+  updateSlider(dataForUpdateSlider) {
+    this.firstHandleValue = dataForUpdateSlider.firstValue;
+    this.secondHandleValue = dataForUpdateSlider.secondValue;
+    this.minimum = dataForUpdateSlider.minimum;
+    this.maximum = dataForUpdateSlider.maximum;
+    this.step = dataForUpdateSlider.step;
+    this.areTooltipsVisible = dataForUpdateSlider.areTooltipsVisible;
+    this.isVerticalOrientation = dataForUpdateSlider.isVerticalOrientation;
+    this.hasIntervalSelection = dataForUpdateSlider.hasIntervalSelection;
 
-    this._setTooltipsVisibility(this.sliderState.areTooltipsVisible);
-    this._setOrientation(this.sliderState.isVerticalOrientation);
-    this._setIntervalSelection(this.sliderState.hasIntervalSelection);
+    this._setTooltipsVisibility(this.areTooltipsVisible);
+    this._setOrientation(this.isVerticalOrientation);
+    this._setIntervalSelection(this.hasIntervalSelection);
 
-    this._setFirstHandlePosition(
-      this.sliderState.value,
-      this.sliderState.minimum,
-      this.sliderState.maximum,
-      this.sliderState.step,
-    );
-    if (this.sliderState.hasIntervalSelection) {
-      this._setSecondHandlePosition(
-        this.sliderState.valueRange,
-        this.sliderState.minimum,
-        this.sliderState.maximum,
-        this.sliderState.step,
-      );
+    this._setHandlePosition(this.$firstHandle, this.$firstTooltip, this.firstHandleValue);
+    if (this.hasIntervalSelection) {
+      this._setHandlePosition(this.$secondHandle, this.$secondTooltip, this.secondHandleValue);
     }
   }
 
   _updateValuesWhenClick(coordinates) {
     const calculatedValue = this._calculateValueForHandle(coordinates);
-    this.firstHandlePosition = this._calculateNewPosition(this.sliderState.value, this.sliderState.minimum, this.sliderState.maximum, this.sliderState.step);
-    this.secondHandlePosition = this._calculateNewPosition(this.sliderState.valueRange, this.sliderState.minimum, this.sliderState.maximum, this.sliderState.step);
+    const firstHandlePosition = this._calculateNewPosition(this.firstHandleValue);
+    const secondHandlePosition = this._calculateNewPosition(this.secondHandleValue);
 
-    if (this.sliderState.hasIntervalSelection) {
-      const isNewPositionCloserToSecondElement = (coordinates - this.firstHandlePosition) > (this.secondHandlePosition - coordinates);
-      const isNewPositionCloserToFirstElement = (coordinates - this.firstHandlePosition) < (this.secondHandlePosition - coordinates);
+    if (this.hasIntervalSelection) {
+      const isNewPositionCloserToSecondElement = (coordinates - firstHandlePosition) > (secondHandlePosition - coordinates);
+      const isNewPositionCloserToFirstElement = (coordinates - firstHandlePosition) < (secondHandlePosition - coordinates);
       if (isNewPositionCloserToSecondElement) {
-        this.sliderState.valueRange = parseInt(calculatedValue);
+        this.secondHandleValue = parseInt(calculatedValue);
       } else if (isNewPositionCloserToFirstElement) {
-        this.sliderState.value = parseInt(calculatedValue);
+        this.firstHandleValue = parseInt(calculatedValue);
       }
     } else {
-      this.sliderState.value = parseInt(calculatedValue);
+      this.firstHandleValue = parseInt(calculatedValue);
     }
 
     this._sendDataForUpdateState();
@@ -70,32 +65,32 @@ class ViewSlider extends EventEmitter {
 
   _updateValuesWhenMove(dataForSearchPosition) {
     const calculatedValue = this._calculateValueForHandle(dataForSearchPosition.coordinates);
-    this.firstHandlePosition = this._calculateNewPosition(this.sliderState.value, this.sliderState.minimum, this.sliderState.maximum, this.sliderState.step);
-    this.secondHandlePosition = this._calculateNewPosition(this.sliderState.valueRange, this.sliderState.minimum, this.sliderState.maximum, this.sliderState.step);
+    const firstHandlePosition = this._calculateNewPosition(this.firstHandleValue);
+    const secondHandlePosition = this._calculateNewPosition(this.secondHandleValue);
 
-    if (this.sliderState.hasIntervalSelection) {
+    if (this.hasIntervalSelection) {
       if (dataForSearchPosition.elementType === 'first') {
-        if (dataForSearchPosition.coordinates >= this.secondHandlePosition - this.stepWidth) {
+        if (dataForSearchPosition.coordinates >= secondHandlePosition - this.stepWidth) {
           return;
-        } else if (dataForSearchPosition.coordinates <= this.secondHandlePosition) {
-          this.sliderState.value = parseInt(calculatedValue);
+        } else if (dataForSearchPosition.coordinates <= secondHandlePosition) {
+          this.firstHandleValue = parseInt(calculatedValue);
         }
       } else if (dataForSearchPosition.elementType === 'second') {
-        if (dataForSearchPosition.coordinates <= this.firstHandlePosition + this.stepWidth) {
+        if (dataForSearchPosition.coordinates <= firstHandlePosition + this.stepWidth) {
           return;
-        } else if (dataForSearchPosition.coordinates >= this.firstHandlePosition) {
-          this.sliderState.valueRange = parseInt(calculatedValue);
+        } else if (dataForSearchPosition.coordinates >= firstHandlePosition) {
+          this.secondHandleValue = parseInt(calculatedValue);
         }
       }
     } else {
-      this.sliderState.value = parseInt(calculatedValue);
+      this.firstHandleValue = parseInt(calculatedValue);
     }
     this._sendDataForUpdateState();
   }
 
   _calculateValueForHandle(coordinates) {
-    const arrayOfValuesForHandle = this._createAnArrayOfValidValues();
-    this.stepWidth = this.scaleWidth / (arrayOfValuesForHandle.length - 1);
+    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
+    this.stepWidth = this.scaleWidth / (arrayOfPossibleHandleValues.length - 1);
     if (coordinates <= 0) {
       coordinates = 0;
     } else if (coordinates >= this.scaleWidth) {
@@ -103,68 +98,64 @@ class ViewSlider extends EventEmitter {
     }
 
     const indexOfValueToCoordinates = (((coordinates) + (this.stepWidth / 2)) / this.stepWidth) ^ 0;
-    const isFirstElementPeaked = this.sliderState.hasIntervalSelection && (indexOfValueToCoordinates >= arrayOfValuesForHandle.indexOf(this.sliderState.valueRange - this.sliderState.step));
+    const isFirstElementPeaked = this.hasIntervalSelection && (indexOfValueToCoordinates >= arrayOfPossibleHandleValues.indexOf(this.secondHandleValue - this.step));
 
     let newValue;
-    if (this.sliderState.hasIntervalSelection) {
-      newValue = (arrayOfValuesForHandle[indexOfValueToCoordinates] === undefined)
-        ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1]
-        : arrayOfValuesForHandle[indexOfValueToCoordinates];
+    if (this.hasIntervalSelection) {
+      newValue = (arrayOfPossibleHandleValues[indexOfValueToCoordinates] === undefined)
+        ? arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1]
+        : arrayOfPossibleHandleValues[indexOfValueToCoordinates];
     } else {
       if (isFirstElementPeaked) {
-        newValue = (this.sliderState.valueRange - this.sliderState.step);
+        newValue = (this.secondHandleValue - this.step);
       } else {
-        newValue = (arrayOfValuesForHandle[indexOfValueToCoordinates] === undefined)
-          ? arrayOfValuesForHandle[arrayOfValuesForHandle.length - 1]
-          : arrayOfValuesForHandle[indexOfValueToCoordinates];
+        newValue = (arrayOfPossibleHandleValues[indexOfValueToCoordinates] === undefined)
+          ? arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1]
+          : arrayOfPossibleHandleValues[indexOfValueToCoordinates];
       }
     }
     return newValue;
   }
 
-  _createAnArrayOfValidValues() {
-    let currentValue = 0;
-    let beginning = this.sliderState.minimum;
-    const finish = this.sliderState.maximum;
-    const arrayOfValuesForHandle = [];
+  _createAnArrayOfPossibleHandleValues() {
+    let currentValue = this.minimum;
+    const arrayOfPossibleHandleValues = [];
 
-    while (currentValue < finish) {
-      if (beginning > finish) {
+    while (currentValue <= this.maximum) {
+      arrayOfPossibleHandleValues.push(currentValue);
+      if (currentValue > this.maximum) {
         break;
       } else {
-        currentValue = beginning;
-        beginning += this.sliderState.step;
-        arrayOfValuesForHandle.push(currentValue);
+        currentValue += this.step;
       }
     }
-    return arrayOfValuesForHandle;
+    return arrayOfPossibleHandleValues;
   }
 
   _calculateNewPosition(value) {
-    const arrayOfValuesForHandle = this._createAnArrayOfValidValues();
-    this.stepWidth = this.scaleWidth / (arrayOfValuesForHandle.length - 1);
-    let handlePosition = this.stepWidth * (arrayOfValuesForHandle.indexOf(value));
+    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
+    this.stepWidth = this.scaleWidth / (arrayOfPossibleHandleValues.length - 1);
+    let handlePosition = this.stepWidth * (arrayOfPossibleHandleValues.indexOf(value));
 
     if (handlePosition <= 0) {
       handlePosition = 0;
     } else if (handlePosition >= this.scaleWidth) {
       handlePosition = this.scaleWidth;
     }
-
-    if (value === this.sliderState.value) {
-      if (arrayOfValuesForHandle.includes(value) === false) {
-        handlePosition = 0;
-      }
-    } else if (value === this.sliderState.valueRange) {
-      if (arrayOfValuesForHandle.includes(value) === false) {
-        handlePosition = this.scaleWidth;
-      }
-    }
     return handlePosition;
   }
 
   _sendDataForUpdateState() {
-    const dataForUpdateState = this.sliderState;
+    const dataForUpdateState = {
+      firstValue: this.firstHandleValue,
+      secondValue: this.secondHandleValue,
+      minimum: this.minimum,
+      maximum: this.maximum,
+      step: this.step,
+      areTooltipsVisible: this.areTooltipsVisible,
+      isVerticalOrientation: this.isVerticalOrientation,
+      hasIntervalSelection: this.hasIntervalSelection,
+    };
 
     this.notify('updateState', dataForUpdateState);
   }
@@ -173,7 +164,14 @@ class ViewSlider extends EventEmitter {
     this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
     this.$firstHandle.mousedown(this._handleHandleMouseDown.bind(this));
     this.$secondHandle.mousedown(this._handleHandleMouseDown.bind(this));
-    $(document).mouseup(() => { $(document).off('mousemove'); });
+
+    $(document).mousemove(this._handleHandleMouseMove.bind(this));
+
+
+    $(document).mouseup(() => {
+      this.isHandleMovingNow = false;
+      this.dataForMovingHandle = null;
+    });
   }
 
   _handleHandleMouseDown(e) {
@@ -184,47 +182,54 @@ class ViewSlider extends EventEmitter {
       ? e.pageY - handleCoordinates.top
       : e.pageX - handleCoordinates.left;
 
-    $(document).mousemove(this._handleHandleMouseMove.bind(this, $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle));
+    this.isHandleMovingNow = true;
+    const $currentHandle = $(e.currentTarget);
+
+    this.dataForMovingHandle = { $currentHandle, sliderCoordinates, cursorPositionInsideHandle };
   }
 
-  _handleHandleMouseMove($currentHandle, sliderCoordinates, cursorPositionInsideHandle, e) {
-    const coordinatesOfClickInSlider = this.isVerticalOrientation
-      ? e.pageY - cursorPositionInsideHandle - sliderCoordinates.top
-      : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
+  _handleHandleMouseMove(e) {
+    if (this.isHandleMovingNow) {
+      const { $currentHandle, sliderCoordinates, cursorPositionInsideHandle } = { ...this.dataForMovingHandle };
 
-    let elementType;
-    if ($currentHandle.hasClass('js-slider__handle_first')) {
-      elementType = 'first';
-    } else if ($currentHandle.hasClass('js-slider__handle_second')) {
-      elementType = 'second';
+      const coordinatesOfClickInSlider = this.isVerticalOrientation
+        ? e.pageY - cursorPositionInsideHandle - sliderCoordinates.top
+        : e.pageX - cursorPositionInsideHandle - sliderCoordinates.left;
+
+      let elementType;
+      if ($currentHandle.hasClass('js-slider__handle_first')) {
+        elementType = 'first';
+      } else if ($currentHandle.hasClass('js-slider__handle_second')) {
+        elementType = 'second';
+      }
+      const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType };
+      this._updateValuesWhenMove(dataForPositionSearch);
     }
-
-    const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType };
-    this._updateValuesWhenMove(dataForPositionSearch);
   }
 
   _handleSliderScaleClick(e) {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    const coordinatesOfClick = this.isVerticalOrientation ? parseInt(e.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2)) : parseInt(e.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+
+    const distanceFromLeftEdgeOfScale = parseInt(e.pageX - sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
+    const distanceFromTopOfScale = parseInt(e.pageY - sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
+
+    const coordinatesOfClick = this.isVerticalOrientation
+      ? distanceFromTopOfScale
+      : distanceFromLeftEdgeOfScale;
 
     this._updateValuesWhenClick(coordinatesOfClick);
   }
 
-  _setFirstHandlePosition(value, minimum, maximum, step) {
-    this.$firstHandle.css('left', `${this._calculateNewPosition(value, minimum, maximum, step)}px`);
-    this.$firstTooltip.html(value);
-  }
-
-  _setSecondHandlePosition(value, minimum, maximum, step) {
-    this.$secondHandle.css('left', `${this._calculateNewPosition(value, minimum, maximum, step)}px`);
-    this.$secondTooltip.html(value);
+  _setHandlePosition($currentHandle, $currentTooltip, value) {
+    $currentHandle.css('left', `${this._calculateNewPosition(value)}px`);
+    $currentTooltip.html(value);
   }
 
   _getCoordinatesOfElementInsideWindow(element) {
-    const box = element.get(0).getBoundingClientRect();
+    const { top, left } = element.get(0).getBoundingClientRect();
     return {
-      top: box.top + window.pageYOffset,
-      left: box.left + window.pageXOffset,
+      top: top + window.pageYOffset,
+      left: left + window.pageXOffset,
     };
   }
 
