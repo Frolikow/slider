@@ -24,14 +24,16 @@ class ViewSlider extends EventEmitter {
   }
 
   updateSlider(dataForUpdateSlider) {
-    this.firstHandleValue = dataForUpdateSlider.firstValue;
-    this.secondHandleValue = dataForUpdateSlider.secondValue;
-    this.minimum = dataForUpdateSlider.minimum;
-    this.maximum = dataForUpdateSlider.maximum;
-    this.step = dataForUpdateSlider.step;
-    this.areTooltipsVisible = dataForUpdateSlider.areTooltipsVisible;
-    this.isVerticalOrientation = dataForUpdateSlider.isVerticalOrientation;
-    this.hasIntervalSelection = dataForUpdateSlider.hasIntervalSelection;
+    const { firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection } = dataForUpdateSlider;
+
+    this.firstHandleValue = firstValue;
+    this.secondHandleValue = secondValue;
+    this.minimum = minimum;
+    this.maximum = maximum;
+    this.step = step;
+    this.areTooltipsVisible = areTooltipsVisible;
+    this.isVerticalOrientation = isVerticalOrientation;
+    this.hasIntervalSelection = hasIntervalSelection;
 
     this._setTooltipsVisibility(this.areTooltipsVisible);
     this._setOrientation(this.isVerticalOrientation);
@@ -43,14 +45,14 @@ class ViewSlider extends EventEmitter {
     }
   }
 
-  _updateValuesWhenClick(coordinates) {
-    const calculatedValue = this._calculateValueForHandle(coordinates);
+  _updateValuesWhenClick(distanceFromStart) {
+    const calculatedValue = this._calculateValueForHandle(distanceFromStart);
     const firstHandlePosition = this._calculateNewPosition(this.firstHandleValue);
     const secondHandlePosition = this._calculateNewPosition(this.secondHandleValue);
 
     if (this.hasIntervalSelection) {
-      const isNewPositionCloserToSecondElement = (coordinates - firstHandlePosition) > (secondHandlePosition - coordinates);
-      const isNewPositionCloserToFirstElement = (coordinates - firstHandlePosition) < (secondHandlePosition - coordinates);
+      const isNewPositionCloserToSecondElement = (distanceFromStart - firstHandlePosition) > (secondHandlePosition - distanceFromStart);
+      const isNewPositionCloserToFirstElement = (distanceFromStart - firstHandlePosition) < (secondHandlePosition - distanceFromStart);
       if (isNewPositionCloserToSecondElement) {
         this.secondHandleValue = parseInt(calculatedValue);
       } else if (isNewPositionCloserToFirstElement) {
@@ -64,21 +66,23 @@ class ViewSlider extends EventEmitter {
   }
 
   _updateValuesWhenMove(dataForSearchPosition) {
-    const calculatedValue = this._calculateValueForHandle(dataForSearchPosition.coordinates);
+    const { distanceFromStart, elementType } = dataForSearchPosition;
+
+    const calculatedValue = this._calculateValueForHandle(distanceFromStart);
     const firstHandlePosition = this._calculateNewPosition(this.firstHandleValue);
     const secondHandlePosition = this._calculateNewPosition(this.secondHandleValue);
 
     if (this.hasIntervalSelection) {
-      if (dataForSearchPosition.elementType === 'first') {
-        if (dataForSearchPosition.coordinates >= secondHandlePosition - this.stepWidth) {
+      if (elementType === 'first') {
+        if (distanceFromStart >= secondHandlePosition - this.stepWidth) {
           return;
-        } else if (dataForSearchPosition.coordinates <= secondHandlePosition) {
+        } else if (distanceFromStart <= secondHandlePosition) {
           this.firstHandleValue = parseInt(calculatedValue);
         }
-      } else if (dataForSearchPosition.elementType === 'second') {
-        if (dataForSearchPosition.coordinates <= firstHandlePosition + this.stepWidth) {
+      } else if (elementType === 'second') {
+        if (distanceFromStart <= firstHandlePosition + this.stepWidth) {
           return;
-        } else if (dataForSearchPosition.coordinates >= firstHandlePosition) {
+        } else if (distanceFromStart >= firstHandlePosition) {
           this.secondHandleValue = parseInt(calculatedValue);
         }
       }
@@ -88,54 +92,37 @@ class ViewSlider extends EventEmitter {
     this._sendDataForUpdateState();
   }
 
-  _calculateValueForHandle(coordinates) {
-    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
-    this.stepWidth = this.scaleWidth / (arrayOfPossibleHandleValues.length - 1);
-    if (coordinates <= 0) {
-      coordinates = 0;
-    } else if (coordinates >= this.scaleWidth) {
-      coordinates = this.scaleWidth;
+  _calculateValueForHandle(distanceFromStart) {
+    if (distanceFromStart <= 0) {
+      distanceFromStart = 0;
+    } else if (distanceFromStart >= this.scaleWidth) {
+      distanceFromStart = this.scaleWidth;
     }
 
-    const indexOfValueToCoordinates = (((coordinates) + (this.stepWidth / 2)) / this.stepWidth) ^ 0;
-    const isFirstElementPeaked = this.hasIntervalSelection && (indexOfValueToCoordinates >= arrayOfPossibleHandleValues.indexOf(this.secondHandleValue - this.step));
+    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
+    this.stepWidth = this.scaleWidth / (arrayPossibleHandleValues.length - 1);
+    const indexValueToDistanceFromStart = Math.round((distanceFromStart) / this.stepWidth);
 
-    let newValue;
-    if (this.hasIntervalSelection) {
-      newValue = (arrayOfPossibleHandleValues[indexOfValueToCoordinates] === undefined)
-        ? arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1]
-        : arrayOfPossibleHandleValues[indexOfValueToCoordinates];
-    } else {
-      if (isFirstElementPeaked) {
-        newValue = (this.secondHandleValue - this.step);
-      } else {
-        newValue = (arrayOfPossibleHandleValues[indexOfValueToCoordinates] === undefined)
-          ? arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1]
-          : arrayOfPossibleHandleValues[indexOfValueToCoordinates];
-      }
-    }
+    const newValue = arrayPossibleHandleValues[indexValueToDistanceFromStart];
+
     return newValue;
   }
 
-  _createAnArrayOfPossibleHandleValues() {
+  _createArrayPossibleHandleValues() {
     let currentValue = this.minimum;
-    const arrayOfPossibleHandleValues = [];
+    const arrayPossibleHandleValues = [];
 
     while (currentValue <= this.maximum) {
-      arrayOfPossibleHandleValues.push(currentValue);
-      if (currentValue > this.maximum) {
-        break;
-      } else {
-        currentValue += this.step;
-      }
+      arrayPossibleHandleValues.push(currentValue);
+      currentValue += this.step;
     }
-    return arrayOfPossibleHandleValues;
+    return arrayPossibleHandleValues;
   }
 
   _calculateNewPosition(value) {
-    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
-    this.stepWidth = this.scaleWidth / (arrayOfPossibleHandleValues.length - 1);
-    let handlePosition = this.stepWidth * (arrayOfPossibleHandleValues.indexOf(value));
+    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
+    this.stepWidth = this.scaleWidth / (arrayPossibleHandleValues.length - 1);
+    let handlePosition = this.stepWidth * (arrayPossibleHandleValues.indexOf(value));
 
     if (handlePosition <= 0) {
       handlePosition = 0;
@@ -162,19 +149,21 @@ class ViewSlider extends EventEmitter {
 
   _initEventListeners() {
     this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
-    this.$firstHandle.mousedown(this._handleHandleMouseDown.bind(this));
-    this.$secondHandle.mousedown(this._handleHandleMouseDown.bind(this));
+    this.$firstHandle.mousedown(this._handleHandleMousedown.bind(this));
+    this.$secondHandle.mousedown(this._handleHandleMousedown.bind(this));
 
-    $(document).mousemove(this._handleHandleMouseMove.bind(this));
+    $(document).mousemove(this._handleDocumentMousemove.bind(this));
 
 
-    $(document).mouseup(() => {
-      this.isHandleMovingNow = false;
-      this.dataForMovingHandle = null;
-    });
+    $(document).mouseup(this._handleDocumentMouseup.bind(this));
   }
 
-  _handleHandleMouseDown(e) {
+  _handleDocumentMouseup() {
+    this.isHandleMovingNow = false;
+    this.dataForMovingHandle = null;
+  }
+
+  _handleHandleMousedown(e) {
     const sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
     const handleCoordinates = this._getCoordinatesOfElementInsideWindow($(e.currentTarget));
 
@@ -183,12 +172,11 @@ class ViewSlider extends EventEmitter {
       : e.pageX - handleCoordinates.left;
 
     this.isHandleMovingNow = true;
-    const $currentHandle = $(e.currentTarget);
 
-    this.dataForMovingHandle = { $currentHandle, sliderCoordinates, cursorPositionInsideHandle };
+    this.dataForMovingHandle = { $currentHandle: $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle };
   }
 
-  _handleHandleMouseMove(e) {
+  _handleDocumentMousemove(e) {
     if (this.isHandleMovingNow) {
       const { $currentHandle, sliderCoordinates, cursorPositionInsideHandle } = { ...this.dataForMovingHandle };
 
@@ -202,8 +190,8 @@ class ViewSlider extends EventEmitter {
       } else if ($currentHandle.hasClass('js-slider__handle_second')) {
         elementType = 'second';
       }
-      const dataForPositionSearch = { coordinates: coordinatesOfClickInSlider, elementType };
-      this._updateValuesWhenMove(dataForPositionSearch);
+      const dataForSearchPosition = { distanceFromStart: coordinatesOfClickInSlider, elementType };
+      this._updateValuesWhenMove(dataForSearchPosition);
     }
   }
 

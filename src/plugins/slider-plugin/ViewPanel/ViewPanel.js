@@ -28,33 +28,34 @@ class ViewPanel extends EventEmitter {
   }
 
   updatePanel(dataForUpdatePanelState) {
-    this.firstHandleValue = dataForUpdatePanelState.firstValue;
-    this.secondHandleValue = dataForUpdatePanelState.secondValue;
-    this.minimum = dataForUpdatePanelState.minimum;
-    this.maximum = dataForUpdatePanelState.maximum;
-    this.step = dataForUpdatePanelState.step;
-    this.areTooltipsVisible = dataForUpdatePanelState.areTooltipsVisible;
-    this.isVerticalOrientation = dataForUpdatePanelState.isVerticalOrientation;
-    this.hasIntervalSelection = dataForUpdatePanelState.hasIntervalSelection;
+    const { firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection } = dataForUpdatePanelState;
+    this.firstHandleValue = firstValue;
+    this.secondHandleValue = secondValue;
+    this.minimum = minimum;
+    this.maximum = maximum;
+    this.step = step;
+    this.areTooltipsVisible = areTooltipsVisible;
+    this.isVerticalOrientation = isVerticalOrientation;
+    this.hasIntervalSelection = hasIntervalSelection;
 
     this._visibilitySecondCurrentValue(this.hasIntervalSelection);
 
     this._updatePanelElements();
   }
 
-  _createAnArrayOfPossibleHandleValues() {
+  _createArrayPossibleHandleValues() {
     let currentValue = this.minimum;
-    const arrayOfPossibleHandleValues = [];
+    const arrayPossibleHandleValues = [];
 
     while (currentValue <= this.maximum) {
-      arrayOfPossibleHandleValues.push(currentValue);
+      arrayPossibleHandleValues.push(currentValue);
       if (currentValue > this.maximum) {
         break;
       } else {
         currentValue += this.step;
       }
     }
-    return arrayOfPossibleHandleValues;
+    return arrayPossibleHandleValues;
   }
 
   _visibilitySecondCurrentValue(isVisible) {
@@ -265,15 +266,15 @@ class ViewPanel extends EventEmitter {
 
   _handleStepSizeValueFocusOut(e) {
     this.step = parseInt($(e.target).val());
-    const arrayOfPossibleHandleValues = this._createAnArrayOfPossibleHandleValues();
+    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
 
-    this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
+    this.firstHandleValue = arrayPossibleHandleValues.includes(this.firstHandleValue)
       ? this.firstHandleValue
-      : arrayOfPossibleHandleValues[0];
+      : arrayPossibleHandleValues[0];
 
-    this.secondHandleValue = arrayOfPossibleHandleValues.includes(this.secondHandleValue)
+    this.secondHandleValue = arrayPossibleHandleValues.includes(this.secondHandleValue)
       ? this.secondHandleValue
-      : arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1];
+      : arrayPossibleHandleValues[arrayPossibleHandleValues.length - 1];
 
     this._sendDataForUpdateState();
   }
