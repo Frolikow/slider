@@ -18,7 +18,7 @@ import Controller from './Controller/Controller';
       hasIntervalSelection: options.hasIntervalSelection,
     };
 
-    const model = new Model();
+    const model = new Model(stateOptions);
     const viewSlider = new ViewSlider(options.$slider);
     const viewPanel = new ViewPanel(options.$slider, options.isConfigPanelVisible);
     const controller = new Controller();
@@ -30,6 +30,6 @@ import Controller from './Controller/Controller';
     controller.subscribe(viewSlider);
     controller.subscribe(viewPanel);
 
-    controller.initPlugin(stateOptions);
+    controller.initPlugin();
   };
 }(jQuery));

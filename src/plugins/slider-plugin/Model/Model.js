@@ -10,7 +10,7 @@ class Model extends EventEmitter {
   }
 
   updateState(newDataToUpdateState) {
-    this.modelData = { ...this.modelData, ...validateIncomingData(newDataToUpdateState) };
+    this.modelData = { ...this.modelData, ...validateIncomingData({ ...this.modelData, ...newDataToUpdateState }) };
 
     this.sendNewDataFromModel();
   }

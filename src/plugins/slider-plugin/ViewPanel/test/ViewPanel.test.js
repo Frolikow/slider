@@ -3,43 +3,66 @@ import ViewPanel from '../ViewPanel';
 document.body.innerHTML = '<div class="slider"></div>'
 const $ = require('jquery');
 
-const mockOptions = {}
-mockOptions.slider = $('.slider');
-
-const viewPanel = new ViewPanel(mockOptions);
+const viewPanel = new ViewPanel($('.slider'), true);
 
 const createPanelElement = jest.spyOn(ViewPanel.prototype, '_createPanelElement');
-const eventHandlers = jest.spyOn(ViewPanel.prototype, '_eventHandlers');
-const initializeElementsAttributes = jest.spyOn(ViewPanel.prototype, '_initializeElementsAttributes');
+const initEventListeners = jest.spyOn(ViewPanel.prototype, '_initEventListeners');
+
+const visibilitySecondCurrentValue = jest.spyOn(ViewPanel.prototype, '_visibilitySecondCurrentValue');
+const updatePanelElements = jest.spyOn(ViewPanel.prototype, '_updatePanelElements');
+
 
 describe('Тестирование методов viewPanel', () => {
-  describe('Тестирование метода updatePanel', () => {
-    describe('Метод, в зависимости от полученного значения "visibilityConfigPanel", создает панель или нет.', () => {
-      const mockData = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
-      test('При "visibilityConfigPanel === true" вызвает приватные методы по 1 разу и отрисовывает панель', () => {
-        viewPanel.visibilityConfigPanel = true;
 
-        viewPanel.updatePanel(mockData);
+  describe('Тестирование метода initPanel', () => {
+
+    describe('Метод, в зависимости от полученного значения "isConfigPanelVisible", создает панель или нет.', () => {
+      test('При "isConfigPanelVisible === true" вызвает приватные методы по 1 разу и отрисовывает панель', () => {
+        viewPanel.isConfigPanelVisible = true;
+
+        viewPanel.initPanel();
 
         expect(createPanelElement).toHaveBeenCalledTimes(1);
-        expect(eventHandlers).toHaveBeenCalledTimes(1);
-        expect(initializeElementsAttributes).toHaveBeenCalledTimes(1);
+        expect(initEventListeners).toHaveBeenCalledTimes(1);
       })
 
       afterEach(() => {
         createPanelElement.mockRestore();
-        eventHandlers.mockRestore();
-        initializeElementsAttributes.mockRestore();
+        initEventListeners.mockRestore();
       })
-      test('При "visibilityConfigPanel === false" не вызвает приватные методы ни разу и не отрисовывает панель', () => {
-        viewPanel.visibilityConfigPanel = true;
+
+      test('При "isConfigPanelVisible === false" не вызывает приватные методы ни разу и не отрисовывает панель', () => {
+        viewPanel.isConfigPanelVisible = false;
+
+        viewPanel.initPanel();
+
+        expect(createPanelElement).not.toBeCalled();
+        expect(initEventListeners).not.toBeCalled();
+      });
+    })
+  });
+  describe('Тестирование метода updatePanel', () => {
+
+    describe('Метод обновляет свойства панели, видимость $currentValueSecondHandle и атрибуты элементов панели.', () => {
+      test('Обновление панели конфигурации', () => {
+        const mockData = {
+          firstValue: 4,
+          secondValue: 8,
+          minimum: 1,
+          maximum: 10,
+          step: 1,
+          areTooltipsVisible: false,
+          isVerticalOrientation: false,
+          hasIntervalSelection: true,
+        }
 
         viewPanel.updatePanel(mockData);
 
-        expect(createPanelElement).not.toBeCalled();
-        expect(eventHandlers).not.toBeCalled();
-        expect(initializeElementsAttributes).not.toBeCalled();
-      });
+        expect(visibilitySecondCurrentValue).toBeCalledWith(viewPanel.hasIntervalSelection);
+        expect(visibilitySecondCurrentValue).toHaveBeenCalledTimes(1);
+        
+        expect(updatePanelElements).toHaveBeenCalledTimes(1);
+      })
     })
   });
 });

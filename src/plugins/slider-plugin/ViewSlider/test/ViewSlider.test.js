@@ -1,92 +1,81 @@
 import EventEmmiter from '../../eventEmiter/eventEmiter'
 import ViewSlider from '../ViewSlider';
 
-const mockOptions = { minimum: 1, maximum: 10, value: 5, valueRange: 8, step: 1 };
-const viewSlider = new ViewSlider(mockOptions);
-
 document.body.innerHTML = '<div class="slider"></div>'
 const $ = require('jquery');
 
-const notify = jest.spyOn(EventEmmiter.prototype, 'notify');
-const createSliderElement = jest.spyOn(ViewSlider.prototype, '_createSliderElement');
-const eventHandlers = jest.spyOn(ViewSlider.prototype, '_eventHandlers');
+const viewSlider = new ViewSlider($('.slider'));
 
-const enableVisibilityTooltips = jest.spyOn(ViewSlider.prototype, '_enableVisibilityTooltips');
-const orientationChange = jest.spyOn(ViewSlider.prototype, '_orientationChange');
-const enableRangeSelection = jest.spyOn(ViewSlider.prototype, '_enableRangeSelection');
-const setHandlePositionAndHandleValue = jest.spyOn(ViewSlider.prototype, '_setHandlePositionAndHandleValue');
+const createSliderElement = jest.spyOn(ViewSlider.prototype, '_createSliderElement');
+const initEventListeners = jest.spyOn(ViewSlider.prototype, '_initEventListeners');
+
+const setTooltipsVisibility = jest.spyOn(ViewSlider.prototype, '_setTooltipsVisibility');
+const setOrientation = jest.spyOn(ViewSlider.prototype, '_setOrientation');
+const setIntervalSelection = jest.spyOn(ViewSlider.prototype, '_setIntervalSelection');
+const setHandlePosition = jest.spyOn(ViewSlider.prototype, '_setHandlePosition');
 
 describe('Тестирование методов viewSlider', () => {
   describe('Тестирование метода initSlider', () => {
-    test('Метод вызывает приватный метод для создания слайдера, инициализирует элементы слайдера, вешает обработчики событий, и отправляет ширину слайдера в контроллер для создания расчетного коэффициента', () => {
-      viewSlider.slider = $('.slider');
+
+    test('Метод вызывает приватный метод для создания слайдера, инициализирует элементы слайдера, вешает обработчики событий', () => {
 
       viewSlider.initSlider()
 
+      expect(viewSlider.scaleWidth).not.toBeUndefined()
       expect(createSliderElement).toHaveBeenCalledTimes(1);
-      expect(viewSlider.scaleWidth).not.toBeUndefined();
-      expect(notify).toHaveBeenCalledTimes(1);
-      expect(notify).toHaveBeenCalledWith('calculateIndexOfRelativeCoordinates', viewSlider.scaleWidth)
-      expect(eventHandlers).toHaveBeenCalledTimes(1);
+      expect(initEventListeners).toHaveBeenCalledTimes(1);
     })
   });
 
   describe('Тестирование метода updateSlider', () => {
-    viewSlider.visibilityTooltips = false;
-    viewSlider.verticalOrientation = false;
-    viewSlider.rangeStatus = false;
-    test('Метод должен вызвать три приватных метода(с глобальными свойствами) для отрисовки слайдера, при передаче пустого объекта', () => {
-      const mockDataForUpdateSlider = {};
+    const mockData = {
+      firstValue: 4,
+      secondValue: 8,
+      minimum: 1,
+      maximum: 10,
+      step: 1,
+      areTooltipsVisible: false,
+      isVerticalOrientation: false,
+      hasIntervalSelection: true,
+    }
 
-      viewSlider.updateSlider(mockDataForUpdateSlider);
+    test('Метод устанавливает новые свойства класса, и вызывает методы для отрисовки слайдера с новыми свойствами', () => {
 
-      expect(enableVisibilityTooltips).toHaveBeenCalledTimes(1);
-      expect(enableVisibilityTooltips).toHaveBeenCalledWith(viewSlider.visibilityTooltips);
+      viewSlider.updateSlider(mockData);
 
-      expect(orientationChange).toHaveBeenCalledTimes(1);
-      expect(orientationChange).toHaveBeenCalledWith(viewSlider.verticalOrientation);
+      expect(setTooltipsVisibility).toHaveBeenCalledTimes(1);
+      expect(setTooltipsVisibility).toHaveBeenCalledWith(viewSlider.areTooltipsVisible);
 
-      expect(enableRangeSelection).toHaveBeenCalledTimes(1);
-      expect(enableRangeSelection).toHaveBeenCalledWith(viewSlider.rangeStatus);
+      expect(setOrientation).toHaveBeenCalledTimes(1);
+      expect(setOrientation).toHaveBeenCalledWith(viewSlider.isVerticalOrientation);
+
+      expect(setIntervalSelection).toHaveBeenCalledTimes(1);
+      expect(setIntervalSelection).toHaveBeenCalledWith(viewSlider.hasIntervalSelection);
     });
 
-    describe('Метод должен вызвать приватный метод(1 или, если включен интревал, 2раза)', () => {
-      const mockDataForUpdateSlider = {
-        value: 2,
-        valueRange: 6,
-        firstPosition: 100,
-        secondPosition: 500,
-        rangeStatus: true,
-      };
-      const mockDataForSetPositionHandle = {
-        value: mockDataForUpdateSlider.value,
-        valueRange: mockDataForUpdateSlider.valueRange,
-        firstHandleCoordinates: mockDataForUpdateSlider.firstPosition,
-        secondHandleCoordinates: mockDataForUpdateSlider.secondPosition,
-        elementType: 'first',
-      };
+    describe('Метод должен вызвать приватный метод _setHandlePosition (1 или, если включен интревал, 2 раза)', () => {
+      let mockDataSetHandlePosition = { ...mockData };
 
       beforeEach(() => {
-        setHandlePositionAndHandleValue.mockClear();
+        setHandlePosition.mockClear();
       });
 
       test('Проверка при отключенном интервале', () => {
-        mockDataForUpdateSlider.rangeStatus = false;
-        
-        viewSlider.updateSlider(mockDataForUpdateSlider);
-        
-        expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(1);
-        expect(setHandlePositionAndHandleValue).toHaveBeenCalledWith(mockDataForSetPositionHandle);
+        mockDataSetHandlePosition.hasIntervalSelection = false;
+
+        viewSlider.updateSlider(mockDataSetHandlePosition);
+
+        expect(setHandlePosition).toHaveBeenCalledWith(viewSlider.$firstHandle, viewSlider.$firstTooltip, viewSlider.firstHandleValue);
+        expect(setHandlePosition).toHaveBeenCalledTimes(1);
       });
-      
+
       test('Проверка при включенном интервале', () => {
-        mockDataForUpdateSlider.rangeStatus = true;
-        mockDataForSetPositionHandle.elementType = 'second';
-        
-        viewSlider.updateSlider(mockDataForUpdateSlider);
-        
-        expect(setHandlePositionAndHandleValue).toHaveBeenNthCalledWith(2, mockDataForSetPositionHandle);
-        expect(setHandlePositionAndHandleValue).toHaveBeenCalledTimes(2);
+        mockDataSetHandlePosition.hasIntervalSelection = true;
+
+        viewSlider.updateSlider(mockDataSetHandlePosition);
+
+        expect(setHandlePosition).toHaveBeenNthCalledWith(2, viewSlider.$secondHandle, viewSlider.$secondTooltip, viewSlider.secondHandleValue);
+        expect(setHandlePosition).toHaveBeenCalledTimes(2);
       });
     })
   })

@@ -6,11 +6,11 @@ class Controller extends EventEmitter {
     super.addEmitter(this.constructor.name);
   }
 
-  initPlugin(dataForInitState) {
+  initPlugin() {
     this.notify('initSlider');
     this.notify('initPanel');
 
-    this.notify('updateState', dataForInitState);
+    this.notify('updateState');
   }
 
   sendNewDataFromModel(newData) {
