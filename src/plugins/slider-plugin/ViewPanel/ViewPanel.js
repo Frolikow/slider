@@ -43,19 +43,19 @@ class ViewPanel extends EventEmitter {
     this._updatePanelElements();
   }
 
-  _createArrayPossibleHandleValues() {
+  _createArrayOfPossibleHandleValues() {
     let currentValue = this.minimum;
-    const arrayPossibleHandleValues = [];
+    const arrayOfPossibleHandleValues = [];
 
     while (currentValue <= this.maximum) {
-      arrayPossibleHandleValues.push(currentValue);
+      arrayOfPossibleHandleValues.push(currentValue);
       if (currentValue > this.maximum) {
         break;
       } else {
         currentValue += this.step;
       }
     }
-    return arrayPossibleHandleValues;
+    return arrayOfPossibleHandleValues;
   }
 
   _visibilitySecondCurrentValue(isVisible) {
@@ -266,15 +266,15 @@ class ViewPanel extends EventEmitter {
 
   _handleStepSizeValueFocusOut(e) {
     this.step = parseInt($(e.target).val());
-    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
+    const arrayOfPossibleHandleValues = this._createArrayOfPossibleHandleValues();
 
-    this.firstHandleValue = arrayPossibleHandleValues.includes(this.firstHandleValue)
+    this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
       ? this.firstHandleValue
-      : arrayPossibleHandleValues[0];
+      : arrayOfPossibleHandleValues[0];
 
-    this.secondHandleValue = arrayPossibleHandleValues.includes(this.secondHandleValue)
+    this.secondHandleValue = arrayOfPossibleHandleValues.includes(this.secondHandleValue)
       ? this.secondHandleValue
-      : arrayPossibleHandleValues[arrayPossibleHandleValues.length - 1];
+      : arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1];
 
     this._sendDataForUpdateState();
   }

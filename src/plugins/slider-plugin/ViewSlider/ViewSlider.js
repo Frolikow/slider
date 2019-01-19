@@ -7,7 +7,7 @@ class ViewSlider extends EventEmitter {
     super.addEmitter(this.constructor.name);
 
     this.$slider = $element;
-    this.isHandleMovingNow = false;
+    this.isHandleMoving = false;
   }
 
   initSlider() {
@@ -28,9 +28,6 @@ class ViewSlider extends EventEmitter {
 
     this.firstHandleValue = firstValue;
     this.secondHandleValue = secondValue;
-    this.minimum = minimum;
-    this.maximum = maximum;
-    this.step = step;
     this.areTooltipsVisible = areTooltipsVisible;
     this.isVerticalOrientation = isVerticalOrientation;
     this.hasIntervalSelection = hasIntervalSelection;
@@ -38,6 +35,9 @@ class ViewSlider extends EventEmitter {
     this._setTooltipsVisibility(this.areTooltipsVisible);
     this._setOrientation(this.isVerticalOrientation);
     this._setIntervalSelection(this.hasIntervalSelection);
+
+    this.arrayOfPossibleHandleValues = this._createArrayOfPossibleHandleValues(minimum, maximum, step);
+    this.stepWidth = this.scaleWidth / (this.arrayOfPossibleHandleValues.length - 1);
 
     this._setHandlePosition(this.$firstHandle, this.$firstTooltip, this.firstHandleValue);
     if (this.hasIntervalSelection) {
@@ -51,22 +51,20 @@ class ViewSlider extends EventEmitter {
     const secondHandlePosition = this._calculateNewPosition(this.secondHandleValue);
 
     if (this.hasIntervalSelection) {
-      const isNewPositionCloserToSecondElement = (distanceFromStart - firstHandlePosition) > (secondHandlePosition - distanceFromStart);
-      const isNewPositionCloserToFirstElement = (distanceFromStart - firstHandlePosition) < (secondHandlePosition - distanceFromStart);
-      if (isNewPositionCloserToSecondElement) {
-        this.secondHandleValue = parseInt(calculatedValue);
-      } else if (isNewPositionCloserToFirstElement) {
+      const isNewPositionCloserToFirstHandle = (distanceFromStart - firstHandlePosition) < (secondHandlePosition - distanceFromStart);
+      if (isNewPositionCloserToFirstHandle) {
         this.firstHandleValue = parseInt(calculatedValue);
+      } else {
+        this.secondHandleValue = parseInt(calculatedValue);
       }
     } else {
       this.firstHandleValue = parseInt(calculatedValue);
     }
-
     this._sendDataForUpdateState();
   }
 
-  _updateValuesWhenMove(dataForSearchPosition) {
-    const { distanceFromStart, elementType } = dataForSearchPosition;
+  _updateValuesWhenMove(dataForPositionSearch) {
+    const { distanceFromStart, elementType } = dataForPositionSearch;
 
     const calculatedValue = this._calculateValueForHandle(distanceFromStart);
     const firstHandlePosition = this._calculateNewPosition(this.firstHandleValue);
@@ -99,30 +97,14 @@ class ViewSlider extends EventEmitter {
       distanceFromStart = this.scaleWidth;
     }
 
-    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
-    this.stepWidth = this.scaleWidth / (arrayPossibleHandleValues.length - 1);
     const indexValueToDistanceFromStart = Math.round((distanceFromStart) / this.stepWidth);
-
-    const newValue = arrayPossibleHandleValues[indexValueToDistanceFromStart];
+    const newValue = this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
 
     return newValue;
   }
 
-  _createArrayPossibleHandleValues() {
-    let currentValue = this.minimum;
-    const arrayPossibleHandleValues = [];
-
-    while (currentValue <= this.maximum) {
-      arrayPossibleHandleValues.push(currentValue);
-      currentValue += this.step;
-    }
-    return arrayPossibleHandleValues;
-  }
-
   _calculateNewPosition(value) {
-    const arrayPossibleHandleValues = this._createArrayPossibleHandleValues();
-    this.stepWidth = this.scaleWidth / (arrayPossibleHandleValues.length - 1);
-    let handlePosition = this.stepWidth * (arrayPossibleHandleValues.indexOf(value));
+    let handlePosition = this.stepWidth * (this.arrayOfPossibleHandleValues.indexOf(value));
 
     if (handlePosition <= 0) {
       handlePosition = 0;
@@ -132,13 +114,21 @@ class ViewSlider extends EventEmitter {
     return handlePosition;
   }
 
+  _createArrayOfPossibleHandleValues(minimum, maximum, step) {
+    let currentValue = minimum;
+    const arrayOfPossibleHandleValues = [];
+
+    while (currentValue <= maximum) {
+      arrayOfPossibleHandleValues.push(currentValue);
+      currentValue += step;
+    }
+    return arrayOfPossibleHandleValues;
+  }
+
   _sendDataForUpdateState() {
     const dataForUpdateState = {
       firstValue: this.firstHandleValue,
       secondValue: this.secondHandleValue,
-      minimum: this.minimum,
-      maximum: this.maximum,
-      step: this.step,
       areTooltipsVisible: this.areTooltipsVisible,
       isVerticalOrientation: this.isVerticalOrientation,
       hasIntervalSelection: this.hasIntervalSelection,
@@ -153,13 +143,11 @@ class ViewSlider extends EventEmitter {
     this.$secondHandle.mousedown(this._handleHandleMousedown.bind(this));
 
     $(document).mousemove(this._handleDocumentMousemove.bind(this));
-
-
     $(document).mouseup(this._handleDocumentMouseup.bind(this));
   }
 
   _handleDocumentMouseup() {
-    this.isHandleMovingNow = false;
+    this.isHandleMoving = false;
     this.dataForMovingHandle = null;
   }
 
@@ -171,13 +159,13 @@ class ViewSlider extends EventEmitter {
       ? e.pageY - handleCoordinates.top
       : e.pageX - handleCoordinates.left;
 
-    this.isHandleMovingNow = true;
+    this.isHandleMoving = true;
 
     this.dataForMovingHandle = { $currentHandle: $(e.currentTarget), sliderCoordinates, cursorPositionInsideHandle };
   }
 
   _handleDocumentMousemove(e) {
-    if (this.isHandleMovingNow) {
+    if (this.isHandleMoving) {
       const { $currentHandle, sliderCoordinates, cursorPositionInsideHandle } = { ...this.dataForMovingHandle };
 
       const coordinatesOfClickInSlider = this.isVerticalOrientation
@@ -190,8 +178,8 @@ class ViewSlider extends EventEmitter {
       } else if ($currentHandle.hasClass('js-slider__handle_second')) {
         elementType = 'second';
       }
-      const dataForSearchPosition = { distanceFromStart: coordinatesOfClickInSlider, elementType };
-      this._updateValuesWhenMove(dataForSearchPosition);
+      const dataForPositionSearch = { distanceFromStart: coordinatesOfClickInSlider, elementType };
+      this._updateValuesWhenMove(dataForPositionSearch);
     }
   }
 
