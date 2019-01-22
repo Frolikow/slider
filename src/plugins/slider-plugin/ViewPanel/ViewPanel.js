@@ -49,11 +49,7 @@ class ViewPanel extends EventEmitter {
 
     while (currentValue <= this.maximum) {
       arrayOfPossibleHandleValues.push(currentValue);
-      if (currentValue > this.maximum) {
-        break;
-      } else {
-        currentValue += this.step;
-      }
+      currentValue += this.step;
     }
     return arrayOfPossibleHandleValues;
   }
