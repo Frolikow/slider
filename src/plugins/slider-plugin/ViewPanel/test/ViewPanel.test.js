@@ -8,7 +8,7 @@ const viewPanel = new ViewPanel($('.slider'), true);
 const createPanelElement = jest.spyOn(ViewPanel.prototype, '_createPanelElement');
 const initEventListeners = jest.spyOn(ViewPanel.prototype, '_initEventListeners');
 
-const visibilitySecondCurrentValue = jest.spyOn(ViewPanel.prototype, '_visibilitySecondCurrentValue');
+const setVisibilityOfSecondCurrentValue = jest.spyOn(ViewPanel.prototype, '_setVisibilityOfSecondCurrentValue');
 const updatePanelElements = jest.spyOn(ViewPanel.prototype, '_updatePanelElements');
 
 
@@ -58,8 +58,8 @@ describe('Тестирование методов viewPanel', () => {
 
         viewPanel.updatePanel(mockData);
 
-        expect(visibilitySecondCurrentValue).toBeCalledWith(viewPanel.hasIntervalSelection);
-        expect(visibilitySecondCurrentValue).toHaveBeenCalledTimes(1);
+        expect(setVisibilityOfSecondCurrentValue).toBeCalledWith(viewPanel.hasIntervalSelection);
+        expect(setVisibilityOfSecondCurrentValue).toHaveBeenCalledTimes(1);
         
         expect(updatePanelElements).toHaveBeenCalledTimes(1);
       })
