@@ -7,9 +7,7 @@ class ViewSlider extends EventEmitter {
     super.addEmitter(this.constructor.name);
 
     this.$slider = $element;
-    this.selectedHandleState = {
-      isHandleMoving: false,
-    };
+    this.selectedHandleState = null;
   }
 
   initSlider() {
@@ -142,11 +140,7 @@ class ViewSlider extends EventEmitter {
   }
 
   _handleDocumentMouseup() {
-    this.selectedHandleState = {
-      isHandleMoving: false,
-      cursorPositionInsideHandle: null,
-      elementType: null,
-    };
+    this.selectedHandleState = null;
   }
 
   _handleHandleMousedown(e) {
@@ -161,11 +155,11 @@ class ViewSlider extends EventEmitter {
       ? 'first'
       : 'second';
 
-    this.selectedHandleState = { isHandleMoving: true, cursorPositionInsideHandle, elementType };
+    this.selectedHandleState = { cursorPositionInsideHandle, elementType };
   }
 
   _handleDocumentMousemove(e) {
-    if (this.selectedHandleState.isHandleMoving) {
+    if (this.selectedHandleState !== null) {
       const { cursorPositionInsideHandle } = this.selectedHandleState;
 
       const distanceFromStart = this.isVerticalOrientation
