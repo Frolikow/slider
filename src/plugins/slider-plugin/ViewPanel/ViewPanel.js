@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
+import createArrayOfPossibleHandleValues from '../shared';
 
 class ViewPanel extends EventEmitter {
   constructor($element, isConfigPanelVisible) {
@@ -38,23 +39,23 @@ class ViewPanel extends EventEmitter {
     this.isVerticalOrientation = isVerticalOrientation;
     this.hasIntervalSelection = hasIntervalSelection;
 
-    this._visibilitySecondCurrentValue(this.hasIntervalSelection);
+    this._setVisibilityOfSecondCurrentValue(this.hasIntervalSelection);
 
     this._updatePanelElements();
   }
 
-  _createArrayOfPossibleHandleValues() {
-    let currentValue = this.minimum;
+  createArrayOfPossibleHandleValues(minimum, maximum, step) {
+    let currentValue = minimum;
     const arrayOfPossibleHandleValues = [];
 
-    while (currentValue <= this.maximum) {
+    while (currentValue <= maximum) {
       arrayOfPossibleHandleValues.push(currentValue);
-      currentValue += this.step;
+      currentValue += step;
     }
     return arrayOfPossibleHandleValues;
   }
 
-  _visibilitySecondCurrentValue(isVisible) {
+  _setVisibilityOfSecondCurrentValue(isVisible) {
     if (isVisible) {
       this.$currentValueSecondHandle.removeClass('configuration__current-value_hidden');
       this.$currentValueSecondHandle.addClass('configuration__current-value_visible');
@@ -219,7 +220,7 @@ class ViewPanel extends EventEmitter {
 
   _handleRangeSwitchChange(e) {
     this.hasIntervalSelection = $(e.target).prop('checked');
-    this._visibilitySecondCurrentValue(this.hasIntervalSelection);
+    this._setVisibilityOfSecondCurrentValue(this.hasIntervalSelection);
 
     this._sendDataForUpdateState();
   }
@@ -262,7 +263,7 @@ class ViewPanel extends EventEmitter {
 
   _handleStepSizeValueFocusOut(e) {
     this.step = parseInt($(e.target).val());
-    const arrayOfPossibleHandleValues = this._createArrayOfPossibleHandleValues();
+    const arrayOfPossibleHandleValues = createArrayOfPossibleHandleValues(this.minimum, this.maximum, this.step);
 
     this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
       ? this.firstHandleValue

@@ -16,9 +16,7 @@ class Model extends EventEmitter {
   }
 
   sendNewDataFromModel() {
-    const newData = { ...this.modelData };
-
-    this.notify('sendNewDataFromModel', newData);
+    this.notify('sendNewDataFromModel', this.modelData);
   }
 }
 
