@@ -45,6 +45,7 @@ class ViewSlider extends EventEmitter {
     if (this.hasIntervalSelection) {
       this._setHandlePosition(this.$secondHandle, this.$secondTooltip, this.secondHandleValue);
     }
+    this._fillScale();
   }
 
   _updateValuesWhenClick(distanceFromStart) {
@@ -182,6 +183,31 @@ class ViewSlider extends EventEmitter {
       top: top + window.pageYOffset,
       left: left + window.pageXOffset,
     };
+  }
+
+  _fillScale() {
+    const sliderScaleCoordinates = this.isVerticalOrientation
+      ? this._getCoordinatesOfElementInsideWindow(this.$sliderScale).top
+      : this._getCoordinatesOfElementInsideWindow(this.$sliderScale).left;
+
+    const firstHandleCoordinates = this.isVerticalOrientation
+      ? this._getCoordinatesOfElementInsideWindow(this.$firstHandle).top
+      : this._getCoordinatesOfElementInsideWindow(this.$firstHandle).left;
+
+    const secondHandlePosition = this.isVerticalOrientation
+      ? this._getCoordinatesOfElementInsideWindow(this.$secondHandle).top
+      : this._getCoordinatesOfElementInsideWindow(this.$secondHandle).left;
+
+    if (this.hasIntervalSelection) {
+      const firstFillLimit = (100 / this.scaleWidth) * (firstHandleCoordinates - sliderScaleCoordinates);
+      const secondFillLimit = (100 / this.scaleWidth) * (secondHandlePosition - sliderScaleCoordinates);
+
+      this.$sliderScale.css('background', `linear-gradient(to right, #999 , #999 ${firstFillLimit}%, #f00 ${firstFillLimit}%, #f00 ${secondFillLimit}%, #999 ${secondFillLimit}%`);
+    } else {
+      const fillLimit = (100 / this.scaleWidth) * (firstHandleCoordinates - sliderScaleCoordinates);
+
+      this.$sliderScale.css('background', `linear-gradient(to right, #f00, #f00 ${fillLimit}%, #999 ${fillLimit}%`);
+    }
   }
 
   _setTooltipsVisibility(switchedOn) {
