@@ -19692,7 +19692,7 @@ function validateIncomingData(incomingData) {
     }
     if (firstValue >= secondValue) {
       secondValue = firstValue;
-      firstValue -= step;
+      firstValue = minimum;
       console.log('Некорректные значения firstValue, secondValue \nОбязательное условие: \nvalue < secondValue \nИзменено на firstValue = firstValue - step, secondValue = firstValue.');
     }
   }
@@ -20215,6 +20215,7 @@ var ViewSlider = function (_EventEmitter) {
 
       this.firstHandleValue = firstValue;
       this.secondHandleValue = secondValue;
+      this.maximum = maximum;
       this.areTooltipsVisible = areTooltipsVisible;
       this.isVerticalOrientation = isVerticalOrientation;
       this.hasIntervalSelection = hasIntervalSelection;
@@ -20280,7 +20281,10 @@ var ViewSlider = function (_EventEmitter) {
     key: '_calculateValueForHandle',
     value: function _calculateValueForHandle(distanceFromStart) {
       var indexValueToDistanceFromStart = Math.round(this._validatePositionForHandle(distanceFromStart) / this.stepWidth);
-      var newHandleValue = this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
+
+      var isPositionIsGreaterLastValue = this._validatePositionForHandle(distanceFromStart) > (this.arrayOfPossibleHandleValues.length - 1) * this.stepWidth;
+
+      var newHandleValue = isPositionIsGreaterLastValue ? this.maximum : this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
 
       return newHandleValue;
     }
@@ -20297,7 +20301,10 @@ var ViewSlider = function (_EventEmitter) {
   }, {
     key: '_calculateHandlePosition',
     value: function _calculateHandlePosition(value) {
-      var handlePosition = this.stepWidth * this.arrayOfPossibleHandleValues.indexOf(value);
+      var isValueIsGreaterLastValue = value > this.arrayOfPossibleHandleValues[this.arrayOfPossibleHandleValues.length - 1];
+      // eslint-disable-next-line no-nested-ternary
+      var handlePosition = isValueIsGreaterLastValue ? this.scaleWidth : this.arrayOfPossibleHandleValues.indexOf(value) < 0 ? this.stepWidth * this.firstHandleValue : this.stepWidth * this.arrayOfPossibleHandleValues.indexOf(value);
+
       return handlePosition;
     }
   }, {
