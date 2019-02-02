@@ -66,7 +66,7 @@ function validateIncomingData(incomingData) {
     }
     if (firstValue >= secondValue) {
       secondValue = firstValue;
-      firstValue -= step;
+      firstValue = minimum;
       console.log('Некорректные значения firstValue, secondValue \nОбязательное условие: \nvalue < secondValue \nИзменено на firstValue = firstValue - step, secondValue = firstValue.');
     }
   }

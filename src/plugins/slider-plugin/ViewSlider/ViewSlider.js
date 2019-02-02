@@ -29,6 +29,7 @@ class ViewSlider extends EventEmitter {
 
     this.firstHandleValue = firstValue;
     this.secondHandleValue = secondValue;
+    this.maximum = maximum;
     this.areTooltipsVisible = areTooltipsVisible;
     this.isVerticalOrientation = isVerticalOrientation;
     this.hasIntervalSelection = hasIntervalSelection;
@@ -73,8 +74,8 @@ class ViewSlider extends EventEmitter {
     const { elementType } = this.selectedHandleState;
 
     if (this.hasIntervalSelection) {
-      const valueForHandleFirstIsChangeable = distanceFromStart <= secondHandlePosition - this.stepWidth;
-      const valueForHandleSecondIsChangeable = distanceFromStart >= firstHandlePosition + this.stepWidth;
+      const valueForHandleFirstIsChangeable = (distanceFromStart <= secondHandlePosition - this.stepWidth);
+      const valueForHandleSecondIsChangeable = (distanceFromStart >= firstHandlePosition + this.stepWidth);
 
       if (elementType === 'first' && valueForHandleFirstIsChangeable) {
         this.firstHandleValue = parseInt(calculatedValue);
@@ -90,7 +91,12 @@ class ViewSlider extends EventEmitter {
 
   _calculateValueForHandle(distanceFromStart) {
     const indexValueToDistanceFromStart = Math.round(this._validatePositionForHandle(distanceFromStart) / this.stepWidth);
-    const newHandleValue = this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
+
+    const isPositionIsGreaterLastValue = this._validatePositionForHandle(distanceFromStart) > (this.arrayOfPossibleHandleValues.length - 1) * this.stepWidth;
+
+    const newHandleValue = isPositionIsGreaterLastValue
+      ? this.maximum
+      : this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
 
     return newHandleValue;
   }
@@ -105,7 +111,14 @@ class ViewSlider extends EventEmitter {
   }
 
   _calculateHandlePosition(value) {
-    const handlePosition = this.stepWidth * (this.arrayOfPossibleHandleValues.indexOf(value));
+    const isValueIsGreaterLastValue = value > (this.arrayOfPossibleHandleValues[this.arrayOfPossibleHandleValues.length - 1]);
+    // eslint-disable-next-line no-nested-ternary
+    const handlePosition = isValueIsGreaterLastValue
+      ? this.scaleWidth
+      : (this.arrayOfPossibleHandleValues.indexOf(value) < 0)
+        ? this.stepWidth * this.firstHandleValue
+        : this.stepWidth * (this.arrayOfPossibleHandleValues.indexOf(value));
+
     return handlePosition;
   }
 
