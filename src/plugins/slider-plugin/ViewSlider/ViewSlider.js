@@ -39,7 +39,7 @@ class ViewSlider extends EventEmitter {
 
     this.sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
     this.arrayOfPossibleHandleValues = createArrayOfPossibleHandleValues(minimum, maximum, step);
-    this.stepWidth = this.scaleWidth / (this.arrayOfPossibleHandleValues.length - 1);
+    this.stepWidth = (this.scaleWidth / (maximum - minimum)) * step;
 
     this._setHandlePosition(this.$firstHandle, this.$firstTooltip, this.firstHandleValue);
     if (this.hasIntervalSelection) {
