@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
-import createArrayOfPossibleHandleValues from '../shared';
+import createRange from '../shared';
 
 class ViewPanel extends EventEmitter {
   constructor($element, isConfigPanelVisible) {
@@ -252,7 +252,7 @@ class ViewPanel extends EventEmitter {
 
   _handleStepSizeValueFocusOut(e) {
     this.step = parseInt($(e.target).val());
-    const arrayOfPossibleHandleValues = createArrayOfPossibleHandleValues(this.minimum, this.maximum, this.step);
+    const arrayOfPossibleHandleValues = createRange(this.minimum, this.maximum, this.step);
 
     this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
       ? this.firstHandleValue

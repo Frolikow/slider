@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
-import createArrayOfPossibleHandleValues from '../shared';
+import createRange from '../shared';
 
 class ViewSlider extends EventEmitter {
   constructor($element) {
@@ -39,7 +39,7 @@ class ViewSlider extends EventEmitter {
     this._setIntervalSelection(this.hasIntervalSelection);
 
     this.sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    this.arrayOfPossibleHandleValues = createArrayOfPossibleHandleValues(minimum, maximum, step);
+    this.arrayOfPossibleHandleValues = createRange(minimum, maximum, step);
     this.stepWidth = (this.scaleWidth / (maximum - minimum)) * step;
 
     this._setHandlePosition(this.$firstHandle, this.$firstTooltip, this.firstHandleValue);

@@ -1,5 +1,5 @@
 
-function createArrayOfPossibleHandleValues(minimum, maximum, step) {
+function createRange(minimum, maximum, step) {
   let currentValue = minimum;
   const arrayOfPossibleHandleValues = [];
 
@@ -10,4 +10,4 @@ function createArrayOfPossibleHandleValues(minimum, maximum, step) {
   return arrayOfPossibleHandleValues;
 }
 
-export default createArrayOfPossibleHandleValues;
+export default createRange;
