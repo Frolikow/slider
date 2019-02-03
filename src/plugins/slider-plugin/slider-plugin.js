@@ -19,8 +19,8 @@ import Controller from './Controller/Controller';
     };
 
     const model = new Model(stateOptions);
-    const viewSlider = new ViewSlider(options.$slider);
-    const viewPanel = new ViewPanel(options.$slider, options.isConfigPanelVisible);
+    const viewSlider = new ViewSlider($(this));
+    const viewPanel = new ViewPanel(this, options.isConfigPanelVisible);
     const controller = new Controller();
 
     model.subscribe(controller);

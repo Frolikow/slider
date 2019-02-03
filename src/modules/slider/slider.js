@@ -3,7 +3,6 @@ import $ from 'jquery';
 $(document).ready(() => {
   $('.slider').each(function () {
     $(this).efSlider({
-      $slider: $(this),
       isConfigPanelVisible: true,
       firstValue: 2,
       secondValue: 8,
