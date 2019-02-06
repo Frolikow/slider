@@ -6,8 +6,8 @@ import createRange from '../shared';
 class ViewSlider extends EventEmitter {
   constructor($element) {
     super();
-    super.addEmitter(this.constructor.name);
 
+    this.events = ['initSlider', 'updateSlider'];
     this.$slider = $element;
     this.selectedKnobState = null;
   }

@@ -3,7 +3,8 @@ import EventEmitter from '../eventEmiter/eventEmiter';
 class Controller extends EventEmitter {
   constructor() {
     super();
-    super.addEmitter(this.constructor.name);
+
+    this.events = ['sendNewDataFromModel', 'updateState'];
   }
 
   initPlugin() {
@@ -14,15 +15,15 @@ class Controller extends EventEmitter {
   }
 
   sendNewDataFromModel(newData) {
-    this.updateSlider(newData);
-    this.updatePanel(newData);
+    this._updateSlider(newData);
+    this._updatePanel(newData);
   }
 
-  updateSlider(dataSlider) {
+  _updateSlider(dataSlider) {
     this.notify('updateSlider', dataSlider);
   }
 
-  updatePanel(dataPanel) {
+  _updatePanel(dataPanel) {
     this.notify('updatePanel', dataPanel);
   }
 

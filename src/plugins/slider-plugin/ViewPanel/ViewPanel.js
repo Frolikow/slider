@@ -5,8 +5,8 @@ import createRange from '../shared';
 class ViewPanel extends EventEmitter {
   constructor($element, isConfigPanelVisible) {
     super();
-    super.addEmitter(this.constructor.name);
 
+    this.events = ['initPanel', 'updatePanel'];
     this.$slider = $element;
     this.isConfigPanelVisible = isConfigPanelVisible;
   }

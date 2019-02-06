@@ -4,18 +4,18 @@ import { validateInitialData, validateIncomingData } from './modelDataValidators
 class Model extends EventEmitter {
   constructor(options) {
     super();
-    super.addEmitter(this.constructor.name);
 
+    this.events = ['updateState'];
     this.modelData = validateInitialData(options);
   }
 
   updateState(newDataToUpdateState) {
     this.modelData = { ...this.modelData, ...validateIncomingData({ ...this.modelData, ...newDataToUpdateState }) };
 
-    this.sendNewDataFromModel();
+    this._sendNewDataFromModel();
   }
 
-  sendNewDataFromModel() {
+  _sendNewDataFromModel() {
     this.notify('sendNewDataFromModel', this.modelData);
   }
 }

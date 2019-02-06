@@ -1,10 +1,6 @@
-import Checkers from '../Checkers/Checkers';
-
-class EventEmitter extends Checkers {
+class EventEmitter {
   constructor() {
-    super();
     this.observers = [];
-    this.emitter = null;
   }
 
   subscribe(instance) {
@@ -14,12 +10,11 @@ class EventEmitter extends Checkers {
   unsubscribe(instance) {
     this.observers.splice(this.observers.indexOf(instance), 1);
   }
-  addEmitter(constructorName) {
-    this.emitter = constructorName;
-  }
+
   notify(methodName, data) {
     this.observers.forEach((instance) => {
-      this.methodCheck(instance.constructor.name, this.emitter, methodName) && instance[methodName](data);
+      instance.events.includes(methodName)
+        && instance[methodName](data);
     });
   }
 }
