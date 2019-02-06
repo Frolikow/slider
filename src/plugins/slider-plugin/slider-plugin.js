@@ -24,10 +24,12 @@ import Controller from './Controller/Controller';
     const controller = new Controller();
 
     model.subscribe(controller);
-    viewSlider.subscribe(controller);
-    viewPanel.subscribe(controller);
     controller.subscribe(model);
+
+    viewSlider.subscribe(controller);
     controller.subscribe(viewSlider);
+
+    viewPanel.subscribe(controller);
     controller.subscribe(viewPanel);
 
     controller.initPlugin();

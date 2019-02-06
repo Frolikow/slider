@@ -12,7 +12,7 @@ const initEventListeners = jest.spyOn(ViewSlider.prototype, '_initEventListeners
 const setTooltipsVisibility = jest.spyOn(ViewSlider.prototype, '_setTooltipsVisibility');
 const setOrientation = jest.spyOn(ViewSlider.prototype, '_setOrientation');
 const setIntervalSelection = jest.spyOn(ViewSlider.prototype, '_setIntervalSelection');
-const setHandlePosition = jest.spyOn(ViewSlider.prototype, '_setHandlePosition');
+const setKnobPosition = jest.spyOn(ViewSlider.prototype, '_setKnobPosition');
 
 describe('Тестирование методов viewSlider', () => {
   describe('Тестирование метода initSlider', () => {
@@ -53,29 +53,29 @@ describe('Тестирование методов viewSlider', () => {
       expect(setIntervalSelection).toHaveBeenCalledWith(viewSlider.hasIntervalSelection);
     });
 
-    describe('Метод должен вызвать приватный метод _setHandlePosition (1 или, если включен интревал, 2 раза)', () => {
-      let mockDataSetHandlePosition = { ...mockData };
+    describe('Метод должен вызвать приватный метод _setKnobPosition (1 или, если включен интревал, 2 раза)', () => {
+      let mockDataSetKnobPosition = { ...mockData };
 
       beforeEach(() => {
-        setHandlePosition.mockClear();
+        setKnobPosition.mockClear();
       });
 
       test('Проверка при отключенном интервале', () => {
-        mockDataSetHandlePosition.hasIntervalSelection = false;
+        mockDataSetKnobPosition.hasIntervalSelection = false;
 
-        viewSlider.updateSlider(mockDataSetHandlePosition);
+        viewSlider.updateSlider(mockDataSetKnobPosition);
 
-        expect(setHandlePosition).toHaveBeenCalledWith(viewSlider.$firstHandle, viewSlider.$firstTooltip, viewSlider.firstHandleValue);
-        expect(setHandlePosition).toHaveBeenCalledTimes(1);
+        expect(setKnobPosition).toHaveBeenCalledWith(viewSlider.$firstKnob, viewSlider.$firstTooltip, viewSlider.firstKnobValue);
+        expect(setKnobPosition).toHaveBeenCalledTimes(1);
       });
 
       test('Проверка при включенном интервале', () => {
-        mockDataSetHandlePosition.hasIntervalSelection = true;
+        mockDataSetKnobPosition.hasIntervalSelection = true;
 
-        viewSlider.updateSlider(mockDataSetHandlePosition);
+        viewSlider.updateSlider(mockDataSetKnobPosition);
 
-        expect(setHandlePosition).toHaveBeenNthCalledWith(2, viewSlider.$secondHandle, viewSlider.$secondTooltip, viewSlider.secondHandleValue);
-        expect(setHandlePosition).toHaveBeenCalledTimes(2);
+        expect(setKnobPosition).toHaveBeenNthCalledWith(2, viewSlider.$secondKnob, viewSlider.$secondTooltip, viewSlider.secondKnobValue);
+        expect(setKnobPosition).toHaveBeenCalledTimes(2);
       });
     })
   })

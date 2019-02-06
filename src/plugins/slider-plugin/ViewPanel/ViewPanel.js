@@ -18,8 +18,8 @@ class ViewPanel extends EventEmitter {
       this.$switchVisibilityTooltips = this.$slider.find('.js-configuration__visibility-tooltips');
       this.$orientationSwitch = this.$slider.find('.js-configuration__orientation');
       this.$rangeSwitch = this.$slider.find('.js-configuration__range');
-      this.$currentValueFirstHandle = this.$slider.find('.js-configuration__current-value_first');
-      this.$currentValueSecondHandle = this.$slider.find('.js-configuration__current-value_second');
+      this.$currentValueFirstKnob = this.$slider.find('.js-configuration__current-value_first');
+      this.$currentValueSecondKnob = this.$slider.find('.js-configuration__current-value_second');
       this.$minimumValue = this.$slider.find('.js-configuration__minimum-value');
       this.$maximumValue = this.$slider.find('.js-configuration__maximum-value');
       this.$stepSizeValue = this.$slider.find('.js-configuration__step-size');
@@ -28,10 +28,9 @@ class ViewPanel extends EventEmitter {
     }
   }
 
-  updatePanel(dataForUpdatePanelState) {
-    const { firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection } = dataForUpdatePanelState;
-    this.firstHandleValue = firstValue;
-    this.secondHandleValue = secondValue;
+  updatePanel({ firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection }) {
+    this.firstKnobValue = firstValue;
+    this.secondKnobValue = secondValue;
     this.minimum = minimum;
     this.maximum = maximum;
     this.step = step;
@@ -46,11 +45,11 @@ class ViewPanel extends EventEmitter {
 
   _setVisibilityOfSecondCurrentValue(isVisible) {
     if (isVisible) {
-      this.$currentValueSecondHandle.removeClass('configuration__current-value_hidden');
-      this.$currentValueSecondHandle.addClass('configuration__current-value_visible');
+      this.$currentValueSecondKnob.removeClass('configuration__current-value_hidden');
+      this.$currentValueSecondKnob.addClass('configuration__current-value_visible');
     } else {
-      this.$currentValueSecondHandle.removeClass('configuration__current-value_visible');
-      this.$currentValueSecondHandle.addClass('configuration__current-value_hidden');
+      this.$currentValueSecondKnob.removeClass('configuration__current-value_visible');
+      this.$currentValueSecondKnob.addClass('configuration__current-value_hidden');
     }
   }
 
@@ -73,23 +72,23 @@ class ViewPanel extends EventEmitter {
         : null,
     });
 
-    this.$currentValueFirstHandle.attr({
+    this.$currentValueFirstKnob.attr({
       step: this.step,
       min: this.minimum,
       max: this.hasIntervalSelection
-        ? this.secondHandleValue - this.step
+        ? this.secondKnobValue - this.step
         : this.maximum,
-      value: this.firstHandleValue,
+      value: this.firstKnobValue,
     });
-    this.$currentValueFirstHandle.val(this.firstHandleValue);
+    this.$currentValueFirstKnob.val(this.firstKnobValue);
 
-    this.$currentValueSecondHandle.attr({
+    this.$currentValueSecondKnob.attr({
       step: this.step,
-      min: this.firstHandleValue + this.step,
+      min: this.firstKnobValue + this.step,
       max: this.maximum,
-      value: this.secondHandleValue,
+      value: this.secondKnobValue,
     });
-    this.$currentValueSecondHandle.val(this.secondHandleValue);
+    this.$currentValueSecondKnob.val(this.secondKnobValue);
 
     this.$minimumValue.attr({
       step: this.step,
@@ -112,8 +111,8 @@ class ViewPanel extends EventEmitter {
 
   _sendDataForUpdateState() {
     const panelStateForUpdatePlugin = {
-      firstValue: this.firstHandleValue,
-      secondValue: this.secondHandleValue,
+      firstValue: this.firstKnobValue,
+      secondValue: this.secondKnobValue,
       minimum: this.minimum,
       maximum: this.maximum,
       step: this.step,
@@ -188,8 +187,8 @@ class ViewPanel extends EventEmitter {
     this.$orientationSwitch.change(this._handleOrientationSwitchChange.bind(this));
     this.$rangeSwitch.change(this._handleRangeSwitchChange.bind(this));
 
-    this.$currentValueFirstHandle.focusout(this._handleCurrentValueFirstFocusOut.bind(this));
-    this.$currentValueSecondHandle.focusout(this._handleCurrentValueSecondFocusOut.bind(this));
+    this.$currentValueFirstKnob.focusout(this._handleCurrentValueFirstFocusOut.bind(this));
+    this.$currentValueSecondKnob.focusout(this._handleCurrentValueSecondFocusOut.bind(this));
     this.$minimumValue.focusout(this._handleMinimumValueFocusOut.bind(this));
     this.$maximumValue.focusout(this._handleMaximumValueFocusOut.bind(this));
     this.$stepSizeValue.focusout(this._handleStepSizeValueFocusOut.bind(this));
@@ -215,52 +214,52 @@ class ViewPanel extends EventEmitter {
   }
 
   _handleCurrentValueFirstFocusOut(e) {
-    this.firstHandleValue = parseInt($(e.target).val());
+    this.firstKnobValue = parseInt($(e.target).val());
 
     this._sendDataForUpdateState();
   }
 
   _handleCurrentValueSecondFocusOut(e) {
-    this.secondHandleValue = parseInt($(e.target).val());
+    this.secondKnobValue = parseInt($(e.target).val());
 
     this._sendDataForUpdateState();
   }
 
   _handleMinimumValueFocusOut(e) {
     this.minimum = parseInt($(e.target).val());
-    this.firstHandleValue = this.firstHandleValue < this.minimum
+    this.firstKnobValue = this.firstKnobValue < this.minimum
       ? this.minimum
-      : this.firstHandleValue;
-    this.secondHandleValue = this.secondHandleValue <= this.minimum
+      : this.firstKnobValue;
+    this.secondKnobValue = this.secondKnobValue <= this.minimum
       ? this.maximum
-      : this.secondHandleValue;
+      : this.secondKnobValue;
 
     this._sendDataForUpdateState();
   }
 
   _handleMaximumValueFocusOut(e) {
     this.maximum = parseInt($(e.target).val());
-    this.secondHandleValue = this.secondHandleValue > this.maximum
+    this.secondKnobValue = this.secondKnobValue > this.maximum
       ? this.maximum
-      : this.secondHandleValue;
-    this.firstHandleValue = this.firstHandleValue >= this.maximum
+      : this.secondKnobValue;
+    this.firstKnobValue = this.firstKnobValue >= this.maximum
       ? this.minimum
-      : this.firstHandleValue;
+      : this.firstKnobValue;
 
     this._sendDataForUpdateState();
   }
 
   _handleStepSizeValueFocusOut(e) {
     this.step = parseInt($(e.target).val());
-    const arrayOfPossibleHandleValues = createRange(this.minimum, this.maximum, this.step);
+    const possibleSliderValues = createRange(this.minimum, this.maximum, this.step);
 
-    this.firstHandleValue = arrayOfPossibleHandleValues.includes(this.firstHandleValue)
-      ? this.firstHandleValue
-      : arrayOfPossibleHandleValues[0];
+    this.firstKnobValue = possibleSliderValues.includes(this.firstKnobValue)
+      ? this.firstKnobValue
+      : possibleSliderValues[0];
 
-    this.secondHandleValue = arrayOfPossibleHandleValues.includes(this.secondHandleValue)
-      ? this.secondHandleValue
-      : arrayOfPossibleHandleValues[arrayOfPossibleHandleValues.length - 1];
+    this.secondKnobValue = possibleSliderValues.includes(this.secondKnobValue)
+      ? this.secondKnobValue
+      : possibleSliderValues[possibleSliderValues.length - 1];
 
     this._sendDataForUpdateState();
   }

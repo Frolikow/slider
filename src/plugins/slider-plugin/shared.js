@@ -1,13 +1,13 @@
 
 function createRange(minimum, maximum, step) {
   let currentValue = minimum;
-  const arrayOfPossibleHandleValues = [];
+  const possibleSliderValues = [];
 
   while (currentValue <= maximum) {
-    arrayOfPossibleHandleValues.push(currentValue);
+    possibleSliderValues.push(currentValue);
     currentValue += step;
   }
-  return arrayOfPossibleHandleValues;
+  return possibleSliderValues;
 }
 
 export default createRange;

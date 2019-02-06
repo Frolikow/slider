@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 import $ from 'jquery';
 import EventEmitter from '../eventEmiter/eventEmiter';
 import createRange from '../shared';
@@ -8,27 +9,25 @@ class ViewSlider extends EventEmitter {
     super.addEmitter(this.constructor.name);
 
     this.$slider = $element;
-    this.selectedHandleState = null;
+    this.selectedKnobState = null;
   }
 
   initSlider() {
     this._createSliderElement();
     this.$sliderScale = this.$slider.find('.js-slider__element');
-    this.$firstHandle = this.$slider.find('.js-slider__handle_first');
+    this.$firstKnob = this.$slider.find('.js-slider__knob_first');
     this.$firstTooltip = this.$slider.find('.js-slider__tooltip_first');
-    this.$secondHandle = this.$slider.find('.js-slider__handle_second');
+    this.$secondKnob = this.$slider.find('.js-slider__knob_second');
     this.$secondTooltip = this.$slider.find('.js-slider__tooltip_second');
 
-    this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstHandle.outerWidth();
+    this.scaleWidth = this.$sliderScale.outerWidth() - this.$firstKnob.outerWidth();
 
     this._initEventListeners();
   }
 
-  updateSlider(dataForUpdateSlider) {
-    const { firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection } = dataForUpdateSlider;
-
-    this.firstHandleValue = firstValue;
-    this.secondHandleValue = secondValue;
+  updateSlider({ firstValue, secondValue, minimum, maximum, step, areTooltipsVisible, isVerticalOrientation, hasIntervalSelection }) {
+    this.firstKnobValue = firstValue;
+    this.secondKnobValue = secondValue;
     this.maximum = maximum;
     this.areTooltipsVisible = areTooltipsVisible;
     this.isVerticalOrientation = isVerticalOrientation;
@@ -38,70 +37,72 @@ class ViewSlider extends EventEmitter {
     this._setOrientation(this.isVerticalOrientation);
     this._setIntervalSelection(this.hasIntervalSelection);
 
-    this.sliderCoordinates = this._getCoordinatesOfElementInsideWindow(this.$sliderScale);
-    this.arrayOfPossibleHandleValues = createRange(minimum, maximum, step);
+    this.sliderCoordinates = this._getElementCoordinates(this.$sliderScale);
+    this.possibleSliderValues = createRange(minimum, maximum, step);
     this.stepWidth = (this.scaleWidth / (maximum - minimum)) * step;
 
-    this._setHandlePosition(this.$firstHandle, this.$firstTooltip, this.firstHandleValue);
+    this._setKnobPosition(this.$firstKnob, this.$firstTooltip, this.firstKnobValue);
     if (this.hasIntervalSelection) {
-      this._setHandlePosition(this.$secondHandle, this.$secondTooltip, this.secondHandleValue);
+      this._setKnobPosition(this.$secondKnob, this.$secondTooltip, this.secondKnobValue);
     }
     this._fillScale();
   }
 
   _updateValuesWhenClick(distanceFromStart) {
-    const calculatedValue = this._calculateValueForHandle(distanceFromStart);
-    const firstHandlePosition = this._calculateHandlePosition(this.firstHandleValue);
-    const secondHandlePosition = this._calculateHandlePosition(this.secondHandleValue);
+    const calculatedValue = this._calculateValueForKnob(distanceFromStart);
+    const firstKnobPosition = this._calculateKnobPosition(this.firstKnobValue);
+    const secondKnobPosition = this._calculateKnobPosition(this.secondKnobValue);
 
     if (this.hasIntervalSelection) {
-      const isNewPositionCloserToFirstHandle = (distanceFromStart - firstHandlePosition) < (secondHandlePosition - distanceFromStart);
-      if (isNewPositionCloserToFirstHandle) {
-        this.firstHandleValue = parseInt(calculatedValue);
+      const isNewPositionCloserToFirstKnob = (distanceFromStart - firstKnobPosition) < (secondKnobPosition - distanceFromStart);
+      if (isNewPositionCloserToFirstKnob) {
+        this.firstKnobValue = parseInt(calculatedValue);
       } else {
-        this.secondHandleValue = parseInt(calculatedValue);
+        this.secondKnobValue = parseInt(calculatedValue);
       }
     } else {
-      this.firstHandleValue = parseInt(calculatedValue);
+      this.firstKnobValue = parseInt(calculatedValue);
     }
     this._sendDataForUpdateState();
   }
 
   _updateValuesWhenMove(distanceFromStart) {
-    const calculatedValue = this._calculateValueForHandle(distanceFromStart);
-    const firstHandlePosition = this._calculateHandlePosition(this.firstHandleValue);
-    const secondHandlePosition = this._calculateHandlePosition(this.secondHandleValue);
-    const { elementType } = this.selectedHandleState;
+    const calculatedValue = this._calculateValueForKnob(distanceFromStart);
+    const firstKnobPosition = this._calculateKnobPosition(this.firstKnobValue);
+    const secondKnobPosition = this._calculateKnobPosition(this.secondKnobValue);
+    const { elementType } = this.selectedKnobState;
 
     if (this.hasIntervalSelection) {
-      const valueForHandleFirstIsChangeable = (distanceFromStart <= secondHandlePosition - this.stepWidth);
-      const valueForHandleSecondIsChangeable = (distanceFromStart >= firstHandlePosition + this.stepWidth);
+      const valueForKnobFirstIsChangeable = (distanceFromStart <= secondKnobPosition - this.stepWidth);
+      const valueForKnobSecondIsChangeable = (distanceFromStart >= firstKnobPosition + this.stepWidth);
 
-      if (elementType === 'first' && valueForHandleFirstIsChangeable) {
-        this.firstHandleValue = parseInt(calculatedValue);
-      } else if (elementType === 'second' && valueForHandleSecondIsChangeable) {
-        this.secondHandleValue = parseInt(calculatedValue);
+      if (elementType === 'first' && valueForKnobFirstIsChangeable) {
+        this.firstKnobValue = parseInt(calculatedValue);
+      } else if (elementType === 'second' && valueForKnobSecondIsChangeable) {
+        this.secondKnobValue = parseInt(calculatedValue);
       }
     } else {
-      this.firstHandleValue = parseInt(calculatedValue);
+      this.firstKnobValue = parseInt(calculatedValue);
     }
 
     this._sendDataForUpdateState();
   }
 
-  _calculateValueForHandle(distanceFromStart) {
-    const indexValueToDistanceFromStart = Math.round(this._validatePositionForHandle(distanceFromStart) / this.stepWidth);
+  _calculateValueForKnob(distanceFromStart) {
+    const indexValueToDistanceFromStart = Math.round(this._validatePositionForKnob(distanceFromStart) / this.stepWidth);
 
-    const isPositionIsGreaterLastValue = this._validatePositionForHandle(distanceFromStart) > (this.arrayOfPossibleHandleValues.length - 1) * this.stepWidth;
+    const isOutOfBounds =
+      this._validatePositionForKnob(distanceFromStart) > (this.possibleSliderValues.length - 1)
+      * this.stepWidth;
 
-    const newHandleValue = isPositionIsGreaterLastValue
+    const newKnobValue = isOutOfBounds
       ? this.maximum
-      : this.arrayOfPossibleHandleValues[indexValueToDistanceFromStart];
+      : this.possibleSliderValues[indexValueToDistanceFromStart];
 
-    return newHandleValue;
+    return newKnobValue;
   }
 
-  _validatePositionForHandle(position) {
+  _validatePositionForKnob(position) {
     if (position <= 0) {
       return 0;
     } else if (position >= this.scaleWidth) {
@@ -110,22 +111,23 @@ class ViewSlider extends EventEmitter {
     return position;
   }
 
-  _calculateHandlePosition(value) {
-    const isValueIsGreaterLastValue = value > (this.arrayOfPossibleHandleValues[this.arrayOfPossibleHandleValues.length - 1]);
+  _calculateKnobPosition(value) {
+    const isOffLimits =
+      value > (this.possibleSliderValues[this.possibleSliderValues.length - 1]);
     // eslint-disable-next-line no-nested-ternary
-    const handlePosition = isValueIsGreaterLastValue
+    const knobPosition = isOffLimits
       ? this.scaleWidth
-      : (this.arrayOfPossibleHandleValues.indexOf(value) < 0)
-        ? this.stepWidth * this.firstHandleValue
-        : this.stepWidth * (this.arrayOfPossibleHandleValues.indexOf(value));
+      : (this.possibleSliderValues.indexOf(value) < 0)
+        ? this.stepWidth * this.firstKnobValue
+        : this.stepWidth * (this.possibleSliderValues.indexOf(value));
 
-    return handlePosition;
+    return knobPosition;
   }
 
   _sendDataForUpdateState() {
     const dataForUpdateState = {
-      firstValue: this.firstHandleValue,
-      secondValue: this.secondHandleValue,
+      firstValue: this.firstKnobValue,
+      secondValue: this.secondKnobValue,
       areTooltipsVisible: this.areTooltipsVisible,
       isVerticalOrientation: this.isVerticalOrientation,
       hasIntervalSelection: this.hasIntervalSelection,
@@ -136,47 +138,49 @@ class ViewSlider extends EventEmitter {
 
   _initEventListeners() {
     this.$sliderScale.click(this._handleSliderScaleClick.bind(this));
-    this.$firstHandle.mousedown(this._handleHandleMousedown.bind(this));
-    this.$secondHandle.mousedown(this._handleHandleMousedown.bind(this));
+    this.$firstKnob.mousedown(this._handleKnobMousedown.bind(this));
+    this.$secondKnob.mousedown(this._handleKnobMousedown.bind(this));
 
     $(document).mousemove(this._handleDocumentMousemove.bind(this));
     $(document).mouseup(this._handleDocumentMouseup.bind(this));
   }
 
   _handleDocumentMouseup() {
-    this.selectedHandleState = null;
+    this.selectedKnobState = null;
   }
 
-  _handleHandleMousedown(e) {
-    const $currentHandle = $(e.currentTarget);
-    const handleCoordinates = this._getCoordinatesOfElementInsideWindow($currentHandle);
+  _handleKnobMousedown(e) {
+    const $currentKnob = $(e.currentTarget);
+    const knobCoordinates = this._getElementCoordinates($currentKnob);
 
-    const cursorPositionInsideHandle = this.isVerticalOrientation
-      ? e.pageY - handleCoordinates.top
-      : e.pageX - handleCoordinates.left;
+    const cursorPositionInsideKnob = this.isVerticalOrientation
+      ? e.pageY - knobCoordinates.top
+      : e.pageX - knobCoordinates.left;
 
-    const elementType = $currentHandle.hasClass('js-slider__handle_first')
+    const elementType = $currentKnob.hasClass('js-slider__knob_first')
       ? 'first'
       : 'second';
 
-    this.selectedHandleState = { cursorPositionInsideHandle, elementType };
+    this.selectedKnobState = { cursorPositionInsideKnob, elementType };
   }
 
   _handleDocumentMousemove(e) {
-    if (this.selectedHandleState !== null) {
-      const { cursorPositionInsideHandle } = this.selectedHandleState;
+    if (this.selectedKnobState !== null) {
+      const { cursorPositionInsideKnob } = this.selectedKnobState;
 
       const distanceFromStart = this.isVerticalOrientation
-        ? e.pageY - cursorPositionInsideHandle - this.sliderCoordinates.top
-        : e.pageX - cursorPositionInsideHandle - this.sliderCoordinates.left;
+        ? e.pageY - cursorPositionInsideKnob - this.sliderCoordinates.top
+        : e.pageX - cursorPositionInsideKnob - this.sliderCoordinates.left;
 
       this._updateValuesWhenMove(distanceFromStart);
     }
   }
 
   _handleSliderScaleClick(e) {
-    const distanceFromLeftEdgeOfScale = parseInt(e.pageX - this.sliderCoordinates.left - (this.$firstHandle.outerWidth() / 2));
-    const distanceFromTopOfScale = parseInt(e.pageY - this.sliderCoordinates.top - (this.$firstHandle.outerHeight() / 2));
+    const distanceFromLeftEdgeOfScale =
+      parseInt(e.pageX - this.sliderCoordinates.left - (this.$firstKnob.outerWidth() / 2));
+    const distanceFromTopOfScale =
+      parseInt(e.pageY - this.sliderCoordinates.top - (this.$firstKnob.outerHeight() / 2));
 
     const coordinatesOfClick = this.isVerticalOrientation
       ? distanceFromTopOfScale
@@ -185,12 +189,12 @@ class ViewSlider extends EventEmitter {
     this._updateValuesWhenClick(coordinatesOfClick);
   }
 
-  _setHandlePosition($currentHandle, $currentTooltip, value) {
-    $currentHandle.css('left', `${this._calculateHandlePosition(value)}px`);
+  _setKnobPosition($currentKnob, $currentTooltip, value) {
+    $currentKnob.css('left', `${this._calculateKnobPosition(value)}px`);
     $currentTooltip.html(value);
   }
 
-  _getCoordinatesOfElementInsideWindow(element) {
+  _getElementCoordinates(element) {
     const { top, left } = element.get(0).getBoundingClientRect();
     return {
       top: top + window.pageYOffset,
@@ -200,26 +204,30 @@ class ViewSlider extends EventEmitter {
 
   _fillScale() {
     const sliderScaleCoordinates = this.isVerticalOrientation
-      ? this._getCoordinatesOfElementInsideWindow(this.$sliderScale).top
-      : this._getCoordinatesOfElementInsideWindow(this.$sliderScale).left;
+      ? this._getElementCoordinates(this.$sliderScale).top
+      : this._getElementCoordinates(this.$sliderScale).left;
 
-    const firstHandleCoordinates = this.isVerticalOrientation
-      ? this._getCoordinatesOfElementInsideWindow(this.$firstHandle).top
-      : this._getCoordinatesOfElementInsideWindow(this.$firstHandle).left;
+    const firstKnobCoordinates = this.isVerticalOrientation
+      ? this._getElementCoordinates(this.$firstKnob).top
+      : this._getElementCoordinates(this.$firstKnob).left;
 
-    const secondHandlePosition = this.isVerticalOrientation
-      ? this._getCoordinatesOfElementInsideWindow(this.$secondHandle).top
-      : this._getCoordinatesOfElementInsideWindow(this.$secondHandle).left;
+    const secondKnobPosition = this.isVerticalOrientation
+      ? this._getElementCoordinates(this.$secondKnob).top
+      : this._getElementCoordinates(this.$secondKnob).left;
 
     if (this.hasIntervalSelection) {
-      const firstFillLimit = (100 / this.scaleWidth) * (firstHandleCoordinates - sliderScaleCoordinates);
-      const secondFillLimit = (100 / this.scaleWidth) * (secondHandlePosition - sliderScaleCoordinates);
+      const firstFillLimit = (100 / this.scaleWidth) * (firstKnobCoordinates - sliderScaleCoordinates);
+      const secondFillLimit = (100 / this.scaleWidth) * (secondKnobPosition - sliderScaleCoordinates);
 
-      this.$sliderScale.css('background', `linear-gradient(to right, #999 , #999 ${firstFillLimit}%, #f00 ${firstFillLimit}%, #f00 ${secondFillLimit}%, #999 ${secondFillLimit}%`);
+      this.$sliderScale.css(
+        'background', `linear-gradient(to right, #999 , #999 ${firstFillLimit}%, #f00 ${firstFillLimit}%, #f00 ${secondFillLimit}%, #999 ${secondFillLimit}%`,
+      );
     } else {
-      const fillLimit = (100 / this.scaleWidth) * (firstHandleCoordinates - sliderScaleCoordinates);
+      const fillLimit = (100 / this.scaleWidth) * (firstKnobCoordinates - sliderScaleCoordinates);
 
-      this.$sliderScale.css('background', `linear-gradient(to right, #f00, #f00 ${fillLimit}%, #999 ${fillLimit}%`);
+      this.$sliderScale.css(
+        'background', `linear-gradient(to right, #f00, #f00 ${fillLimit}%, #999 ${fillLimit}%`,
+      );
     }
   }
 
@@ -240,26 +248,26 @@ class ViewSlider extends EventEmitter {
   _setOrientation(switchedOn) {
     if (switchedOn) {
       this.$sliderScale.addClass('slider__element_vertical');
-      this.$firstHandle.addClass('slider__handle_vertical');
+      this.$firstKnob.addClass('slider__knob_vertical');
       this.$firstTooltip.addClass('slider__tooltip_vertical');
-      this.$secondHandle.addClass('slider__handle_vertical');
+      this.$secondKnob.addClass('slider__knob_vertical');
       this.$secondTooltip.addClass('slider__tooltip_vertical');
     } else {
       this.$sliderScale.removeClass('slider__element_vertical');
-      this.$firstHandle.removeClass('slider__handle_vertical');
+      this.$firstKnob.removeClass('slider__knob_vertical');
       this.$firstTooltip.removeClass('slider__tooltip_vertical');
-      this.$secondHandle.removeClass('slider__handle_vertical');
+      this.$secondKnob.removeClass('slider__knob_vertical');
       this.$secondTooltip.removeClass('slider__tooltip_vertical');
     }
   }
 
   _setIntervalSelection(switchedOn) {
     if (switchedOn) {
-      this.$secondHandle.addClass('slider__handle_visible');
-      this.$secondHandle.removeClass('slider__handle_hidden');
+      this.$secondKnob.addClass('slider__knob_visible');
+      this.$secondKnob.removeClass('slider__knob_hidden');
     } else {
-      this.$secondHandle.removeClass('slider__handle_visible');
-      this.$secondHandle.addClass('slider__handle_hidden');
+      this.$secondKnob.removeClass('slider__knob_visible');
+      this.$secondKnob.addClass('slider__knob_hidden');
     }
   }
 
@@ -269,13 +277,13 @@ class ViewSlider extends EventEmitter {
     $sliderElement.className = 'slider__element js-slider__element';
 
     $sliderElement.innerHTML = bookListingTemplate({
-      handles: [{
-        className: 'slider__handle slider__handle_first js-slider__handle_first',
+      knobs: [{
+        className: 'slider__knob slider__knob_first js-slider__knob_first',
         tooltip: [{
           className: 'slider__tooltip slider__tooltip_first js-slider__tooltip_first',
         }],
       }, {
-        className: 'slider__handle slider__handle_second js-slider__handle_second',
+        className: 'slider__knob slider__knob_second js-slider__knob_second',
         tooltip: [{
           className: 'slider__tooltip slider__tooltip_second js-slider__tooltip_second',
         }],
