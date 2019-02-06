@@ -13,8 +13,7 @@ const mockOptions = {
 };
 const model = new Model(mockOptions);
 
-const notify = jest.spyOn(EventEmmiter.prototype, 'notify');
-const sendNewDataFromModel = jest.spyOn(Model.prototype, 'sendNewDataFromModel');
+const sendNewDataFromModel = jest.spyOn(Model.prototype, '_sendNewDataFromModel');
 
 describe('Тестирование методов Model', () => {
 
@@ -40,15 +39,6 @@ describe('Тестирование методов Model', () => {
       expect(model.modelData.maximum).toEqual(mockOptions.maximum)
 
       expect(sendNewDataFromModel).toHaveBeenCalledTimes(1);
-    })
-  });
-
-  describe('Тестирование метода sendNewDataFromModel', () => {
-    test('Метод вызвает родительский метод "notify" с аргументами для обновления вьюх', () => {
-      model.sendNewDataFromModel();
-
-      expect(notify).toHaveBeenCalledTimes(1);
-      expect(notify).toHaveBeenCalledWith('sendNewDataFromModel', model.modelData);
     })
   });
 });

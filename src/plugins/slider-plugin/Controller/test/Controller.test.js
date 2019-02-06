@@ -4,8 +4,8 @@ import EventEmmiter from '../../eventEmiter/eventEmiter';
 
 const controller = new Controller();
 const notify = jest.spyOn(EventEmmiter.prototype, 'notify');
-const updateSlider = jest.spyOn(Controller.prototype, 'updateSlider');
-const updatePanel = jest.spyOn(Controller.prototype, 'updatePanel');
+const updateSlider = jest.spyOn(Controller.prototype, '_updateSlider');
+const updatePanel = jest.spyOn(Controller.prototype, '_updatePanel');
 
 describe('Тестирование методов controller', () => {
   const mockData = {
@@ -39,26 +39,6 @@ describe('Тестирование методов controller', () => {
       expect(updateSlider).toHaveBeenCalledTimes(1);
       expect(updatePanel).toBeCalledWith(mockData);
       expect(updatePanel).toHaveBeenCalledTimes(1);
-    })
-  });
-
-  describe('Тестирование метода updateSlider', () => {
-    test('Метод вызвает родительский метод "notify" с аргументами для обновления viewSlider', () => {
-
-      controller.updateSlider(mockData);
-
-      expect(notify).toBeCalledWith('updateSlider', mockData)
-      expect(notify).toHaveBeenCalledTimes(1);
-    })
-  });
-
-  describe('Тестирование метода updatePanel', () => {
-    test('Метод вызвает родительский метод "notify" с аргументами для обновления viewPanel', () => {
-
-      controller.updatePanel(mockData);
-
-      expect(notify).toBeCalledWith('updatePanel', mockData)
-      expect(notify).toHaveBeenCalledTimes(1);
     })
   });
 
